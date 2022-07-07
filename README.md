@@ -5,7 +5,7 @@
 # 🌐 Socials:
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://linkedin.com/in/rickygummadi) [![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/441914) 
 
-#🏆 My StackOverflow Profile
+# 🏆 My StackOverflow Profile
 [![My Stack Overflow Stats](https://so-stats-kurt-liao.vercel.app/api?user=441914)](https://stackoverflow.com/users/441914/ricky-g)
 
 # 💻 Tech Stack:
