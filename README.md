@@ -1,11 +1,10 @@
 <p align='center'>
-    <!-- <img alt='GIF' src='https://github.com/mrhrifat/mrhrifat/blob/master/gifs/code.gif?raw=true' width='600' height='300' /> -->
+    <img alt='GIF' src='https://github.com/Ricky-G/Ricky-G/blob/main/CodeAnimation.gif?raw=true' width='600' height='300' />
 </p>
-<div align='center'>
-<img src='https://readme-typing-svg.herokuapp.com?font=ubuntu&color=16A085&center=true&lines=Cloud+Solution+Architect;Azure+Developer;Open+Source+Contributor;Cloud+Advocate'/>
-</div>
 
-# 💫 Hello there! I'm Ricky.
+<br/>
+
+# 💫 Hello there! I'm Ricky. 
 
 🔭 I’m currently working on all things to do with Azure and I blog at "still-to-come"
 <br>
@@ -40,13 +39,13 @@
 
 <div align='center'>
 
-![](http://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=ricky-g&theme=default)
+![](http://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=ricky-g&theme=solarized_dark)
 <br/>
-![](http://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=ricky-g&theme=default)
-![](http://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=ricky-g&theme=default)
-<br/>
-![](http://github-profile-summary-cards.vercel.app/api/cards/stats?username=ricky-g&theme=default)
-![](http://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=ricky-g&theme=default&utcOffset=8)
+![](http://github-profile-summary-cards.vercel.app/api/cards/stats?username=ricky-g&theme=solarized_dark)
+![](http://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=ricky-g&theme=solarized_dark&utcOffset=8)
+<br>
+![](https://github-readme-stats.vercel.app/api/top-langs/?username=ricky-g&show_icons=true&theme=radical&hide_border=true&cache_seconds=3600&langs_count=50)
+
 </div>
 
 ## 🏆 **GitHub Trophies**
@@ -54,13 +53,17 @@
 ![](https://github-profile-trophy.vercel.app/?username=ricky-g&theme=flat&no-frame=false&no-bg=false&margin-w=4)
 
 ## ✍️ **Random Dev Quote**
+
 <div align='center'>
-  ![](https://quotes-github-readme.vercel.app/api?type=horizontal&theme=radical)
+
+  ![](https://quotes-github-readme.vercel.app/api?type=horizontal&theme=monokai)
+  
 </div>
 
 ## 💰 **Support**
 
- 👍🏻 If you appreciate what I do and wish to support my work, you can consider by
+👍🏻 If you appreciate what I do and wish to support my work, you can consider by
+
 <div align='left'>
 
 [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/rickygummaT)
