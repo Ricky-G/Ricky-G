@@ -18,7 +18,7 @@
 
 ## 🌐 **Socials**
 
-👍🏻 Feel free to connect with me on LinkedIn or reach me on my blog
+👍🏻 Feel free to connect with me on LinkedIn or reach out to me on my blog
 
 <div align='left'>
 
