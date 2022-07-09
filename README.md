@@ -1,5 +1,5 @@
 <p align='center'>
-    <img alt='GIF' src='https://github.com/Ricky-G/Ricky-G/blob/main/CodeAnimation.gif?raw=true' width='600' height='300' />
+    <img alt='GIF' src='https://github.com/Ricky-G/Ricky-G/blob/main/CodeAnimation_New.gif?raw=true' width='600' height='300' />
 </p>
 
 <br/>
