@@ -49,7 +49,8 @@
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
 
-## 📊 **GitHub Stats**
+<details>
+  <summary>📊 GitHub Stats </summary>  
 
 <div align='center'>
 
@@ -62,24 +63,31 @@
 
 </div>
 
-## 🏆 **GitHub Trophies**
+</details>
+
+<details>
+  <summary>🏆 GitHub Trophies</summary>  
 
 ![](https://github-profile-trophy.vercel.app/?username=ricky-g&theme=flat&no-frame=false&no-bg=false&margin-w=4)
 
-## ✍️ **Random Dev Quote**
+</details>
 
+<details>
+  <summary>✍️ Random Dev Quote</summary>  
 <div align='center'>
 
   ![](https://quotes-github-readme.vercel.app/api?type=horizontal&theme=monokai)
 
 </div>
+</details>
 
-## 💰 **Support**
-
-👍🏻 If you appreciate what I do and wish to support my work, you can consider by
+<details>
+  <summary>💰Support</summary>  
+  👍🏻 If you appreciate what I do and wish to support my work, you can consider by
 
 <div align='left'>
 
 [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/rickygummaT)
 
 </div>
+</details>
