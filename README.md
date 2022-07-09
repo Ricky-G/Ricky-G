@@ -1,8 +1,6 @@
 <p align='center'>
-    <img alt='GIF' src='https://github.com/Ricky-G/Ricky-G/blob/main/CodeAnimation_New.gif?raw=true' width='600' height='300' />
+    <img alt='GIF' src='https://github.com/Ricky-G/Ricky-G/blob/main/CodeAnimation_New.gif?raw=true' width='250' height='90' />
 </p>
-
-<br/>
 
 # 💫 Hello there! I'm Ricky.
 
@@ -14,7 +12,7 @@
 <br>
 🌱 How to reach me: "still-to-come"<br>
 
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fricky-g%2Fhit-counter&count_bg=%2379C83D&title_bg=%23555555&icon=github.svg&icon_color=%23FFFFFF&title=Visitors&edge_flat=false)](<(https://hits.seeyoufarm.com)>)
+![Visitor Count](https://profile-counter.glitch.me/ricky-g/count.svg)
 
 ## 🌐 **Socials**
 
@@ -22,14 +20,16 @@
 
 <div align='left'>
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://linkedin.com/in/rickygummadi)
-[![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/441914)
+[![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/rickygummadi) 
+[![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/441914)
 
 </div>
 
 ## 🏆 **My StackOverflow Profile**
 
 <div align='center'>
+
+[![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/441914)
 
 [![My Stack Overflow Stats](https://so-stats-kurt-liao.vercel.app/api?user=441914)](https://stackoverflow.com/users/441914/ricky-g)
 
@@ -46,6 +46,7 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white) 
 ![Raspberry Pi](https://img.shields.io/badge/-RaspberryPi-C51A4A?style=for-the-badge&logo=Raspberry-Pi) 
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) 
+![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
 
 ## 📊 **GitHub Stats**
@@ -68,7 +69,9 @@
 ## ✍️ **Random Dev Quote**
 
 <div align='center'>
+
   ![](https://quotes-github-readme.vercel.app/api?type=horizontal&theme=monokai)
+
 </div>
 
 ## 💰 **Support**
