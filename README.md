@@ -10,7 +10,7 @@
 <br>
 🤝 I’m looking for help with any open source projects and educating about cloud
 <br>
-🌱 How to reach me: https://clouddev.blog or via LinkedIn <br>
+🌱 How to reach me: via LinkedIn <br>
 
 ![Visitor Count](https://profile-counter.glitch.me/ricky-g/count.svg)
 
