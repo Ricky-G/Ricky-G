@@ -12,8 +12,6 @@
 <br>
 🌱 How to reach me: via LinkedIn <br>
 
-![Visitor Count](https://profile-counter.glitch.me/ricky-g/count.svg)
-
 ## 🌐 **Socials**
 
 👍🏻 Feel free to connect with me on LinkedIn or reach out to me on my blog
@@ -91,3 +89,5 @@
 
 </div>
 </details>
+
+![Visitor Count](https://profile-counter.glitch.me/ricky-g/count.svg)
