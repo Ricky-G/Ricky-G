@@ -4,9 +4,9 @@
 
 # 💫 Hello there! I'm Ricky.
 
-🔭 I’m currently working on all things to do with Azure and I blog at https://clouddev.blog
+🔭 I’m currently working on all things to do with Azure 
 <br>
-👯 I’m currently learning all sorts of things .NET MAUI, AKS and all things app-innovation
+👯 I’m currently learning all sorts of things .NET MAUI, AKS and all things app-dev and Azure Open AI services
 <br>
 🤝 I’m looking for help with any open source projects and educating about cloud
 <br>
