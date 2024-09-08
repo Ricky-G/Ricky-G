@@ -10,7 +10,7 @@
 <br>
 🤝 I’m looking for help with any open source projects and educating about cloud
 <br>
-🌱 How to reach me: via LinkedIn <br> or https://clouddev.blog
+🌱 How to reach me: via LinkedIn or https://clouddev.blog  <br>
 
 ## 🌐 **Socials**
 
