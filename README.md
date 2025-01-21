@@ -1,4 +1,6 @@
-![GIF](https://github.com/Ricky-G/Ricky-G/raw/main/CodeAnimation_New.gif)
+<p align='center'>
+  <img src='https://imgur.com/8aZOViG' alt='GIF'>
+</p>
 
 # 💫 Hello there! I'm Ricky.
 
