@@ -20,7 +20,7 @@
 
 [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/rickygummadi) 
 [![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/441914)
-[![My Blog](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://clouddev.blog/)
+[![My Blog](https://img.shields.io/badge/GitHub%20Pages-121013?logo=github&logoColor=white)](https://clouddev.blog/)
 
 </div>
 
