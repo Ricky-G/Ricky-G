@@ -1,5 +1,5 @@
 <p align='center'>
-  <img src='https://i.imgur.com/8aZOViG.gif' alt='GIF'>
+  <img src='https://github.com/Ricky-G/Ricky-G/raw/main/CodeAnimation_New.gif?raw=true' alt='GIF'>
 </p>
 
 # 💫 Hello there! I'm Ricky.
