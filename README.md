@@ -8,7 +8,7 @@
 <br>
 👯 I’m currently learning all sorts of things .NET MAUI, AKS and all things app-dev and Azure Open AI services
 <br>
-🤝 I’m looking for help with any open source projects and educating about cloud
+🤝 I’m looking to contribute to open source projects and educating about cloud
 <br>
 🌱 How to reach me: via LinkedIn or https://clouddev.blog  <br>
 
