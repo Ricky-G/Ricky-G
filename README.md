@@ -20,14 +20,13 @@
 
 [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/rickygummadi) 
 [![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/441914)
+[![My Blog](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://clouddev.blog/)
 
 </div>
 
 ## 🏆 **My StackOverflow Profile**
 
 <div align='center'>
-
-[![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/441914)
 
 [![My Stack Overflow Stats](https://so-stats-kurt-liao.vercel.app/api?user=441914&theme=azure)](https://stackoverflow.com/users/441914/ricky-g)
 
