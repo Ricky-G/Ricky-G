@@ -1,6 +1,4 @@
-<p align='center'>
-    <img alt='GIF' src='https://github.com/Ricky-G/Ricky-G/blob/main/CodeAnimation_New.gif?raw=true' width='250' height='90' />
-</p>
+![GIF](https://github.com/Ricky-G/Ricky-G/blob/main/CodeAnimation_New.gif?raw=true)
 
 # 💫 Hello there! I'm Ricky.
 
