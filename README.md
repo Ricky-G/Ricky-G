@@ -29,7 +29,7 @@
 
 [![Stack Overflow](https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/441914)
 
-[![My Stack Overflow Stats](https://so-stats-kurt-liao.vercel.app/api?user=441914)](https://stackoverflow.com/users/441914/ricky-g)
+[![My Stack Overflow Stats](https://so-stats-kurt-liao.vercel.app/api?user=441914&theme=azure)](https://stackoverflow.com/users/441914/ricky-g)
 
 </div>
 
