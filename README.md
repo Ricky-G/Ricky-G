@@ -4,7 +4,7 @@
 
 # 💫 Hello there! I'm Ricky.
 
-🔭 I’m currently working on all things to do with Azure 
+🔭 I’m currently working on all things to do with Azure && Azure AI Foundry
 <br>
 👯 I’m currently learning all sorts of things .NET MAUI, AKS and all things app-dev and Azure Open AI services
 <br>
