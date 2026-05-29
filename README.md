@@ -29,7 +29,7 @@ I'm a Cloud & AI Solution Architect at Microsoft, passionate about cloud, AI and
 
 <div align="center">
 
-# 📝 clouddev.blog
+# 📝 [clouddev.blog](https://clouddev.blog)
 
 ### *Where I write down everything I learn building cloud & AI systems.*
 
