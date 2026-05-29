@@ -19,7 +19,7 @@
 I'm a Cloud & AI Solution Architect at Microsoft, passionate about cloud, AI and startups, focused on building scalable systems, exploring emerging tech and connecting with innovative founders.
 
 - 🤖 Building the **[Agent Governance Toolkit](https://github.com/Ricky-G/agent-governance-toolkit)**: policy enforcement, zero-trust identity, execution sandboxing and reliability engineering for autonomous AI agents. Covers the full **OWASP Agentic Top 10**.
-- ☁️ Deep-diving into **Azure AI Foundry**: cross-region deployments, private endpoints and enterprise-grade landing zones.
+- ☁️ Deep-diving into **Microsoft AI Foundry**: cross-region deployments, private endpoints and enterprise-grade landing zones.
 - 🌐 Designing **AKS networking patterns**: static egress gateways, per-namespace egress IPs, zero-trust east-west traffic.
 - ⚙️ Benchmarking real-world **Azure API Management** architectures at scale.
 
