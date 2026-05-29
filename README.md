@@ -4,7 +4,7 @@
 
 <h1 align="center">Hey, I'm Ricky 👋</h1>
 <p align="center">
-  <em>Cloud & AI Architect • Engineer at heart • Azure + Azure AI Foundry specialist</em>
+  <em>Cloud & AI Architect • Engineer at heart • Azure + AI Foundry specialist</em>
 </p>
 
 <p align="center">
