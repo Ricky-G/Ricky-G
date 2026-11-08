@@ -6,7 +6,7 @@ See PROFILE.md for local reproduction, refresh behavior and activation prerequis
 -->
 
 <p align="center">
-<a href="https://ricky-g.com"><picture>
+<a href="https://clouddev.blog"><picture>
 <source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-phone-dark.svg#motion">
 <source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-phone-light.svg#motion">
 <source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-dark.svg#motion">
