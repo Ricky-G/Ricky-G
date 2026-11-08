@@ -14,10 +14,10 @@
     "assets/generated/pulse-light.svg": "dfba62f3327d6b98e90ac4a22a342c0f2e2cf2f4bf3845a7acdced07a517dbd0",
     "assets/generated/pulse-phone-dark.svg": "e1e9009c3eead375a36cf40f37e2ced3a89c86b6980f58d4b32ca1338b153251",
     "assets/generated/pulse-phone-light.svg": "e71986848642a17180a82e3516cde7de55696f56742108ee2f13dc5dca7cc21f",
-    "assets/generated/signoff-dark.svg": "98c64b3e2477c49f0c19c0dd2b10d99e33f8fb189f54035f0ae636dbbef7607b",
-    "assets/generated/signoff-light.svg": "8b82f706dc32bd18294bd3de629166c62197b2900a9811be1194978be2b7b5c4",
-    "assets/generated/signoff-phone-dark.svg": "b1dced66910758559ba4c221fc936f63546019f474c75920acf57497b62bc849",
-    "assets/generated/signoff-phone-light.svg": "83211d284b59629847ddeb0a92d1cea51828b1343896a16b7c25993ee80a8a14",
+    "assets/generated/signoff-dark.svg": "0fe0c56337c37dd2f131287dc0b5fead6d600e4335250e97fb30e367277fb5c1",
+    "assets/generated/signoff-light.svg": "20c02e83667b8adc99849c742702f2e3f0afaddb37062200a8e06ec3830692ea",
+    "assets/generated/signoff-phone-dark.svg": "30495ac219b5a5a9e7ba0c2a11cf941696e3fa5b89511b3913d9e58600a87d05",
+    "assets/generated/signoff-phone-light.svg": "0ea628c1f08d0e37064cd0e590ed7ddd4aea657e8a0381cf7f7df999ef68dbe8",
     "assets/generated/snake-dark.svg": "27d8c720b6e7cbc77b3da8db7c2d703dfc32451e550af67eec4b102d48a91c7c",
     "assets/generated/snake-light.svg": "6eb63edf955e7483cd7661430bffe0d46a9af45685b4b6a63317d25a56ad6de4",
     "assets/generated/tile-agt-dark.svg": "e61a70541c05aa471f9049d8b7deb27dcd45cf90a13edd1961154500623e347b",
@@ -60,8 +60,8 @@
     "assets/pill-linkedin-light.svg": "107f319d22fc87f57d64403fa065f8397b440dfd7d1b32fe4d74fa231822cbff",
     "assets/pill-site-dark.svg": "fd8328572e0e9939413c6c3e1e828f238bed815d051ca80656f0cc2631104b51",
     "assets/pill-site-light.svg": "5074edb62c8bbf0bd9e7361765f4ee90999743b75095bb1e140163338e3b1bdb",
-    "assets/stack-dark.svg": "df6ad2d13589ab40c51b6a45e908a259e2fce4ad54afa9750ec16f67618748cb",
-    "assets/stack-light.svg": "2039b6d05a590873501946dc17201799c84758b2715da2d37b7fac527f33aa0c",
+    "assets/stack-dark.svg": "e263950df5087ed72e810f7f8d830541c1850f88e4093ba6770f71faa655bf1f",
+    "assets/stack-light.svg": "93ea5f2a612eef775b0674f8e72139ffe8eea4efa869848dbeeea0a3b119e875",
     "assets/stack-phone-dark.svg": "b95d536c4094149caa259412e8036347de060ddbf35cec13210600e0096dccd2",
     "assets/stack-phone-light.svg": "00d88d7a9aa1fd1243290944d4e14602e404610ed97b3354af2f841dcd785201",
     "assets/tile-arcade-dark.svg": "ee09233a593dcb2754f902b2688ec892f611cc3c6adccc208684479084f40a0e",
@@ -71,6 +71,6 @@
     "assets/tile-ledgerboard-dark.svg": "f9735de43bec1fd1562dab91eae17fe28cbe75957b0685fb5a034a7bd389efbe",
     "assets/tile-ledgerboard-light.svg": "1206c08ac203bb0216b138c38c6f163a087ddea08dd874ee8918132c502036c6"
   },
-  "rendered_at": "2026-11-08T17:32:04.294636+13:00",
+  "rendered_at": "2026-11-09T10:09:25.208197+13:00",
   "snake_source": "snk"
 }

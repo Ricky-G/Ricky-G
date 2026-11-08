@@ -331,6 +331,16 @@ class TypographyTests(unittest.TestCase):
             labels = [node.text for node in root.iter() if node.get("data-font-role") == "project-meta"]
             self.assertEqual(labels[:2], ["microsoft/", "agent-governance-toolkit"])
 
+    def test_stack_layer_heading_has_its_own_column_before_the_first_chip(self):
+        root = build.ET.fromstring(build.stack(self.tokens, "fixture"))
+        labels = [node for node in root.iter() if node.get("data-font-role") == "stack-meta"
+                  and node.text in {name for name, _ in build.STACK["layers"]}]
+        self.assertEqual(len(labels), 3)
+        first_chip_x = 22 + 212
+        for node in labels:
+            right = float(node.get("x")) + build.tw(node.text, 18, "mono", ls=1)
+            self.assertLessEqual(right + 16, first_chip_x)
+
     def test_larger_text_has_reserved_vertical_space_for_long_titles_and_metadata(self):
         long_post = dict(POST, title="Long unbroken article " + "X" * 280)
         data = {"stats": self.stats, "feed": {"items": [long_post]}, "now": self.now}

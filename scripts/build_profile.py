@@ -1044,7 +1044,7 @@ STACK = {
 
 def stack(T, P):
     W = 1200
-    band_x, band_w, lab_w = 22, 770, 168
+    band_x, band_w, lab_w = 22, 770, 212
     cx0, cw = 814, 364
     css_x = """
 @keyframes %P-dash{to{stroke-dashoffset:-24}}
