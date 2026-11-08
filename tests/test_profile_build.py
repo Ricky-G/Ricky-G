@@ -512,11 +512,11 @@ class HeroPlayTests(unittest.TestCase):
     def test_play_sources_are_explicit_motion_for_each_theme_and_phone(self):
         sources = re.findall(r'<source media="([^"]+)" srcset="([^"]+)"', self.control)
         self.assertEqual(sources, [
-            ("(prefers-color-scheme: dark) and (max-width: 600px)", "assets/hero-phone-dark.svg#motion"),
-            ("(max-width: 600px)", "assets/hero-phone-light.svg#motion"),
-            ("(prefers-color-scheme: dark)", "assets/hero-dark.svg#motion"),
+            ("(prefers-color-scheme: dark) and (max-width: 600px)", "assets/hero-phone-dark.svg?animation=play#motion"),
+            ("(max-width: 600px)", "assets/hero-phone-light.svg?animation=play#motion"),
+            ("(prefers-color-scheme: dark)", "assets/hero-dark.svg?animation=play#motion"),
         ])
-        self.assertIn('<img src="assets/hero-light.svg#motion" width="99%"', self.control)
+        self.assertIn('<img src="assets/hero-light.svg?animation=play#motion" width="99%"', self.control)
         self.assertNotIn("prefers-reduced-motion", self.control)
         self.assertNotIn("<a ", self.control)
         build.verify_references(self.control.encode(), {})
@@ -547,6 +547,14 @@ class HeroPlayTests(unittest.TestCase):
         self.assertTrue(all("(prefers-reduced-motion: no-preference)" in media for media, _ in explicit))
         self.assertIn('<img src="assets/hero-light.svg"', primary)
         self.assertNotIn('<img src="assets/hero-light.svg#motion"', primary)
+
+    def test_manual_play_has_a_distinct_constant_resource_identity(self):
+        primary = self.readme.split("</p>", 1)[0]
+        self.assertNotIn("?animation=play", primary)
+        sources = re.findall(r'(?:src|srcset)="([^"]+)"', self.control)
+        self.assertEqual(len(sources), 4)
+        self.assertTrue(all(source.endswith("?animation=play#motion") for source in sources))
+        self.assertNotRegex(self.control, r"[?&](?:timestamp|time|cache|nonce|token)=")
 
 
 class ValidationTests(unittest.TestCase):
@@ -587,6 +595,38 @@ class ValidationTests(unittest.TestCase):
         build.verify_references(b'<img src="assets/example.svg#motion">', {"assets/example.svg": b"fixture"})
         with self.assertRaisesRegex(ValueError, "Unknown image fragment"):
             build.verify_references(b'<img src="assets/example.svg#unexpected">', {"assets/example.svg": b"fixture"})
+
+    def test_exact_constant_play_query_is_accepted_only_for_the_four_hero_variants(self):
+        for name in ("hero-light", "hero-dark", "hero-phone-light", "hero-phone-dark"):
+            path = f"assets/{name}.svg"
+            with self.subTest(path=path):
+                build.verify_references(f'<img src="{path}?animation=play#motion">'.encode(), {path: b"fixture"})
+
+    def test_other_queries_paths_or_fragments_cannot_bypass_image_reference_validation(self):
+        invalid = [
+            "assets/hero-light.svg?animation=play",
+            "assets/hero-light.svg?animation=play#unexpected",
+            "assets/hero-light.svg?animation=play#motion#other",
+            "assets/hero-light.svg?animation=play&extra=1#motion",
+            "assets/hero-light.svg?animation=play?extra=1#motion",
+            "assets/hero-light.svg?animation=other#motion",
+            "assets/hero-light.svg?Animation=play#motion",
+            "assets/hero-light.svg?animation=%70lay#motion",
+            "assets/hero-light.svg?nonce=123#motion",
+            "assets/hero-light.svg?#motion",
+            "assets/example.svg?animation=play#motion",
+            "assets/generated/post-1-light.svg?animation=play#motion",
+            "https://example.com/hero-light.svg?animation=play#motion",
+            "/assets/hero-light.svg?animation=play#motion",
+            "assets/../hero-light.svg?animation=play#motion",
+            "assets/%2e%2e/hero-light.svg?animation=play#motion",
+            "assets/%68ero-light.svg?animation=play#motion",
+            "assets/hero-light.svg%3fanimation=play#motion",
+        ]
+        for reference in invalid:
+            with self.subTest(reference=reference), self.assertRaises(ValueError):
+                build.verify_references(f'<img src="{reference}">'.encode(),
+                                        {"assets/hero-light.svg": b"fixture"})
 
     def test_workflow_snake_adapter_is_static_by_default_and_idempotent(self):
         source = self.svg("<g/>").decode()

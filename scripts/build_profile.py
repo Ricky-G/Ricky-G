@@ -1828,6 +1828,15 @@ def verify_references(readme, pending):
         reference, _, fragment = reference.partition("#")
         if fragment not in ("", "motion"):
             raise ValueError(f"Unknown image fragment: {fragment}.")
+        reference, query_separator, query = reference.partition("?")
+        if query_separator and (
+            query != "animation=play" or fragment != "motion"
+            or reference not in {
+                "assets/hero-light.svg", "assets/hero-dark.svg",
+                "assets/hero-phone-light.svg", "assets/hero-phone-dark.svg",
+            }
+        ):
+            raise ValueError("Unsupported image query: only the explicit hero play resource is allowed.")
         if not reference.startswith("assets/") or ".." in reference.split("/"):
             raise ValueError(f"README image is not repository-local: {reference}.")
         if reference not in pending and not (ROOT / reference).is_file():

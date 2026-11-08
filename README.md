@@ -17,10 +17,10 @@ See PROFILE.md for local reproduction, refresh behavior and activation prerequis
 <details>
 <summary>Play hero animation</summary>
 <p align="center"><picture>
-<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/hero-phone-dark.svg#motion">
-<source media="(max-width: 600px)" srcset="assets/hero-phone-light.svg#motion">
-<source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg#motion">
-<img src="assets/hero-light.svg#motion" width="99%" alt="Kia ora, shipping from Auckland, New Zealand. Ricky Gummadi, Cloud and AI Solution Architect. Engineer at heart. The hard part isn't creating AI. It's governing it. A layered policy shield connects cloud, AI-agent and tool nodes through identity, policy and audit above the Auckland skyline. The allow, deny and audit chips are illustrations."></picture></p>
+<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/hero-phone-dark.svg?animation=play#motion">
+<source media="(max-width: 600px)" srcset="assets/hero-phone-light.svg?animation=play#motion">
+<source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg?animation=play#motion">
+<img src="assets/hero-light.svg?animation=play#motion" width="99%" alt="Kia ora, shipping from Auckland, New Zealand. Ricky Gummadi, Cloud and AI Solution Architect. Engineer at heart. The hard part isn't creating AI. It's governing it. A layered policy shield connects cloud, AI-agent and tool nodes through identity, policy and audit above the Auckland skyline. The allow, deny and audit chips are illustrations."></picture></p>
 </details>
 
 <p align="center">
