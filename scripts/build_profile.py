@@ -1559,7 +1559,12 @@ def main(argv=None):
             for name, body in bodies.items():
                 readme = replace_block(readme, name, body, args.initialize)
             pending["README.md"] = readme.encode()
-            content_changed = any(baseline.get(name) != digest(content) for name, content in pending.items()
+            content_baseline = dict(baseline)
+            if args.preserve_snake:
+                # The provider replaced these files before the build; compare with their last published bytes.
+                content_baseline.update({name: value for name, value in state.get("files", {}).items()
+                                         if name.startswith("assets/generated/snake-")})
+            content_changed = any(content_baseline.get(name) != digest(content) for name, content in pending.items()
                                   if "signoff-" not in name and name != "README.md")
             content_changed |= readme != old_readme
             if content_changed:

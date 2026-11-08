@@ -3,10 +3,11 @@ import io
 import json
 import os
 from pathlib import Path
+import shutil
 import sys
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
@@ -275,6 +276,85 @@ class TransactionTests(unittest.TestCase):
     def test_asset_ownership_rejects_manual_changes(self):
         with self.assertRaisesRegex(ValueError, "edited"):
             build.verify_ownership({"files": {"assets/test.svg": "expected"}}, {"assets/test.svg": "changed"}, False, False)
+
+
+class SnakeRefreshTests(unittest.TestCase):
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory(prefix="profile-snake-refresh-")
+        self.root = Path(self.directory.name)
+        source = Path(__file__).resolve().parents[1]
+        for name in ("assets", "data"):
+            shutil.copytree(source / name, self.root / name)
+        for name in ("README.md", "requirements.txt"):
+            shutil.copyfile(source / name, self.root / name)
+        self.patches = [
+            patch.object(build, "ROOT", self.root),
+            patch.object(build, "ASSETS", self.root / "assets"),
+            patch.object(build, "GEN", self.root / "assets" / "generated"),
+            patch.object(build, "DATA", self.root / "data"),
+        ]
+        for value in self.patches:
+            value.start()
+        self.state_path = self.root / "data" / "build-state.json"
+        state = json.loads(self.state_path.read_bytes())
+        self.now = datetime.fromisoformat(state["rendered_at"]) + timedelta(minutes=1)
+        state["snake_source"] = "snk"
+        for theme in ("light", "dark"):
+            name = f"assets/generated/snake-{theme}.svg"
+            path = self.root / name
+            adapted = build.stop_snake_motion(path.read_text(encoding="utf-8")).encode()
+            path.write_bytes(adapted)
+            state["files"][name] = build.digest(adapted)
+        self.state_path.write_bytes((json.dumps(state, indent=2, sort_keys=True) + "\n").encode())
+        self.before = self.snapshot()
+
+    def tearDown(self):
+        for value in reversed(self.patches):
+            value.stop()
+        self.directory.cleanup()
+
+    def snapshot(self):
+        return {path.relative_to(self.root).as_posix(): path.read_bytes()
+                for path in self.root.rglob("*") if path.is_file()}
+
+    def provider_output(self, changed=False):
+        for theme in ("light", "dark"):
+            path = self.root / f"assets/generated/snake-{theme}.svg"
+            root = build.ET.fromstring(path.read_bytes())
+            for node in list(root):
+                if node.get("id") == "profile-motion":
+                    root.remove(node)
+            if changed:
+                build.ET.SubElement(root, "{http://www.w3.org/2000/svg}circle",
+                                    {"cx": "10", "cy": "10", "r": "2", "fill": "#d97706"})
+            path.write_bytes(build.ET.tostring(root, encoding="utf-8"))
+
+    def render_cached_provider(self):
+        from profile_data import read_inputs
+        inputs = read_inputs(self.root, now=self.now, offline=True)
+        with patch("profile_data.read_inputs", return_value=inputs), patch("sys.stdout", new_callable=io.StringIO):
+            return build.main(["--preserve-snake", "--now", self.now.isoformat()])
+
+    def test_unchanged_provider_rewrite_preserves_all_published_bytes_and_stamp(self):
+        self.provider_output()
+        self.assertNotEqual(self.snapshot(), self.before)
+        self.assertEqual(self.render_cached_provider(), 0)
+        self.assertEqual(self.snapshot(), self.before)
+        self.provider_output()
+        self.assertEqual(self.render_cached_provider(), 0)
+        self.assertEqual(self.snapshot(), self.before)
+
+    def test_real_snake_change_advances_stamp_once_then_repeats_exactly(self):
+        self.provider_output(changed=True)
+        self.assertEqual(self.render_cached_provider(), 0)
+        changed = self.snapshot()
+        self.assertNotEqual(changed["README.md"], self.before["README.md"])
+        self.assertEqual(json.loads(changed["data/build-state.json"])["rendered_at"],
+                         self.now.astimezone(build.NZ).isoformat())
+        self.provider_output()
+        self.now += timedelta(minutes=1)
+        self.assertEqual(self.render_cached_provider(), 0)
+        self.assertEqual(self.snapshot(), changed)
 
 
 class WorkflowTests(unittest.TestCase):
