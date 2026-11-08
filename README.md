@@ -25,9 +25,7 @@ See PROFILE.md for local reproduction, refresh behavior and activation prerequis
 <p align="center">I write about the journey on <a href="https://clouddev.blog">my blog</a>.</p>
 
 <details>
-<summary>Read the introduction as text</summary>
-<p><strong>Engineer at heart.</strong> I design cloud architectures, build AI systems you can trust, and create developer platforms that accelerate delivery. I write about the journey on <a href="https://clouddev.blog">my blog</a>.</p>
-<p><strong>About me</strong><br>I'm an engineer from Auckland, passionate about cloud, AI, and startups. I build scalable systems, govern AI agents, and obsess over developer experience, turning gnarly architecture into things that actually ship.</p>
+
 </details>
 
 <h2><picture>
