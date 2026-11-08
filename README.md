@@ -24,10 +24,6 @@ See PROFILE.md for local reproduction, refresh behavior and activation prerequis
 
 <p align="center">I write about the journey on <a href="https://clouddev.blog">my blog</a>.</p>
 
-<details>
-
-</details>
-
 <h2><picture>
 <source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-writing-phone-dark.svg#motion">
 <source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-writing-phone-light.svg#motion">
