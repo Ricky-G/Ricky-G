@@ -415,6 +415,14 @@ HERO_CSS = """
 .%P .sweep{transform-box:fill-box;transform-origin:0 50%;animation:%P-sweep 1.6s cubic-bezier(.2,.8,.2,1) .7s both}
 @keyframes %P-circuit{to{stroke-dashoffset:-36}}
 .%P .circuit{animation:%P-circuit 6s linear infinite}
+@keyframes %P-allow-route{0%,100%{transform:translate(0,0)}25%{transform:translate(14px,-12px)}50%{transform:translate(28px,0)}75%{transform:translate(14px,12px)}}
+@keyframes %P-deny-route{0%,100%{transform:translate(0,0)}25%{transform:translate(-12px,-10px)}50%{transform:translate(-24px,0)}75%{transform:translate(-12px,10px)}}
+@keyframes %P-audit-route{0%,100%{transform:translate(0,0)}25%{transform:translate(12px,-12px)}50%{transform:translate(24px,0)}75%{transform:translate(12px,12px)}}
+@keyframes %P-deny-glow{0%,72%,100%{opacity:0}82%,88%{opacity:.55}95%{opacity:0}}
+.%P .chip-allow{animation:%P-allow-route 12s ease-in-out infinite}
+.%P .chip-deny{animation:%P-deny-route 14s ease-in-out infinite 1.4s}
+.%P .chip-audit{animation:%P-audit-route 16s ease-in-out infinite .7s}
+.%P .deny-glow{animation:%P-deny-glow 6s ease-in-out infinite 1.5s}
 """
 
 
@@ -497,9 +505,33 @@ def decision_chip(T, P, x, y, kind, verb, obj, align="start", fs=20):
             f'<tspan style="fill:{col};font-weight:700">{verb}</tspan><tspan style="fill:{T["ink3"]}"> · </tspan>'
             f'{esc(obj)}</text>')
     if kind == "deny":
-        body = (f'<g class="shake">{body}<rect class="flash" x="{x - 2:.1f}" y="{y - 2}" width="{w + 4:.1f}" '
-                f'height="{h + 4}" rx="{h / 2 + 2}" style="fill:none;stroke:{col};stroke-width:2"/></g>')
+        halo = (f'<rect class="deny-glow" data-hero-effect="deny-glow" x="{x - 4:.1f}" y="{y - 4}" '
+                f'width="{w + 8:.1f}" height="{h + 8}" '
+                f'rx="{h / 2 + 4}" filter="url(#{P}-soft)" '
+                f'style="fill:none;stroke:{col};stroke-width:8;opacity:0"/>')
+        body = (f'<g class="shake">{halo}{body}<rect class="flash" data-hero-effect="deny-flash" '
+                f'x="{x - 2:.1f}" y="{y - 2}" '
+                f'width="{w + 4:.1f}" height="{h + 4}" rx="{h / 2 + 2}" '
+                f'style="fill:none;stroke:{col};stroke-width:2;opacity:0"/></g>')
     return body, w
+
+
+HERO_CHIPS = {
+    "desktop": (("allow", 900, 80, "repo.read", "end"),
+                ("deny", 930, 439, "shell.exec", "end"),
+                ("audit", 1148, 534, "signed", "end")),
+    "phone": (("allow", 30, 114, "repo.read", "start"),
+              ("deny", 564, 498, "shell.exec", "end"),
+              ("audit", 34, 600, "signed", "start")),
+}
+
+
+def hero_chips(T, P, phone=False):
+    elements = []
+    for kind, x, y, action, align in HERO_CHIPS["phone" if phone else "desktop"]:
+        body, _ = decision_chip(T, P, x, y, kind, kind, action, align=align, fs=26 if phone else 20)
+        elements.append(f'<g class="chip-{kind}" data-hero-chip="{kind}">{body}</g>')
+    return "".join(elements)
 
 
 def greeting(T, P, x, y, text, center=False, fs=20):
@@ -522,7 +554,7 @@ HERO_TITLE = ("ricky g. Cloud and AI Solution Architect, Auckland, New Zealand. 
 
 
 def hero_desktop(T, P):
-    W, H, cx, cy, r = 1200, 620, 935, 276, 124
+    W, H, cx, cy, r = 1200, 644, 935, 276, 124
     o = [svg_open(P, W, H, HERO_TITLE, css(P, HERO_CSS)),
          "<defs>", defs_common(T, P), hero_defs(T, P, W, H, cx, cy, r), "</defs>",
          f'<g clip-path="url(#{P}-clip)">',
@@ -532,7 +564,7 @@ def hero_desktop(T, P):
              rays=[(120, -10, 230), (170, -10, 190), (232, -10, 250), (300, -10, 205), (372, -10, 238),
                    (450, -10, 180)],
              star_box=(20, 16, 1180, 380), n_stars=58, seed=7),
-         f'<g transform="translate(0 473)">{skyline(T, P)}</g>', "</g>",
+         f'<g transform="translate(0 497)">{skyline(T, P)}</g>', "</g>",
          greeting(T, P, 50, 50, "Kia ora · shipping from Auckland, NZ"),
          f'<text x="44" y="232" style="font-size:164px;font-weight:800;letter-spacing:-6px;fill:{T["ink"]}">ricky '
          f'<tspan style="fill:url(#{P}-shim)">g.</tspan></text>',
@@ -542,17 +574,14 @@ def hero_desktop(T, P):
          tx(48, 491, "It's governing it.", 52, f"url(#{P}-brand)", 800, ls=-0.5, role="hero-slogan"),
          f'<rect class="sweep" x="50" y="513" width="190" height="5" rx="2.5" style="fill:url(#{P}-brand)"/>',
          governance_core(T, P, cx, cy, r)]
-    a, _ = decision_chip(T, P, 826, 93, "allow", "allow", "repo.read", align="end")
-    b, _ = decision_chip(T, P, 871, 404, "deny", "deny", "shell.exec", align="end")
-    c, _ = decision_chip(T, P, 1171, 455, "audit", "audit", "signed", align="end")
-    o += [f'<g class="fl1">{a}</g>', f'<g class="fl2">{b}</g>', f'<g class="fl3">{c}</g>',
+    o += [hero_chips(T, P),
           f'<rect x="7.7" y="7.7" width="{W - 15.4}" height="{H - 15.4}" rx="25.3" '
           f'style="fill:none;stroke:{T["cardline"]};stroke-width:1.4"/></svg>']
     return "".join(o)
 
 
 def hero_phone(T, P):
-    W, H, cx, cy, r = 600, 1168, 300, 336, 122
+    W, H, cx, cy, r = 600, 1304, 300, 336, 122
     o = [svg_open(P, W, H, HERO_TITLE, css(P, HERO_CSS)),
          "<defs>", defs_common(T, P), hero_defs(T, P, W, H, cx, cy, r), "</defs>",
          f'<g clip-path="url(#{P}-clip)">',
@@ -561,25 +590,22 @@ def hero_phone(T, P):
                     (560, 90, 170, 80, -12, "aurC", "a1")],
              rays=[(70, -10, 220), (120, -10, 180), (180, -10, 240), (250, -10, 200)],
              star_box=(20, 16, 580, 560), n_stars=40, seed=9),
-         f'<g transform="translate(0 1090) scale(.5)">{skyline(T, P)}</g>', "</g>",
+         f'<g transform="translate(0 1226) scale(.5)">{skyline(T, P)}</g>', "</g>",
          greeting(T, P, 300, 36, "Kia ora · Auckland, NZ", center=True, fs=32),
          governance_core(T, P, cx, cy, r)]
-    a, _ = decision_chip(T, P, 24, 135, "allow", "allow", "repo.read", fs=26)
-    b, _ = decision_chip(T, P, 576, 505, "deny", "deny", "shell.exec", align="end", fs=26)
-    o += [f'<g class="fl1">{a}</g>', f'<g class="fl2">{b}</g>',
-          tx(300, 590, "identity · policy · audit", 30, T["ink2"], 600, anchor="middle", role="illustration-caption"),
-          f'<text x="300" y="712" text-anchor="middle" style="font-size:156px;font-weight:800;letter-spacing:-5px;'
+    o += [hero_chips(T, P, phone=True),
+          f'<text x="300" y="848" text-anchor="middle" style="font-size:156px;font-weight:800;letter-spacing:-5px;'
           f'fill:{T["ink"]}">ricky <tspan style="fill:url(#{P}-shim)">g.</tspan></text>',
-          tx(300, 788, "Cloud & AI Solution", 44, T["ink"], 650, anchor="middle", role="hero-role"),
-          tx(300, 842, "Architect", 44, T["ink"], 650, anchor="middle", role="hero-role"),
-          tx(300, 894, "Auckland, NZ · Engineer at heart", 34, T["ink3"], 500, anchor="middle", role="hero-meta")]
-    y = 956
+          tx(300, 924, "Cloud & AI Solution", 44, T["ink"], 650, anchor="middle", role="hero-role"),
+          tx(300, 978, "Architect", 44, T["ink"], 650, anchor="middle", role="hero-role"),
+          tx(300, 1030, "Auckland, NZ · Engineer at heart", 34, T["ink3"], 500, anchor="middle", role="hero-meta")]
+    y = 1092
     for line in wrap("The hard part isn't creating AI.", 40, "regular", 532, 2):
         o.append(tx(300, y, line, 40, T["ink2"], 500, anchor="middle", role="hero-slogan"))
         y += 48
-    o += [tx(300, 1072, "It's governing it.", 56, f"url(#{P}-brand)", 800, anchor="middle",
+    o += [tx(300, 1208, "It's governing it.", 56, f"url(#{P}-brand)", 800, anchor="middle",
              ls=-0.5, role="hero-slogan"),
-          f'<rect class="sweep" x="220" y="1094" width="160" height="5" rx="2.5" style="fill:url(#{P}-brand)"/>',
+          f'<rect class="sweep" x="220" y="1230" width="160" height="5" rx="2.5" style="fill:url(#{P}-brand)"/>',
           f'<rect x="7.7" y="7.7" width="{W - 15.4}" height="{H - 15.4}" rx="25.3" '
           f'style="fill:none;stroke:{T["cardline"]};stroke-width:1.4"/></svg>']
     return "".join(o)
@@ -647,9 +673,9 @@ def pill(T, P, kind):
 # --------------------------------------------------------------------------- section labels
 LABELS = {
     "writing": ("01", "Writing", "published on clouddev.blog · latest three"),
-    "building": ("02", "Building", "open source · verified GitHub snapshots"),
+    "building": ("02", "Building", "open-source projects · what I'm building"),
     "stack": ("03", "Stack", "what I build with, drawn like an architecture"),
-    "pulse": ("04", "Pulse", "the last 12 months · public activity"),
+    "pulse": ("04", "Pulse", "a year of building · GitHub activity"),
     "arcade": ("05", "Arcade", "a little play · a real contribution calendar"),
 }
 
@@ -1121,14 +1147,14 @@ def pulse(T, P, st):
     W, H = 1200, 360
     mix = st["mix"]
     total = sum(mix.values()) or 1
-    o = [svg_open(P, W, H, f"Pulse: {st['contributions']:,} contributions in the last year.", css(P)), "<defs>",
+    o = [svg_open(P, W, H, f"GitHub activity: {st['contributions']:,} contributions in the last year.", css(P)), "<defs>",
          defs_common(T, P), f'<clipPath id="{P}-c"><rect x="7" y="7" width="1186" height="{H - 14}" rx="24"/></clipPath>',
          "</defs>", card(T, P, 7, 7, 1186, H - 14),
          f'<g clip-path="url(#{P}-c)">{glow(T, P, 120, 300, 130, "aurA")}</g>',
          kicker(T, 40, 62, "LAST 12 MONTHS", "green", pulse=True, P=P),
          tx(36, 188, f"{st['contributions']:,}", 110, f"url(#{P}-brand)", 800, ls=-3, role="pulse-count"),
          tx(40, 241, "contributions on GitHub", 25, T["ink2"], 500, role="pulse-body"),
-         tx(40, 326, "verified public snapshot", 18.5, T["ink3"], mono=True, role="pulse-meta"),
+         tx(40, 326, "A year of building", 18.5, T["ink3"], mono=True, role="pulse-meta"),
          f'<rect x="404" y="40" width="1" height="280" style="fill:{T["cardline"]}"/>',
          f'<rect x="838" y="40" width="1" height="280" style="fill:{T["cardline"]}"/>',
          kicker(T, 438, 62, "WHERE IT GOES", "violet")]
@@ -1149,7 +1175,7 @@ def pulse(T, P, st):
         o.append(f'<circle cx="{cx + 5}" cy="{cy - 5}" r="5" style="fill:{col}"/>')
         o.append(tx(cx + 18, cy, lab, 22, T["ink2"], 500, role="pulse-body"))
         o.append(tx(814, cy, f"{pct}%", 22, T["ink"], 700, mono=True, anchor="end", role="pulse-body"))
-    o.append(tx(438, 326, "share of public types", 18.5, T["ink3"], mono=True, role="pulse-meta"))
+    o.append(tx(438, 326, "public repository activity", 18.5, T["ink3"], mono=True, role="pulse-meta"))
     stats_r = ((metric(st["repos"]), "public repositories"), (metric(st["contributed_to"]), "public repos contributed to"),
                (metric(st["posts"]), "posts on clouddev.blog"))
     for i, (num, lab) in enumerate(stats_r):
@@ -1182,9 +1208,7 @@ def signoff(T, P, st):
         y += 38
     o += [f'<text x="1156" y="353" text-anchor="end" style="font-size:70px;font-weight:800;letter-spacing:-2.4px;'
           f'fill:{T["ink"]}">ricky <tspan style="fill:url(#{P}-shim)">g.</tspan></text>',
-          tx(44, 330, f"Auckland, New Zealand · {st['utc']}", 20, T["ink3"], mono=True, role="signoff-meta"),
-          tx(44, 363, f"snapshot {st['synced_long']}", 18.5, T["ink3"], mono=True, role="signoff-meta"),
-          tx(44, 390, "built from public sources", 18.5, T["ink3"], mono=True, role="signoff-meta"),
+          tx(44, 330, "Auckland, New Zealand", 20, T["ink3"], mono=True, role="signoff-meta"),
           "</svg>"]
     return "".join(o)
 
@@ -1313,7 +1337,7 @@ def pulse_phone(T, P, st):
     elements = [kicker(T, 34, 62, "LAST 12 MONTHS", pulse=True, P=P, size=32),
                 tx(32, 198, f"{st['contributions']:,}", 116, f"url(#{P}-brand)", 800, ls=-3, role="pulse-count")]
     y = 261
-    for line in wrap("contributions on the public profile", 40, "regular", 532, 3):
+    for line in wrap("contributions in the last year", 40, "regular", 532, 3):
         elements.append(tx(34, y, line, 40, T["ink2"], role="pulse-body"))
         y += 53
     y += 32
@@ -1328,7 +1352,7 @@ def pulse_phone(T, P, st):
                            anchor="end", role="pulse-body"))
         y += 62
     y += 16
-    for line in wrap("Mix counts public repositories only.", 32, "regular", 532, 3):
+    for line in wrap("Public repository activity", 32, "regular", 532, 3):
         elements.append(tx(34, y, line, 32, T["ink3"], role="pulse-meta"))
         y += 45
     values = ((st["repos"], "public repositories"), (st["contributed_to"], "public repos contributed to"),
@@ -1341,21 +1365,16 @@ def pulse_phone(T, P, st):
         for line in wrap(caption, 40, "regular", 532, 3):
             elements.append(tx(34, y, line, 40, T["ink2"], role="pulse-body"))
             y += 53
-    y += 28
-    for line in wrap("A captured snapshot, not a live visitor-time query.", 32, "regular", 532, 3):
-        elements.append(tx(34, y, line, 32, T["ink3"], role="pulse-meta"))
-        y += 45
-    o = phone_card(T, P, math.ceil(y + 20), f"Public profile snapshot: {st['contributions']:,} contributions.")
+    o = phone_card(T, P, math.ceil(y + 20), f"GitHub activity: {st['contributions']:,} contributions in the last year.")
     return "".join(o + elements + ["</svg>"])
 
 
 def activity_notice(T, P, st, phone=False):
     width, size = (600, 40) if phone else (1200, 26)
-    elements = [tx(32, 88, "Public activity", 48, T["ink"], 750, role="pulse-title")]
-    lines = [f"Public profile contributions: {metric(st['contributions'], True)}",
+    elements = [tx(32, 88, "GitHub activity", 48, T["ink"], 750, role="pulse-title")]
+    lines = [f"Contributions in the last year: {metric(st['contributions'], True)}",
              f"Public repositories: {metric(st['repos'])} · blog posts: {metric(st['posts'])}",
-             "Public contribution-type breakdown unavailable.",
-             "No sample statistics or private metrics are substituted."]
+             "Activity breakdown is currently unavailable."]
     y = 159
     for text in lines:
         for line in wrap(text, size, "regular", width - 64, 4):
@@ -1363,7 +1382,7 @@ def activity_notice(T, P, st, phone=False):
             y += size * 1.4
         y += 10
     height = math.ceil(y + 24)
-    o = [svg_open(P, width, height, "Public activity snapshot. Some metrics are unavailable; no sample values substituted.",
+    o = [svg_open(P, width, height, "GitHub activity. Some counts are currently unavailable.",
                   css(P)), "<defs>", defs_common(T, P), "</defs>", card(T, P, 7, 7, width - 14, height - 14)]
     return "".join(o + elements + ["</svg>"])
 
@@ -1381,7 +1400,7 @@ def signoff_phone(T, P, st):
     y += 40
     elements.append(tx(34, y, "ricky g.", 60, f"url(#{P}-brand)", 800, ls=-1.5))
     y += 61
-    for line in wrap(f"Auckland, NZ · snapshot {st['synced_long']}", 32, "regular", 532, 3):
+    for line in wrap("Auckland, New Zealand", 32, "regular", 532, 3):
         elements.append(tx(34, y, line, 32, T["ink3"], role="signoff-meta"))
         y += 45
     o = phone_card(T, P, math.ceil(y + 20), OFF_CLOCK_TEXT)
@@ -1390,10 +1409,10 @@ def signoff_phone(T, P, st):
 
 def snake(T, P, days):
     if not days:
-        return (svg_open(P, 1200, 190, "Public contribution calendar unavailable. No simulated data is shown.", css(P))
+        return (svg_open(P, 1200, 190, "GitHub contribution calendar is currently unavailable.", css(P))
                 + "<defs>" + defs_common(T, P) + "</defs>" + card(T, P, 7, 7, 1186, 176)
                 + tx(32, 70, "Contribution calendar unavailable", 35, T["ink"], 750)
-                + tx(32, 120, "A real calendar could not be verified. No simulated contributions are shown.", 23, T["ink2"])
+                + tx(32, 120, "The contribution calendar is currently unavailable. Please check back later.", 23, T["ink2"])
                 + "</svg>")
     first = datetime.fromisoformat(days[0]["date"]).date()
     origin = first - timedelta(days=(first.weekday() + 1) % 7)
@@ -1511,28 +1530,27 @@ def projects_block(stats):
 
 def pulse_block(stats):
     mix = stats["mix"]
-    description = (f"Public profile snapshot: {metric(stats['contributions'], True)} contributions in the last year. "
+    description = (f"GitHub activity: {metric(stats['contributions'], True)} contributions in the last year. "
                    f"{metric(stats['repos'])} public repositories; {metric(stats['posts'])} published blog posts.")
-    activity = ("Public-repository contribution-type breakdown is unavailable. No sample statistics are substituted."
+    activity = ("Activity breakdown is currently unavailable."
                 if mix is None else
                 f"Public-repository activity: {mix['commits']} commits, {mix['prs']} pull requests, "
                 f"{mix['issues']} issues and {mix['reviews']} reviews across "
                 f"{metric(stats['contributed_to'])} public repositories.")
     return ('<p align="center">' + picture("assets/generated/pulse", description + " " + activity,
             "99%", phone=True) + '</p>\n\n'
-            f'<p><strong>{metric(stats["contributions"], True)} contributions</strong> shown on the public '
-            f'GitHub profile · {metric(stats["repos"])} public repositories · '
+            f'<p><strong>{metric(stats["contributions"], True)} contributions in the last year</strong> '
+            f'· {metric(stats["repos"])} public repositories · '
             f'{metric(stats["posts"])} published articles.</p>\n'
-            f'<p>{esc(activity)} The type mix can differ from the public calendar total, which also counts '
-            'other contribution types and any anonymous aggregates the owner has chosen to make public.</p>')
+            f'<p>{esc(activity)}</p>')
 
 
 def signoff_block(stats):
     return ('<p align="center">' + picture("assets/generated/signoff",
-            f"{OFF_CLOCK_TEXT} Auckland, New Zealand. Snapshot {stats['synced_long']}.",
+            f"{OFF_CLOCK_TEXT} Auckland, New Zealand.",
             "99%", "https://www.linkedin.com/in/rickygummadi", phone=True) + '</p>\n\n'
             f'<p align="center">{esc(OFF_CLOCK_TEXT)}</p>\n\n'
-            f'<p align="center">Public-data snapshot: {stats["synced_long"]}. '
+            '<p align="center">'
             '<a href="https://www.linkedin.com/in/rickygummadi">Let’s make something →</a></p>')
 
 

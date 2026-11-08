@@ -161,7 +161,7 @@ class RenderingTests(unittest.TestCase):
 
     def test_missing_calendar_is_labelled_not_simulated(self):
         svg = build.snake(build.THEMES["light"], "fixture", [])
-        self.assertIn("No simulated", svg)
+        self.assertIn("currently unavailable", svg)
         self.assertNotIn('class="snake"', svg)
 
     def test_all_hero_variants_are_employer_free_and_keep_the_aurora_design(self):
@@ -316,14 +316,12 @@ class TypographyTests(unittest.TestCase):
             self.assertEqual({node.get("data-node") for node in root.iter() if node.get("data-node")},
                              {"cloud", "agent", "tool"})
 
-    def test_desktop_audit_chip_does_not_cover_a_redundant_core_caption(self):
-        desktop = build.ET.fromstring(build.hero_desktop(self.tokens, "fixture"))
-        phone = build.ET.fromstring(build.hero_phone(self.tokens, "fixture"))
-        self.assertFalse([node for node in desktop.iter()
-                          if node.get("data-font-role") == "illustration-caption"])
-        self.assertEqual(len([node for node in phone.iter()
-                              if node.get("data-font-role") == "illustration-caption"]), 1)
-        self.assertIn("identity, policy and audit", desktop.get("aria-label"))
+    def test_decision_chips_use_reserved_rows_instead_of_a_redundant_caption(self):
+        for renderer in (build.hero_desktop, build.hero_phone):
+            root = build.ET.fromstring(renderer(self.tokens, "fixture"))
+            self.assertFalse([node for node in root.iter()
+                              if node.get("data-font-role") == "illustration-caption"])
+            self.assertIn("identity, policy and audit", root.get("aria-label"))
 
     def test_project_identity_wraps_at_the_owner_repository_boundary(self):
         for renderer in (build.tile_agt, build.tile_agt_phone):
@@ -365,6 +363,130 @@ class TypographyTests(unittest.TestCase):
         for node in lines:
             self.assertLessEqual(build.tw("".join(node.itertext()), 21, "mono"), 308)
             self.assertIn("font-size:21px", node.get("style"))
+
+
+class ReaderCopyTests(unittest.TestCase):
+    forbidden = re.compile(
+        r"snapshot|verified public|verified GitHub|built from public sources|auto.synced|"
+        r"visitor.time query|no sample|private metrics|Plain Markdown|"
+        r"All profile images live in this repository|no live third.party",
+        re.IGNORECASE,
+    )
+
+    def reader_text(self, svg):
+        root = build.ET.fromstring(svg)
+        text = [root.get("aria-label", "")]
+        for node in root.iter():
+            if node.tag.rsplit("}", 1)[-1] in {"text", "title"}:
+                text.append("".join(node.itertext()))
+        return " ".join(text)
+
+    def test_generated_reader_surfaces_use_human_copy_not_build_disclaimers(self):
+        stats = dict(STATS)
+        now = datetime(2026, 11, 9, tzinfo=build.NZ)
+        build.set_stamp(stats, now)
+        data = {"stats": stats, "feed": {"items": [POST]}, "now": now}
+        for theme, tokens in build.THEMES.items():
+            assets = build.build_all(tokens, theme, data, build.stand_in)
+            for name, svg in assets.items():
+                with self.subTest(theme=theme, name=name):
+                    self.assertNotRegex(self.reader_text(svg), self.forbidden)
+            for phone in (False, True):
+                svg = build.activity_notice(tokens, "fixture", dict(stats, mix=None), phone=phone)
+                self.assertNotRegex(self.reader_text(svg), self.forbidden)
+                self.assertIn("unavailable", self.reader_text(svg).lower())
+        for body in (build.pulse_block(stats), build.signoff_block(stats)):
+            self.assertNotRegex(body, self.forbidden)
+
+    def test_published_readme_and_all_generated_svg_texts_have_no_technical_footer(self):
+        root = Path(__file__).resolve().parents[1]
+        readme = (root / "README.md").read_text(encoding="utf-8")
+        self.assertNotRegex(readme, self.forbidden)
+        self.assertIn('href="https://www.linkedin.com/in/rickygummadi">Let’s make something →</a>', readme)
+        self.assertIn("public repositories", readme)
+        for path in (root / "assets").rglob("*.svg"):
+            with self.subTest(path=path.name):
+                self.assertNotRegex(self.reader_text(path.read_bytes()), self.forbidden)
+
+    def test_signoff_does_not_expose_or_depend_on_capture_time(self):
+        now = datetime(2026, 11, 9, tzinfo=build.NZ)
+        first, later = dict(STATS), dict(STATS)
+        build.set_stamp(first, now)
+        build.set_stamp(later, now + timedelta(days=10))
+        self.assertEqual(build.signoff_block(first), build.signoff_block(later))
+        for renderer in (build.signoff, build.signoff_phone):
+            self.assertEqual(renderer(build.THEMES["light"], "fixture", first),
+                             renderer(build.THEMES["light"], "fixture", later))
+        self.assertIn("Auckland, New Zealand", build.signoff_block(first))
+
+    def test_activity_preserves_metric_scope_without_equating_types_to_total(self):
+        stats = dict(STATS, contributions=100)
+        body = build.pulse_block(stats)
+        self.assertIn("100 contributions in the last year", body)
+        self.assertIn("20 commits, 10 pull requests, 5 issues and 2 reviews", body)
+        self.assertIn("across 4 public repositories", body)
+        self.assertNotIn("share of 100", body)
+        self.assertNotIn("37 contributions", body)
+
+
+class ChipMotionTests(unittest.TestCase):
+    def test_each_hero_has_three_upright_motion_groups_and_explicit_effect_hooks(self):
+        for theme, tokens in build.THEMES.items():
+            for renderer in (build.hero_desktop, build.hero_phone):
+                with self.subTest(theme=theme, renderer=renderer.__name__):
+                    svg = renderer(tokens, "fixture")
+                    root = build.ET.fromstring(svg)
+                    chips = [node for node in root.iter() if node.get("data-hero-chip")]
+                    self.assertEqual([node.get("data-hero-chip") for node in chips], ["allow", "deny", "audit"])
+                    for kind, duration in (("allow", 12), ("deny", 14), ("audit", 16)):
+                        self.assertIn(f".fixture .chip-{kind}{{animation:fixture-{kind}-route {duration}s", svg)
+                        route = re.search(
+                            rf"@keyframes fixture-{kind}-route\{{(.*?)(?=\n@keyframes|\n\.fixture)",
+                            svg, re.DOTALL,
+                        )[1]
+                        self.assertIn("translate", route)
+                        self.assertNotIn("rotate", route)
+                    effects = [node for node in root.iter() if node.get("data-hero-effect")]
+                    self.assertEqual({node.get("data-hero-effect") for node in effects},
+                                     {"deny-flash", "deny-glow"})
+                    self.assertTrue(all("opacity:0" in node.get("style") for node in effects))
+                    self.assertIn(".fixture .shake{animation:fixture-shake 6s", svg)
+                    self.assertIn(".fixture .flash{animation:fixture-flash 6s", svg)
+                    self.assertIn(".fixture .deny-glow{animation:fixture-deny-glow 6s", svg)
+                    self.assertIn(".fixture:not(:target) *{animation:none!important}", svg)
+                    self.assertNotIn("<animate", svg)
+                    build.validate_svg("assets/hero-light.svg", svg.encode())
+
+    def test_full_route_envelopes_keep_chip_rows_inside_canvas_and_separate(self):
+        movement = {"allow": (0, 28, -12, 12), "deny": (-29, 5, -10, 10), "audit": (0, 24, -12, 12)}
+        for phone, canvas in ((False, (1200, 644)), (True, (600, 1304))):
+            boxes = []
+            for kind, x, y, action, align in build.HERO_CHIPS["phone" if phone else "desktop"]:
+                _, width = build.decision_chip(build.THEMES["light"], "fixture", x, y, kind, kind, action,
+                                               align=align, fs=26 if phone else 20)
+                x = x - width if align == "end" else x
+                left, right, top, bottom = movement[kind]
+                box = (x + left, y + top, x + width + right, y + 48 + bottom)
+                self.assertGreaterEqual(box[0], 12)
+                self.assertGreaterEqual(box[1], 12)
+                self.assertLessEqual(box[2], canvas[0] - 12)
+                self.assertLessEqual(box[3], canvas[1] - 12)
+                boxes.append(box)
+            for index, a in enumerate(boxes):
+                for b in boxes[index + 1:]:
+                    separated = a[2] + 12 <= b[0] or b[2] + 12 <= a[0] or a[3] + 12 <= b[1] or b[3] + 12 <= a[1]
+                    self.assertTrue(separated, (phone, a, b))
+
+    def test_parent_picture_still_requires_normal_motion_and_static_fallback(self):
+        readme = (Path(__file__).resolve().parents[1] / "README.md").read_text(encoding="utf-8")
+        hero = readme.split("</p>", 1)[0]
+        sources = re.findall(r'<source media="([^"]+)" srcset="([^"]+)"', hero)
+        motion = [(media, url) for media, url in sources if url.endswith("#motion")]
+        self.assertEqual(len(motion), 4)
+        self.assertTrue(all("(prefers-reduced-motion: no-preference)" in media for media, _ in motion))
+        self.assertIn('<img src="assets/hero-light.svg"', hero)
+        self.assertIn('srcset="assets/hero-phone-dark.svg"', hero)
+        self.assertNotIn('src="assets/hero-light.svg#motion"', hero)
 
 
 class ValidationTests(unittest.TestCase):
@@ -544,7 +666,9 @@ class SnakeRefreshTests(unittest.TestCase):
         self.provider_output(changed=True)
         self.assertEqual(self.render_cached_provider(), 0)
         changed = self.snapshot()
-        self.assertNotEqual(changed["README.md"], self.before["README.md"])
+        self.assertEqual(changed["README.md"], self.before["README.md"])
+        self.assertNotEqual(changed["assets/generated/snake-light.svg"],
+                            self.before["assets/generated/snake-light.svg"])
         self.assertEqual(json.loads(changed["data/build-state.json"])["rendered_at"],
                          self.now.astimezone(build.NZ).isoformat())
         self.provider_output()
@@ -573,6 +697,20 @@ class SnakeRefreshTests(unittest.TestCase):
         self.assertEqual(self.render_cached_provider(), 0)
         for name in ("hero-light.svg", "hero-dark.svg", "hero-phone-light.svg", "hero-phone-dark.svg"):
             self.assertNotIn(b"<image", (self.root / "assets" / name).read_bytes())
+
+    def test_clock_only_rerun_never_changes_visible_copy_or_internal_state(self):
+        self.assertEqual(self.render_cached_provider(), 0)
+        before = self.snapshot()
+        self.now += timedelta(hours=1)
+        self.assertEqual(self.render_cached_provider(), 0)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_meaningful_cache_receipts_remain_internal_without_reader_timestamps(self):
+        state = json.loads(self.state_path.read_bytes())
+        self.assertIn("rendered_at", state)
+        self.assertIn("files", state)
+        self.assertTrue((self.root / "data" / "provenance.json").is_file())
+        self.assertNotIn(b"Public-data snapshot:", (self.root / "README.md").read_bytes())
 
 
 class WorkflowTests(unittest.TestCase):
