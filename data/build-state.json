@@ -14,10 +14,10 @@
     "assets/generated/pulse-light.svg": "3752b84f3d86d0ec89e11b6d0d524282c3c90587f0e08192a87aeffc56ef5999",
     "assets/generated/pulse-phone-dark.svg": "d6b989310bd33d1b65d4e0aa4dc7392ef8583e152afd5a6fdb05f6bd5204107c",
     "assets/generated/pulse-phone-light.svg": "5b9b23bf09466b841b36b7f8d0bdc999da766bfd87f60cdc8212bdd2d9fad1fc",
-    "assets/generated/signoff-dark.svg": "b73e02e3c453accebe79c6e3b1ba8ce38b9f512d5a0d834a107fe07e2ae9dab6",
-    "assets/generated/signoff-light.svg": "576f3f29edd5fe446cad6382598af8196c36c77a369e1b31c50f8fa3b177bdae",
-    "assets/generated/signoff-phone-dark.svg": "e099d93bd9949bd8d93ef62942c693c9cfd3d1cb0ea97e62f582bafc7c4397e6",
-    "assets/generated/signoff-phone-light.svg": "977e5ac75276b5047a95e32b3c5488681389a8a9cb67a3f89c83ccc24f8afd7e",
+    "assets/generated/signoff-dark.svg": "15eebf83910eca0cb6fde062330b80064c98bf57595334bf0f5f35dc86bf8305",
+    "assets/generated/signoff-light.svg": "3445ebcea4cb4c3a26ed91a86633d2e7da1d92ecb981f63459f3e00511d458a7",
+    "assets/generated/signoff-phone-dark.svg": "c79807bc1eb3079b69aa5f754694e4319127eb8cb68989d22f8f09471785aae6",
+    "assets/generated/signoff-phone-light.svg": "bac50f5d4cb3d6ed1d48fa68c2c653c593c9ba4fc7860adbe67b559dc2d0df31",
     "assets/generated/snake-dark.svg": "27d8c720b6e7cbc77b3da8db7c2d703dfc32451e550af67eec4b102d48a91c7c",
     "assets/generated/snake-light.svg": "6eb63edf955e7483cd7661430bffe0d46a9af45685b4b6a63317d25a56ad6de4",
     "assets/generated/tile-agt-dark.svg": "1786d282b66a9e54c3f472141ad0f0f57ec90bd6f0e60dc0b3c50a9a8a088800",
@@ -67,6 +67,6 @@
     "assets/tile-ledgerboard-dark.svg": "45123116f6340c46eeba37888421c53f205da50e397a62b5e580f4aa90017f40",
     "assets/tile-ledgerboard-light.svg": "0979836107bda2ea237c4192fcf6fbead3e4ccb15cab54e5c9653c6e520482ee"
   },
-  "rendered_at": "2026-11-08T15:09:49.992266+13:00",
+  "rendered_at": "2026-11-08T15:11:02.883487+13:00",
   "snake_source": "snk"
 }
