@@ -1,0 +1,157 @@
+{
+  "feed_url": "https://clouddev.blog/latest-posts.json",
+  "hashes": {
+    "calendar": "9484084701d508b94a39d26d70157c424ae7053f1279b5c30ffbb7fc4604cc3a",
+    "covers": "b8313954c452a9fd6a8b0377518e8630236602ebe1afba0ec9ed4bfef531ab16",
+    "feed": "cc71b50356029e5c113e73141b6531251af9c7a9f4d2f33b018caa6402b50f06",
+    "stats": "7b2f3b3c390141c53c20a534814b9ecf8551b153ed3035f95d67d8d61db2a071"
+  },
+  "readiness": [
+    {
+      "canonical": "https://clouddev.blog/GitHub/Copilot/github-copilot-agents-part-2-harnesses-the-agent-host-cloud-sandboxes-and-ai-credits-explained/",
+      "status": 200,
+      "title": "GitHub Copilot CLI vs Local vs Cloud: Agents Explained (2026)",
+      "url": "https://clouddev.blog/GitHub/Copilot/github-copilot-agents-part-2-harnesses-the-agent-host-cloud-sandboxes-and-ai-credits-explained/"
+    },
+    {
+      "canonical": "https://clouddev.blog/AI/AI-Engineering/mcp-goes-stateless-no-handshake-no-sticky-sessions-better-ai-gateways/",
+      "status": 200,
+      "title": "MCP Goes Stateless: No Handshake, No Sticky Sessions, Better AI Gateways",
+      "url": "https://clouddev.blog/AI/AI-Engineering/mcp-goes-stateless-no-handshake-no-sticky-sessions-better-ai-gateways/"
+    },
+    {
+      "canonical": "https://clouddev.blog/AI/AI-Engineering/agents-md-vs-copilot-instructions-vs-cursor-rules-vs-claude-md-which-ai-context-file-to-use-and-when-2026/",
+      "status": 200,
+      "title": "AGENTS.md vs Copilot Instructions vs Cursor Rules vs CLAUDE.md: Which AI Context File to Use, and When (2026)",
+      "url": "https://clouddev.blog/AI/AI-Engineering/agents-md-vs-copilot-instructions-vs-cursor-rules-vs-claude-md-which-ai-context-file-to-use-and-when-2026/"
+    }
+  ],
+  "sources": {
+    "agt": {
+      "payload": {
+        "description": "AI Agent Governance Toolkit — Policy enforcement, zero-trust identity, execution sandboxing, and reliability engineering for autonomous AI agents. Covers 10/10 OWASP Agentic Top 10.",
+        "forks": 1129,
+        "language": "Python",
+        "repository": "microsoft/agent-governance-toolkit",
+        "source": "https://api.github.com/repos/microsoft/agent-governance-toolkit",
+        "stars": 6535,
+        "url": "https://github.com/microsoft/agent-governance-toolkit",
+        "visibility": "public"
+      },
+      "retrieved_at": "2026-11-08T01:43:44.390979Z"
+    },
+    "calendar": {
+      "payload": {
+        "calendar_sha256": "9484084701d508b94a39d26d70157c424ae7053f1279b5c30ffbb7fc4604cc3a",
+        "contributions": 1226,
+        "privacy": "anonymous public GitHub calendar; may include publicly displayed aggregate",
+        "url": "https://github.com/users/Ricky-G/contributions"
+      },
+      "retrieved_at": "2026-11-08T01:43:44.390979Z"
+    },
+    "docker": {
+      "payload": {
+        "description": "Prebuilt Dockerfiles for popular AI models – build and run with zero setup",
+        "forks": 0,
+        "language": "Python",
+        "repository": "Ricky-G/docker-ai-models",
+        "source": "https://api.github.com/repos/Ricky-G/docker-ai-models",
+        "stars": 2,
+        "url": "https://github.com/Ricky-G/docker-ai-models",
+        "visibility": "public"
+      },
+      "retrieved_at": "2026-11-07T09:49:01.424267Z"
+    },
+    "feed": {
+      "payload": {
+        "sha256": "cc71b50356029e5c113e73141b6531251af9c7a9f4d2f33b018caa6402b50f06",
+        "url": "https://clouddev.blog/latest-posts.json"
+      },
+      "retrieved_at": "2026-11-07T09:49:01.424267Z"
+    },
+    "hub": {
+      "payload": {
+        "description": "Tested Azure cloud and Microsoft AI engineering scenarios: deployable architectures, runnable demos, benchmarks, and evidence-backed investigations.",
+        "forks": 3,
+        "language": "Bicep",
+        "repository": "Ricky-G/azure-scenario-hub",
+        "source": "https://api.github.com/repos/Ricky-G/azure-scenario-hub",
+        "stars": 9,
+        "url": "https://github.com/Ricky-G/azure-scenario-hub",
+        "visibility": "public"
+      },
+      "retrieved_at": "2026-11-07T09:49:01.424267Z"
+    },
+    "ledger": {
+      "payload": {
+        "description": "Local-first Markdown Kanban for VS Code with entity palettes, conflict-safe autosave, and append-only analytics.",
+        "forks": 0,
+        "language": "JavaScript",
+        "repository": "Ricky-G/ledgerboard",
+        "source": "https://api.github.com/repos/Ricky-G/ledgerboard",
+        "stars": 0,
+        "url": "https://github.com/Ricky-G/ledgerboard",
+        "visibility": "public"
+      },
+      "retrieved_at": "2026-11-07T09:49:01.424267Z"
+    },
+    "mix": {
+      "payload": {
+        "contributed_to": 36,
+        "from": "2025-11-07T09:49:01.424267Z",
+        "mix": {
+          "commits": 262,
+          "issues": 100,
+          "prs": 146,
+          "reviews": 23
+        },
+        "privacy": "public repositories only",
+        "to": "2026-11-07T09:49:01.424267Z",
+        "url": "https://api.github.com/graphql"
+      },
+      "retrieved_at": "2026-11-07T09:49:01.424267Z"
+    },
+    "posts": {
+      "payload": {
+        "archive_url": "https://clouddev.blog/archives/",
+        "first_year": 2022,
+        "posts": 27,
+        "url": "https://clouddev.blog/atom.xml"
+      },
+      "retrieved_at": "2026-11-07T09:49:01.424267Z"
+    },
+    "readiness": {
+      "payload": {
+        "articles": [
+          {
+            "canonical": "https://clouddev.blog/GitHub/Copilot/github-copilot-agents-part-2-harnesses-the-agent-host-cloud-sandboxes-and-ai-credits-explained/",
+            "status": 200,
+            "title": "GitHub Copilot CLI vs Local vs Cloud: Agents Explained (2026)",
+            "url": "https://clouddev.blog/GitHub/Copilot/github-copilot-agents-part-2-harnesses-the-agent-host-cloud-sandboxes-and-ai-credits-explained/"
+          },
+          {
+            "canonical": "https://clouddev.blog/AI/AI-Engineering/mcp-goes-stateless-no-handshake-no-sticky-sessions-better-ai-gateways/",
+            "status": 200,
+            "title": "MCP Goes Stateless: No Handshake, No Sticky Sessions, Better AI Gateways",
+            "url": "https://clouddev.blog/AI/AI-Engineering/mcp-goes-stateless-no-handshake-no-sticky-sessions-better-ai-gateways/"
+          },
+          {
+            "canonical": "https://clouddev.blog/AI/AI-Engineering/agents-md-vs-copilot-instructions-vs-cursor-rules-vs-claude-md-which-ai-context-file-to-use-and-when-2026/",
+            "status": 200,
+            "title": "AGENTS.md vs Copilot Instructions vs Cursor Rules vs CLAUDE.md: Which AI Context File to Use, and When (2026)",
+            "url": "https://clouddev.blog/AI/AI-Engineering/agents-md-vs-copilot-instructions-vs-cursor-rules-vs-claude-md-which-ai-context-file-to-use-and-when-2026/"
+          }
+        ]
+      },
+      "retrieved_at": "2026-11-07T09:49:01.424267Z"
+    },
+    "repos": {
+      "payload": {
+        "public_repos": 129,
+        "url": "https://api.github.com/users/Ricky-G"
+      },
+      "retrieved_at": "2026-11-07T09:49:01.424267Z"
+    }
+  },
+  "version": 1
+}

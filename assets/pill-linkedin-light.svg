@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 96" width="300" height="96" id="motion" class="plll" role="img" aria-label="LinkedIn: Let&#x27;s connect"><title>LinkedIn: Let&#x27;s connect</title><style>
+.plll text{font-family:'Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
+.plll .m{font-family:'Cascadia Code','JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace}
+@keyframes plll-tw{0%,100%{opacity:.18}50%{opacity:1}}
+@keyframes plll-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes plll-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(3);opacity:0}}
+@keyframes plll-spin{to{transform:rotate(360deg)}}
+@keyframes plll-spinr{to{transform:rotate(-360deg)}}
+@keyframes plll-blink{0%,55%{opacity:1}56%,100%{opacity:.1}}
+@keyframes plll-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes plll-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes plll-travel{0%{transform:translateX(0);opacity:0}8%{opacity:1}85%{opacity:1}100%{transform:translateX(var(--d,1000px));opacity:0}}
+.plll .t1{animation:plll-tw 3.4s ease-in-out infinite}
+.plll .t2{animation:plll-tw 4.8s ease-in-out infinite 1.1s}
+.plll .t3{animation:plll-tw 6.2s ease-in-out infinite 2.3s}
+.plll .ping{animation:plll-ping 2.6s ease-out infinite}
+.plll .blink{animation:plll-blink 1.1s steps(1) infinite}
+.plll .fl1{animation:plll-float 6s ease-in-out infinite}
+.plll .fl2{animation:plll-float 7s ease-in-out infinite 1.4s}
+.plll .fl3{animation:plll-float 6.5s ease-in-out infinite .7s}
+.plll .in{animation:plll-in .7s cubic-bezier(.2,.8,.2,1) both}
+.plll .grow{transform-box:fill-box;transform-origin:0 50%;animation:plll-grow 1.4s cubic-bezier(.2,.8,.2,1) .5s both}
+.plll:not(:target) *{animation:none!important}
+@media (prefers-reduced-motion:reduce){.plll:not(:target) *{animation:none!important}}
+</style><defs><linearGradient id="plll-brand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="plll-shim" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="plll-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:#ffffff"/><stop offset="1" style="stop-color:#f7f8fe"/></linearGradient><filter id="plll-shadow" x="-20%" y="-40%" width="140%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dy="6" result="o"/><feFlood style="flood-color:#1e2a5a;flood-opacity:0.13"/><feComposite in2="o" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="plll-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="40"/></filter><filter id="plll-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><linearGradient id="plll-edge" gradientUnits="userSpaceOnUse" x1="7" y1="0" x2="293" y2="0"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient></defs><rect x="7" y="7" width="286" height="82" rx="41" style="fill:url(#plll-card);stroke:#e2e6f3;stroke-width:1.3"/><circle cx="48" cy="48" r="27" style="fill:#0a66c2"/><text x="48" y="57.5" text-anchor="middle" style="font-size:25px;font-weight:800;fill:#fff">in</text><text x="90.0" y="42.0" class="m" style="font-size:11.5px;fill:#666f8e;font-weight:700;letter-spacing:1.6px">LET&#x27;S CONNECT</text><text x="90.0" y="69.0" style="font-size:20.5px;fill:#0b1020;font-weight:750">LinkedIn</text><path d="M258 53L269 42M261.5 42H269V49.5" style="fill:none;stroke:#666f8e;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round"/></svg>

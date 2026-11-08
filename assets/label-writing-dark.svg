@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 78" width="1200" height="78" id="motion" class="lwd" role="img" aria-label="Writing: published on clouddev.blog · latest three"><title>Writing: published on clouddev.blog · latest three</title><style>
+.lwd text{font-family:'Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
+.lwd .m{font-family:'Cascadia Code','JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace}
+@keyframes lwd-tw{0%,100%{opacity:.18}50%{opacity:1}}
+@keyframes lwd-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes lwd-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(3);opacity:0}}
+@keyframes lwd-spin{to{transform:rotate(360deg)}}
+@keyframes lwd-spinr{to{transform:rotate(-360deg)}}
+@keyframes lwd-blink{0%,55%{opacity:1}56%,100%{opacity:.1}}
+@keyframes lwd-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes lwd-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes lwd-travel{0%{transform:translateX(0);opacity:0}8%{opacity:1}85%{opacity:1}100%{transform:translateX(var(--d,1000px));opacity:0}}
+.lwd .t1{animation:lwd-tw 3.4s ease-in-out infinite}
+.lwd .t2{animation:lwd-tw 4.8s ease-in-out infinite 1.1s}
+.lwd .t3{animation:lwd-tw 6.2s ease-in-out infinite 2.3s}
+.lwd .ping{animation:lwd-ping 2.6s ease-out infinite}
+.lwd .blink{animation:lwd-blink 1.1s steps(1) infinite}
+.lwd .fl1{animation:lwd-float 6s ease-in-out infinite}
+.lwd .fl2{animation:lwd-float 7s ease-in-out infinite 1.4s}
+.lwd .fl3{animation:lwd-float 6.5s ease-in-out infinite .7s}
+.lwd .in{animation:lwd-in .7s cubic-bezier(.2,.8,.2,1) both}
+.lwd .grow{transform-box:fill-box;transform-origin:0 50%;animation:lwd-grow 1.4s cubic-bezier(.2,.8,.2,1) .5s both}
+.lwd:not(:target) *{animation:none!important}
+@media (prefers-reduced-motion:reduce){.lwd:not(:target) *{animation:none!important}}
+
+@keyframes lwd-run{0%{transform:translateX(0);opacity:0}6%{opacity:1}88%{opacity:1}100%{transform:translateX(1150px);opacity:0}}
+.lwd .run{animation:lwd-run 7s cubic-bezier(.45,0,.2,1) infinite}
+</style><defs><linearGradient id="lwd-brand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#34d399"/><stop offset=".33" style="stop-color:#2dd4bf"/><stop offset=".7" style="stop-color:#a78bfa"/><stop offset="1" style="stop-color:#e879f9"/></linearGradient><linearGradient id="lwd-shim" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect"><stop offset="0" style="stop-color:#34d399"/><stop offset=".33" style="stop-color:#2dd4bf"/><stop offset=".7" style="stop-color:#a78bfa"/><stop offset="1" style="stop-color:#e879f9"/></linearGradient><linearGradient id="lwd-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:#121a37"/><stop offset="1" style="stop-color:#0b1128"/></linearGradient><filter id="lwd-shadow" x="-20%" y="-40%" width="140%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dy="6" result="o"/><feFlood style="flood-color:#000000;flood-opacity:0.45"/><feComposite in2="o" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="lwd-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="40"/></filter><filter id="lwd-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><linearGradient id="lwd-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#34d399;stop-opacity:.9"/><stop offset=".4" style="stop-color:#a78bfa;stop-opacity:.55"/><stop offset="1" style="stop-color:#e879f9;stop-opacity:0"/></linearGradient></defs><text x="14.0" y="48.0" class="m" style="font-size:15px;fill:url(#lwd-brand);font-weight:700">01</text><text x="52.0" y="49.0" style="font-size:27px;fill:#eef1ff;font-weight:750;letter-spacing:-0.3px">Writing</text><text x="1186.0" y="48.0" text-anchor="end" class="m" style="font-size:14px;fill:#8a93b7;font-weight:400">published on clouddev.blog · latest three</text><rect x="14" y="63" width="1172" height="1.6" style="fill:url(#lwd-line)"/><g class="run"><circle cx="18" cy="63.8" r="7" style="fill:#34d399;opacity:.22"/><circle cx="18" cy="63.8" r="3" style="fill:#34d399"/></g></svg>

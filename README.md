@@ -1,165 +1,115 @@
-<p align="center">
-  <img src="https://github.com/Ricky-G/Ricky-G/raw/main/CodeAnimation_New.gif?raw=true" alt="Code animation banner" />
-</p>
-
-<h1 align="center">Hey, I'm Ricky 👋</h1>
-<p align="center">
-  <em>Cloud & AI Architect • Engineer at heart • Azure + AI Foundry specialist</em>
-</p>
+<!--
+Aurora Australis: repository-local SVG artwork, with light/dark and phone variants.
+Edit the prose outside the four generated boundaries normally.
+Writing, project metadata, pulse and sign-off are rebuilt from validated public data.
+See PROFILE.md for local reproduction, refresh behavior and activation prerequisites.
+-->
 
 <p align="center">
-  <a href="https://clouddev.blog"><img src="https://img.shields.io/badge/Blog-clouddev.blog-0A66C2?style=for-the-badge&logo=githubpages&logoColor=white"/></a>
-  <a href="https://linkedin.com/in/rickygummadi"><img src="https://img.shields.io/badge/LinkedIn-rickygummadi-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
+<a href="https://ricky-g.com"><picture>
+<source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-phone-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-phone-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/hero-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/hero-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg"><img src="assets/hero-light.svg" width="99%" alt="Kia ora, shipping from Auckland, New Zealand. Ricky Gummadi, Cloud and AI Solution Architect at Microsoft. Engineer at heart. The hard part isn't creating AI. It's governing it. Portrait with illustrative allow, deny and audit decisions above the Auckland skyline."></picture></a>
 </p>
 
----
+<p align="center">
+<a href="https://clouddev.blog"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/pill-blog-dark.svg"><img src="assets/pill-blog-light.svg" width="220" alt="Read the blog: clouddev.blog"></picture></a><a href="https://ricky-g.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/pill-site-dark.svg"><img src="assets/pill-site-light.svg" width="220" alt="Home base: ricky-g.com"></picture></a><a href="https://www.linkedin.com/in/rickygummadi"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/pill-linkedin-dark.svg"><img src="assets/pill-linkedin-light.svg" width="220" alt="Let's connect on LinkedIn"></picture></a>
+</p>
 
-## 👨‍💻 About me
+<p align="center"><strong>Cloud &amp; AI Solution Architect at Microsoft · Engineer at heart · Auckland, New Zealand</strong><br>I build on Azure, govern AI agents, and write down the engineering details at <a href="https://clouddev.blog">clouddev.blog</a>.</p>
 
-I'm a Cloud & AI Solution Architect at Microsoft, passionate about cloud, AI and startups, focused on building scalable systems, exploring emerging tech and connecting with innovative founders.
+<h2><picture>
+<source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-writing-phone-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-writing-phone-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-writing-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-writing-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/label-writing-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/label-writing-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/label-writing-dark.svg"><img src="assets/label-writing-light.svg" width="99%" alt="01 Writing: the latest three published articles from clouddev.blog"></picture></h2>
 
-- 🤖 Building the **[Agent Governance Toolkit](https://github.com/Ricky-G/agent-governance-toolkit)**: policy enforcement, zero-trust identity, execution sandboxing and reliability engineering for autonomous AI agents. Covers the full **OWASP Agentic Top 10**.
-- ☁️ Deep-diving into **Microsoft AI Foundry**: cross-region deployments, private endpoints and enterprise-grade landing zones.
-- 🌐 Designing **AKS networking patterns**: static egress gateways, per-namespace egress IPs, zero-trust east-west traffic.
-- ⚙️ Benchmarking real-world **Azure API Management** architectures at scale.
+<!-- WRITING:START -->
+<!-- GENERATED:sha256=291c97b9e99f403b4e44fae58a1586e449865a962ee69dd6dd7a9065850321f7 -->
+<p align="center">
+<a href="https://clouddev.blog/GitHub/Copilot/github-copilot-agents-part-2-harnesses-the-agent-host-cloud-sandboxes-and-ai-credits-explained/"><picture><source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/post-1-phone-dark.svg#motion"><source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/post-1-phone-light.svg#motion"><source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/post-1-dark.svg#motion"><source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/post-1-light.svg#motion"><source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/generated/post-1-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/generated/post-1-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/generated/post-1-dark.svg"><img src="assets/generated/post-1-light.svg" width="99%" alt="GitHub Copilot CLI vs Local vs Cloud: Agents Explained (2026). Published 3 Nov 2026. Compare GitHub Copilot CLI, Local and cloud agents in 2026. Learn where the Copilot SDK fits, how sessions run, and what sub-agents and AI Credits cost."></picture></a><br>
+<a href="https://clouddev.blog/AI/AI-Engineering/mcp-goes-stateless-no-handshake-no-sticky-sessions-better-ai-gateways/"><picture><source media="(prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/post-2-dark.svg#motion"><source media="(prefers-color-scheme: light) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/post-2-light.svg#motion"><source media="(prefers-color-scheme: dark)" srcset="assets/generated/post-2-dark.svg"><img src="assets/generated/post-2-light.svg" width="275" alt="MCP Goes Stateless: No Handshake, No Sticky Sessions, Better AI Gateways. Published 20 Oct 2026. MCP 2026-07-28 removes handshakes and sticky sessions. Learn what changes for Azure API Management, per-tool routing, retries, tracing and secure tool access."></picture></a><a href="https://clouddev.blog/AI/AI-Engineering/agents-md-vs-copilot-instructions-vs-cursor-rules-vs-claude-md-which-ai-context-file-to-use-and-when-2026/"><picture><source media="(prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/post-3-dark.svg#motion"><source media="(prefers-color-scheme: light) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/post-3-light.svg#motion"><source media="(prefers-color-scheme: dark)" srcset="assets/generated/post-3-dark.svg"><img src="assets/generated/post-3-light.svg" width="275" alt="AGENTS.md vs Copilot Instructions vs Cursor Rules vs CLAUDE.md: Which AI Context File to Use, and When (2026). Published 26 Jun 2026. A practical guide to AGENTS.md, Copilot instructions, Cursor rules, CLAUDE.md, GEMINI.md and skills. Choose the right context file, understand precedence, and see what the..."></picture></a><a href="https://clouddev.blog/archives/"><picture><source media="(prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/archive-dark.svg#motion"><source media="(prefers-color-scheme: light) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/archive-light.svg#motion"><source media="(prefers-color-scheme: dark)" srcset="assets/generated/archive-dark.svg"><img src="assets/generated/archive-light.svg" width="275" alt="Browse 27 published posts since 2022 on clouddev.blog."></picture></a>
+</p>
 
----
+<ol>
+<li><strong><a href="https://clouddev.blog/GitHub/Copilot/github-copilot-agents-part-2-harnesses-the-agent-host-cloud-sandboxes-and-ai-credits-explained/">GitHub Copilot CLI vs Local vs Cloud: Agents Explained (2026)</a></strong> — 3 Nov 2026<br>Compare GitHub Copilot CLI, Local and cloud agents in 2026. Learn where the Copilot SDK fits, how sessions run, and what sub-agents and AI Credits cost.</li>
+<li><strong><a href="https://clouddev.blog/AI/AI-Engineering/mcp-goes-stateless-no-handshake-no-sticky-sessions-better-ai-gateways/">MCP Goes Stateless: No Handshake, No Sticky Sessions, Better AI Gateways</a></strong> — 20 Oct 2026<br>MCP 2026-07-28 removes handshakes and sticky sessions. Learn what changes for Azure API Management, per-tool routing, retries, tracing and secure tool access.</li>
+<li><strong><a href="https://clouddev.blog/AI/AI-Engineering/agents-md-vs-copilot-instructions-vs-cursor-rules-vs-claude-md-which-ai-context-file-to-use-and-when-2026/">AGENTS.md vs Copilot Instructions vs Cursor Rules vs CLAUDE.md: Which AI Context File to Use, and When (2026)</a></strong> — 26 Jun 2026<br>A practical guide to AGENTS.md, Copilot instructions, Cursor rules, CLAUDE.md, GEMINI.md and skills. Choose the right context file, understand precedence, and see what the...</li>
+</ol>
+<p><a href="https://clouddev.blog/archives/">Explore all 27 published articles →</a></p>
+<!-- WRITING:END -->
 
-<!-- =============== BLOG SHOWCASE =============== -->
+<h2><picture>
+<source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-building-phone-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-building-phone-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-building-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-building-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/label-building-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/label-building-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/label-building-dark.svg"><img src="assets/label-building-light.svg" width="99%" alt="02 Building: open-source projects with verified GitHub metadata snapshots"></picture></h2>
 
-<div align="center">
+<!-- PROJECTS:START -->
+<!-- GENERATED:sha256=cc5eb45ae2eb4e6cef82bc394335b49499970377317e60e6007003cb8a6ddd5b -->
+<p align="center">
+<a href="https://github.com/microsoft/agent-governance-toolkit"><picture><source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/tile-agt-phone-dark.svg#motion"><source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/tile-agt-phone-light.svg#motion"><source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/tile-agt-dark.svg#motion"><source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/tile-agt-light.svg#motion"><source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/generated/tile-agt-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/generated/tile-agt-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/generated/tile-agt-dark.svg"><img src="assets/generated/tile-agt-light.svg" width="550" alt="Agent Governance Toolkit: 6.5k stars, 1.1k forks. Policy enforcement, identity, sandboxing and audit for AI agents. The project reports ten OWASP Agentic Top 10 risks covered; the terminal is illustrative."></picture></a><a href="https://github.com/Ricky-G/azure-scenario-hub"><picture><source media="(prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/tile-hub-dark.svg#motion"><source media="(prefers-color-scheme: light) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/tile-hub-light.svg#motion"><source media="(prefers-color-scheme: dark)" srcset="assets/generated/tile-hub-dark.svg"><img src="assets/generated/tile-hub-light.svg" width="275" alt="Azure Scenario Hub: 9 stars. APIM benchmark: 882 versus 874 requests per second, 146 versus 153 ms p95, zero errors across 1.67 million requests."></picture></a><br>
+<a href="https://github.com/Ricky-G/docker-ai-models"><picture><source media="(prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference)" srcset="assets/tile-docker-dark.svg#motion"><source media="(prefers-color-scheme: light) and (prefers-reduced-motion: no-preference)" srcset="assets/tile-docker-light.svg#motion"><source media="(prefers-color-scheme: dark)" srcset="assets/tile-docker-dark.svg"><img src="assets/tile-docker-light.svg" width="275" alt="docker-ai-models: prebuilt Dockerfiles for popular AI models; the terminal is an illustration."></picture></a><a href="https://github.com/Ricky-G/ledgerboard"><picture><source media="(prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference)" srcset="assets/tile-ledgerboard-dark.svg#motion"><source media="(prefers-color-scheme: light) and (prefers-reduced-motion: no-preference)" srcset="assets/tile-ledgerboard-light.svg#motion"><source media="(prefers-color-scheme: dark)" srcset="assets/tile-ledgerboard-dark.svg"><img src="assets/tile-ledgerboard-light.svg" width="275" alt="ledgerboard: local-first Markdown Kanban for VS Code with conflict-safe autosave; the moving card is an illustration."></picture></a><a href="https://ricky-g.com"><picture><source media="(prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference)" srcset="assets/tile-arcade-dark.svg#motion"><source media="(prefers-color-scheme: light) and (prefers-reduced-motion: no-preference)" srcset="assets/tile-arcade-light.svg#motion"><source media="(prefers-color-scheme: dark)" srcset="assets/tile-arcade-dark.svg"><img src="assets/tile-arcade-light.svg" width="275" alt="Play snake and minesweeper on ricky-g.com."></picture></a></p>
 
-# 📝 [clouddev.blog](https://clouddev.blog)
+<p><strong><a href="https://github.com/microsoft/agent-governance-toolkit">Agent Governance Toolkit</a></strong> — policy enforcement, zero-trust identity, execution sandboxing and reliability engineering for autonomous AI agents. The project reports OWASP Agentic Top 10 coverage.</p>
+<p><strong><a href="https://github.com/Ricky-G/azure-scenario-hub">Azure Scenario Hub</a></strong> — deployable Azure and Microsoft AI scenarios, runnable demos and benchmarks. <a href="https://clouddev.blog/Azure/APIM/apim-backend-fan-out-shared-backend-rewrite-uri-vs-one-backend-per-api-a-real-benchmark/">Read the APIM benchmark and its methodology →</a></p>
+<p><a href="https://github.com/Ricky-G/docker-ai-models">docker-ai-models</a> · <a href="https://github.com/Ricky-G/ledgerboard">ledgerboard</a> · <a href="https://ricky-g.com">The mini arcade</a></p>
+<!-- PROJECTS:END -->
 
-### *Where I write down everything I learn building cloud & AI systems.*
+<h2><picture>
+<source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-stack-phone-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-stack-phone-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-stack-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-stack-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/label-stack-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/label-stack-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/label-stack-dark.svg"><img src="assets/label-stack-light.svg" width="99%" alt="03 Stack: what I build with, drawn like an architecture"></picture></h2>
 
-[![Visit the blog](https://img.shields.io/badge/Read%20the%20blog%20%E2%86%92-clouddev.blog-0A66C2?style=for-the-badge&logo=githubpages&logoColor=white&labelColor=000000)](https://clouddev.blog)
+<p align="center"><picture>
+<source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/stack-phone-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/stack-phone-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/stack-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/stack-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/stack-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/stack-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/stack-dark.svg"><img src="assets/stack-light.svg" width="99%" alt="Agents and AI: GitHub Copilot, Model Context Protocol, Microsoft Agent Framework, Semantic Kernel, Microsoft Foundry and Azure OpenAI. Cloud platform: Azure, AKS, API Management, Container Apps, Functions, Bicep, Terraform and Docker. Languages: C#, .NET, Python, TypeScript and PowerShell. Governance across every layer: Agent Governance Toolkit, Entra ID, Private Link and Azure Monitor. Every tool call: identity, policy, audit."></picture></p>
 
-Long-form articles on **Azure architecture**, **AI Foundry**, **AKS**, **APIM**, **agentic AI** and the gritty engineering details in between.
+<p><strong>Agents &amp; AI</strong> — GitHub Copilot · MCP · Microsoft Agent Framework · Semantic Kernel · Microsoft Foundry · Azure OpenAI<br><strong>Cloud platform</strong> — Azure · AKS · API Management · Container Apps · Functions · Bicep · Terraform · Docker<br><strong>Languages</strong> — C# · .NET · Python · TypeScript · PowerShell<br><strong>Across every layer</strong> — Agent Governance Toolkit · Entra ID · Private Link · Azure Monitor</p>
 
-</div>
+<h2><picture>
+<source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-pulse-phone-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-pulse-phone-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-pulse-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-pulse-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/label-pulse-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/label-pulse-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/label-pulse-dark.svg"><img src="assets/label-pulse-light.svg" width="99%" alt="04 Pulse: a captured snapshot of public GitHub activity in the last twelve months"></picture></h2>
 
-### 🆕 Latest posts
+<!-- PULSE:START -->
+<!-- GENERATED:sha256=e609f686aff2b597abe868ec017aca9a16dd714cd8906071d7b0b77999863672 -->
+<p align="center"><picture><source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/pulse-phone-dark.svg#motion"><source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/pulse-phone-light.svg#motion"><source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/pulse-dark.svg#motion"><source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/pulse-light.svg#motion"><source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/generated/pulse-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/generated/pulse-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/generated/pulse-dark.svg"><img src="assets/generated/pulse-light.svg" width="99%" alt="Public profile snapshot: 1,226 contributions in the last year. 129 public repositories; 27 published blog posts. Public-repository activity: 262 commits, 146 pull requests, 100 issues and 23 reviews across 36 public repositories."></picture></p>
 
-<table>
-<tr>
-<td width="50%" valign="top">
+<p><strong>1,226 contributions</strong> shown on the public GitHub profile · 129 public repositories · 27 published articles.</p>
+<p>Public-repository activity: 262 commits, 146 pull requests, 100 issues and 23 reviews across 36 public repositories. The type mix can differ from the public calendar total, which also counts other contribution types and any anonymous aggregates the owner has chosen to make public.</p>
+<!-- PULSE:END -->
 
-#### 🧪 [APIM Backend Fan-out](https://clouddev.blog/)
-**Shared Backend + rewrite-uri vs One Backend Per API: a real benchmark.**
-A head-to-head performance and operational comparison for large-scale APIM estates.
+<h2><picture>
+<source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-arcade-phone-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-arcade-phone-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-arcade-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/label-arcade-light.svg#motion">
+<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/label-arcade-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/label-arcade-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/label-arcade-dark.svg"><img src="assets/label-arcade-light.svg" width="99%" alt="05 Arcade: a little play over the real public GitHub contribution calendar"></picture></h2>
 
-</td>
-<td width="50%" valign="top">
+<p align="center"><picture>
+<source media="(prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/snake-dark.svg#motion">
+<source media="(prefers-color-scheme: light) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/snake-light.svg#motion">
+<source media="(prefers-color-scheme: dark)" srcset="assets/generated/snake-dark.svg"><img src="assets/generated/snake-light.svg" width="99%" alt="A decorative snake moving over Ricky's verified public GitHub contribution calendar. This is an animation, not an interactive game in the README."></picture></p>
 
-#### 🌍 [AKS Static Egress Gateway](https://clouddev.blog/)
-**Per-namespace static egress IPs in AKS.**
-How to give every Kubernetes namespace its own static outbound IP, perfect for compliance and partner allow-lists.
+<p align="center"><a href="https://ricky-g.com">Play snake and minesweeper on ricky-g.com →</a></p>
 
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
+<!-- SIGNOFF:START -->
+<!-- GENERATED:sha256=1c444212dbb1f5d3a9bbb6514dc2b06cb34dad3e618735a6cc4dbca2fed9b64a -->
+<p align="center"><a href="https://www.linkedin.com/in/rickygummadi"><picture><source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/signoff-phone-dark.svg#motion"><source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/signoff-phone-light.svg#motion"><source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/signoff-dark.svg#motion"><source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/generated/signoff-light.svg#motion"><source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/generated/signoff-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/generated/signoff-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/generated/signoff-dark.svg"><img src="assets/generated/signoff-light.svg" width="99%" alt="Off the clock? Still building AI and AI agents, exploring emerging tech and side projects. Founders with impossible ideas: let&#x27;s talk. Auckland, New Zealand. Snapshot 8 Nov 2026, 14:43 NZDT."></picture></a></p>
 
-#### 🔐 [Microsoft Foundry Cross-Region with Private Endpoints (Part 1)](https://clouddev.blog/Azure/AI/Networking/microsoft-foundry-cross-region-with-private-endpoints-part-1/)
-Deploying Azure AI Foundry across regions while staying inside private networking and data-residency boundaries.
+<p align="center">Public-data snapshot: 8 Nov 2026, 14:43 NZDT. <a href="https://www.linkedin.com/in/rickygummadi">Let’s make something →</a></p>
+<!-- SIGNOFF:END -->
 
-</td>
-<td width="50%" valign="top">
-
-#### 🎨 [Running FLUX.1 OmniControl on a Consumer GPU](https://clouddev.blog/AI/LLMs/running-flux-1-omnicontrol-on-a-consumer-gpu-a-docker-implementation-tested-on-rtx-3060/)
-A Docker implementation tested on an RTX 3060, with memory tricks for devs without datacenter GPUs.
-
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
-
-#### 💻 [Pimp My Terminal with Oh My Posh](https://clouddev.blog/Engineering/Tooling/pimp-my-terminal-terminal-customization-with-oh-my-posh-a-cloud-native-terminal-setup/)
-A scripted, cloud-native terminal setup using Oh My Posh, Nerd Fonts and PowerShell.
-
-</td>
-<td width="50%" valign="top">
-
-#### 🛠️ [Automating Searchable Branches in Azure DevOps](https://clouddev.blog/Azure-DevOps/Azure-DevOps-API/automating-searchable-branch-configuration-in-azure-devops-repos-via-rest-api/)
-Bulk-configuring searchable branches across thousands of repos using internal Azure DevOps REST APIs.
-
-</td>
-</tr>
-</table>
-
-<div align="center">
-
-**[📚 Browse the full archive on clouddev.blog →](https://clouddev.blog)**
-
-</div>
-
-<!-- =============== /BLOG SHOWCASE =============== -->
-
----
-
-## 🧰 Tech I work with daily
-
-**Cloud & Platform**
-![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
-![Azure AI Foundry](https://img.shields.io/badge/Azure%20AI%20Foundry-5B2EFF?style=for-the-badge&logo=microsoft&logoColor=white)
-![AKS](https://img.shields.io/badge/AKS-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
-![APIM](https://img.shields.io/badge/API%20Management-0078D4?style=for-the-badge&logo=azureapimanagement&logoColor=white)
-![Terraform](https://img.shields.io/badge/Terraform-5835CC?style=for-the-badge&logo=terraform&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-0db7ed?style=for-the-badge&logo=docker&logoColor=white)
-
-**Languages & Frameworks**
-![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
-![.NET](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
-
-**AI / Agents**
-![Semantic Kernel](https://img.shields.io/badge/Semantic%20Kernel-000000?style=for-the-badge&logo=microsoft&logoColor=white)
-![Azure OpenAI](https://img.shields.io/badge/Azure%20OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
-![MCP](https://img.shields.io/badge/Model%20Context%20Protocol-1F6FEB?style=for-the-badge&logo=anthropic&logoColor=white)
-
----
-
-## 🌟 Featured projects
-
-| Project | What it does |
-|---|---|
-| 🛡️ **[agent-governance-toolkit](https://github.com/Ricky-G/agent-governance-toolkit)** | Policy enforcement, zero-trust identity & sandboxing for autonomous AI agents. Maps to the OWASP Agentic Top 10. |
-| 🏗️ **[azure-scenario-hub](https://github.com/Ricky-G/azure-scenario-hub)** | Reusable Azure reference scenarios and deployable architectures. |
-| 🌐 **[clouddev.blog](https://clouddev.blog)** | Long-form articles on Azure, AI, AKS, APIM and DevOps. |
-
----
-
-<details>
-  <summary>📊 GitHub stats</summary>
-
-<div align="center">
-
-![](https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=ricky-g&theme=github_dark)
-<br/>
-![](https://github-profile-summary-cards.vercel.app/api/cards/stats?username=ricky-g&theme=github_dark)
-![](https://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=ricky-g&theme=github_dark&utcOffset=8)
-<br/>
-![](https://github-readme-stats.vercel.app/api/top-langs/?username=ricky-g&show_icons=true&theme=github_dark&hide_border=true&langs_count=8&layout=compact)
-
-</div>
-</details>
-
-<details>
-  <summary>🏆 Trophies</summary>
-
-![](https://github-profile-trophy.vercel.app/?username=ricky-g&theme=gruvbox&no-frame=true&margin-w=4)
-
-</details>
-
-<details>
-  <summary>✍️ Random dev quote</summary>
-
-<div align="center">
-
-![](https://quotes-github-readme.vercel.app/api?type=horizontal&theme=github)
-
-</div>
-</details>
+<p align="center"><sub>Plain Markdown and self-contained SVG. All profile images live in this repository; no live third-party widgets or JavaScript.</sub></p>

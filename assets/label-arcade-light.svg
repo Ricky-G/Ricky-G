@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 78" width="1200" height="78" id="motion" class="lal" role="img" aria-label="Arcade: a little play · a real contribution calendar"><title>Arcade: a little play · a real contribution calendar</title><style>
+.lal text{font-family:'Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
+.lal .m{font-family:'Cascadia Code','JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace}
+@keyframes lal-tw{0%,100%{opacity:.18}50%{opacity:1}}
+@keyframes lal-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes lal-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(3);opacity:0}}
+@keyframes lal-spin{to{transform:rotate(360deg)}}
+@keyframes lal-spinr{to{transform:rotate(-360deg)}}
+@keyframes lal-blink{0%,55%{opacity:1}56%,100%{opacity:.1}}
+@keyframes lal-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes lal-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes lal-travel{0%{transform:translateX(0);opacity:0}8%{opacity:1}85%{opacity:1}100%{transform:translateX(var(--d,1000px));opacity:0}}
+.lal .t1{animation:lal-tw 3.4s ease-in-out infinite}
+.lal .t2{animation:lal-tw 4.8s ease-in-out infinite 1.1s}
+.lal .t3{animation:lal-tw 6.2s ease-in-out infinite 2.3s}
+.lal .ping{animation:lal-ping 2.6s ease-out infinite}
+.lal .blink{animation:lal-blink 1.1s steps(1) infinite}
+.lal .fl1{animation:lal-float 6s ease-in-out infinite}
+.lal .fl2{animation:lal-float 7s ease-in-out infinite 1.4s}
+.lal .fl3{animation:lal-float 6.5s ease-in-out infinite .7s}
+.lal .in{animation:lal-in .7s cubic-bezier(.2,.8,.2,1) both}
+.lal .grow{transform-box:fill-box;transform-origin:0 50%;animation:lal-grow 1.4s cubic-bezier(.2,.8,.2,1) .5s both}
+.lal:not(:target) *{animation:none!important}
+@media (prefers-reduced-motion:reduce){.lal:not(:target) *{animation:none!important}}
+
+@keyframes lal-run{0%{transform:translateX(0);opacity:0}6%{opacity:1}88%{opacity:1}100%{transform:translateX(1150px);opacity:0}}
+.lal .run{animation:lal-run 7s cubic-bezier(.45,0,.2,1) infinite}
+</style><defs><linearGradient id="lal-brand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="lal-shim" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="lal-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:#ffffff"/><stop offset="1" style="stop-color:#f7f8fe"/></linearGradient><filter id="lal-shadow" x="-20%" y="-40%" width="140%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dy="6" result="o"/><feFlood style="flood-color:#1e2a5a;flood-opacity:0.13"/><feComposite in2="o" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="lal-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="40"/></filter><filter id="lal-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><linearGradient id="lal-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#059669;stop-opacity:.9"/><stop offset=".4" style="stop-color:#7c3aed;stop-opacity:.55"/><stop offset="1" style="stop-color:#c026d3;stop-opacity:0"/></linearGradient></defs><text x="14.0" y="48.0" class="m" style="font-size:15px;fill:url(#lal-brand);font-weight:700">05</text><text x="52.0" y="49.0" style="font-size:27px;fill:#0b1020;font-weight:750;letter-spacing:-0.3px">Arcade</text><text x="1186.0" y="48.0" text-anchor="end" class="m" style="font-size:14px;fill:#666f8e;font-weight:400">a little play · a real contribution calendar</text><rect x="14" y="63" width="1172" height="1.6" style="fill:url(#lal-line)"/><g class="run"><circle cx="18" cy="63.8" r="7" style="fill:#059669;opacity:.22"/><circle cx="18" cy="63.8" r="3" style="fill:#059669"/></g></svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 112" width="600" height="112" id="motion" class="lwpd" role="img" aria-label="Writing: published on clouddev.blog · latest three"><title>Writing: published on clouddev.blog · latest three</title><style>
+.lwpd text{font-family:'Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
+.lwpd .m{font-family:'Cascadia Code','JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace}
+@keyframes lwpd-tw{0%,100%{opacity:.18}50%{opacity:1}}
+@keyframes lwpd-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes lwpd-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(3);opacity:0}}
+@keyframes lwpd-spin{to{transform:rotate(360deg)}}
+@keyframes lwpd-spinr{to{transform:rotate(-360deg)}}
+@keyframes lwpd-blink{0%,55%{opacity:1}56%,100%{opacity:.1}}
+@keyframes lwpd-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes lwpd-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes lwpd-travel{0%{transform:translateX(0);opacity:0}8%{opacity:1}85%{opacity:1}100%{transform:translateX(var(--d,1000px));opacity:0}}
+.lwpd .t1{animation:lwpd-tw 3.4s ease-in-out infinite}
+.lwpd .t2{animation:lwpd-tw 4.8s ease-in-out infinite 1.1s}
+.lwpd .t3{animation:lwpd-tw 6.2s ease-in-out infinite 2.3s}
+.lwpd .ping{animation:lwpd-ping 2.6s ease-out infinite}
+.lwpd .blink{animation:lwpd-blink 1.1s steps(1) infinite}
+.lwpd .fl1{animation:lwpd-float 6s ease-in-out infinite}
+.lwpd .fl2{animation:lwpd-float 7s ease-in-out infinite 1.4s}
+.lwpd .fl3{animation:lwpd-float 6.5s ease-in-out infinite .7s}
+.lwpd .in{animation:lwpd-in .7s cubic-bezier(.2,.8,.2,1) both}
+.lwpd .grow{transform-box:fill-box;transform-origin:0 50%;animation:lwpd-grow 1.4s cubic-bezier(.2,.8,.2,1) .5s both}
+.lwpd:not(:target) *{animation:none!important}
+@media (prefers-reduced-motion:reduce){.lwpd:not(:target) *{animation:none!important}}
+</style><defs><linearGradient id="lwpd-brand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#34d399"/><stop offset=".33" style="stop-color:#2dd4bf"/><stop offset=".7" style="stop-color:#a78bfa"/><stop offset="1" style="stop-color:#e879f9"/></linearGradient><linearGradient id="lwpd-shim" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect"><stop offset="0" style="stop-color:#34d399"/><stop offset=".33" style="stop-color:#2dd4bf"/><stop offset=".7" style="stop-color:#a78bfa"/><stop offset="1" style="stop-color:#e879f9"/></linearGradient><linearGradient id="lwpd-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:#121a37"/><stop offset="1" style="stop-color:#0b1128"/></linearGradient><filter id="lwpd-shadow" x="-20%" y="-40%" width="140%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dy="6" result="o"/><feFlood style="flood-color:#000000;flood-opacity:0.45"/><feComposite in2="o" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="lwpd-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="40"/></filter><filter id="lwpd-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter></defs><text x="14.0" y="44.0" class="m" style="font-size:21px;fill:url(#lwpd-brand);font-weight:700">01</text><text x="58.0" y="46.0" style="font-size:36px;fill:#eef1ff;font-weight:750">Writing</text><text x="14.0" y="80.0" class="m" style="font-size:19px;fill:#8a93b7;font-weight:400">published on clouddev.blog · latest three</text><rect x="14" y="100" width="572" height="2" style="fill:url(#lwpd-brand)"/></svg>

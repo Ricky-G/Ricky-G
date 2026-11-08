@@ -1,0 +1,26 @@
+{
+  "https://clouddev.blog/AI/AI-Engineering/agents-md-vs-copilot-instructions-vs-cursor-rules-vs-claude-md-which-ai-context-file-to-use-and-when-2026/": {
+    "bytes": 63228,
+    "height": 564,
+    "path": "assets/src/covers/4379c2719b69708be3a2af3590ace70ed1b10dd5d698818d810e56860f0ca21e.jpg",
+    "sha256": "91ee8a168b6302b65c18769a3e2faf33b3d9595f5c31349d6dd8ea8fbcc6220c",
+    "source_url": "https://clouddev.blog/img/ai-context-files.png",
+    "width": 1316
+  },
+  "https://clouddev.blog/AI/AI-Engineering/mcp-goes-stateless-no-handshake-no-sticky-sessions-better-ai-gateways/": {
+    "bytes": 52309,
+    "height": 564,
+    "path": "assets/src/covers/453c5cabdda613d036c47020597c26516d4403176adfb429f75e68f10d839714.jpg",
+    "sha256": "39b32f4e92f837b304a2829da9e8ccd6007b1caffde0446b730d4a38a9cab618",
+    "source_url": "https://clouddev.blog/img/mcp-goes-stateless.png",
+    "width": 1316
+  },
+  "https://clouddev.blog/GitHub/Copilot/github-copilot-agents-part-2-harnesses-the-agent-host-cloud-sandboxes-and-ai-credits-explained/": {
+    "bytes": 58070,
+    "height": 564,
+    "path": "assets/src/covers/76efcbdaab79d3e2233d991c03d76b4742ec5ea12f46a0fe6b624fd2a5866d8e.jpg",
+    "sha256": "9fd53145fd2983d17900f18cde1b3ad3f04930c9d842d9ea155c06d690e3e99d",
+    "source_url": "https://clouddev.blog/img/github-copilot-agents-part-2.png",
+    "width": 1316
+  }
+}

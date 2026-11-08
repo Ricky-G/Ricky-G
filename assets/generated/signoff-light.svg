@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 250" width="1200" height="250" id="motion" class="sol" role="img" aria-label="Off the clock? Still building. Founders with crazy, impossible ideas: let&#x27;s talk."><title>Off the clock? Still building. Founders with crazy, impossible ideas: let&#x27;s talk.</title><style>
+.sol text{font-family:'Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
+.sol .m{font-family:'Cascadia Code','JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace}
+@keyframes sol-tw{0%,100%{opacity:.18}50%{opacity:1}}
+@keyframes sol-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes sol-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(3);opacity:0}}
+@keyframes sol-spin{to{transform:rotate(360deg)}}
+@keyframes sol-spinr{to{transform:rotate(-360deg)}}
+@keyframes sol-blink{0%,55%{opacity:1}56%,100%{opacity:.1}}
+@keyframes sol-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes sol-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes sol-travel{0%{transform:translateX(0);opacity:0}8%{opacity:1}85%{opacity:1}100%{transform:translateX(var(--d,1000px));opacity:0}}
+.sol .t1{animation:sol-tw 3.4s ease-in-out infinite}
+.sol .t2{animation:sol-tw 4.8s ease-in-out infinite 1.1s}
+.sol .t3{animation:sol-tw 6.2s ease-in-out infinite 2.3s}
+.sol .ping{animation:sol-ping 2.6s ease-out infinite}
+.sol .blink{animation:sol-blink 1.1s steps(1) infinite}
+.sol .fl1{animation:sol-float 6s ease-in-out infinite}
+.sol .fl2{animation:sol-float 7s ease-in-out infinite 1.4s}
+.sol .fl3{animation:sol-float 6.5s ease-in-out infinite .7s}
+.sol .in{animation:sol-in .7s cubic-bezier(.2,.8,.2,1) both}
+.sol .grow{transform-box:fill-box;transform-origin:0 50%;animation:sol-grow 1.4s cubic-bezier(.2,.8,.2,1) .5s both}
+.sol:not(:target) *{animation:none!important}
+@media (prefers-reduced-motion:reduce){.sol:not(:target) *{animation:none!important}}
+</style><defs><linearGradient id="sol-brand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="sol-shim" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="sol-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:#ffffff"/><stop offset="1" style="stop-color:#f7f8fe"/></linearGradient><filter id="sol-shadow" x="-20%" y="-40%" width="140%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dy="6" result="o"/><feFlood style="flood-color:#1e2a5a;flood-opacity:0.13"/><feComposite in2="o" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="sol-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="40"/></filter><filter id="sol-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><clipPath id="sol-c"><rect x="7" y="7" width="1186" height="236" rx="24"/></clipPath></defs><rect x="7" y="7" width="1186" height="236" rx="24" style="fill:url(#sol-card);stroke:#e2e6f3;stroke-width:1.4"/><g clip-path="url(#sol-c)"><circle cx="1150" cy="230" r="170" filter="url(#sol-blur)" style="fill:#c4b5fd;opacity:0.22"/><circle cx="900" cy="0" r="120" filter="url(#sol-blur)" style="fill:#6ee7b7;opacity:0.22"/></g><circle cx="49" cy="55.5" r="4.4" style="fill:#c026d3"/><text x="61.0" y="60.0" class="m" style="font-size:12.5px;fill:#666f8e;font-weight:700;letter-spacing:1.8px">OFF THE CLOCK</text><text x="42.0" y="110.0" style="font-size:34px;fill:#0b1020;font-weight:800;letter-spacing:-0.6px">Still building. Let&#x27;s make something.</text><text x="44.0" y="150.0" style="font-size:18.5px;fill:#394262;font-weight:400">I&#x27;m building AI agents, exploring emerging tech and chasing far too many</text><text x="44.0" y="177.0" style="font-size:18.5px;fill:#394262;font-weight:400">side projects. I love meeting founders with crazy, impossible ideas, so if</text><text x="44.0" y="204.0" style="font-size:18.5px;fill:#394262;font-weight:400">that&#x27;s you, let&#x27;s talk.</text><text x="1156" y="112" text-anchor="end" style="font-size:56px;font-weight:800;letter-spacing:-2.4px;fill:#0b1020">ricky <tspan style="fill:url(#sol-shim)">g.</tspan></text><text x="1156.0" y="146.0" text-anchor="end" class="m" style="font-size:13.5px;fill:#666f8e;font-weight:400">Auckland, New Zealand · UTC+13</text><text x="1156.0" y="172.0" text-anchor="end" class="m" style="font-size:12.5px;fill:#9aa1ba;font-weight:400">snapshot 8 Nov 2026, 14:43 NZDT</text><text x="1156.0" y="194.0" text-anchor="end" class="m" style="font-size:12.5px;fill:#9aa1ba;font-weight:400">built from public sources</text></svg>

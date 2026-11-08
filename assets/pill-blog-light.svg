@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 96" width="300" height="96" id="motion" class="plbl" role="img" aria-label="clouddev.blog: Read the blog"><title>clouddev.blog: Read the blog</title><style>
+.plbl text{font-family:'Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
+.plbl .m{font-family:'Cascadia Code','JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace}
+@keyframes plbl-tw{0%,100%{opacity:.18}50%{opacity:1}}
+@keyframes plbl-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes plbl-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(3);opacity:0}}
+@keyframes plbl-spin{to{transform:rotate(360deg)}}
+@keyframes plbl-spinr{to{transform:rotate(-360deg)}}
+@keyframes plbl-blink{0%,55%{opacity:1}56%,100%{opacity:.1}}
+@keyframes plbl-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes plbl-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes plbl-travel{0%{transform:translateX(0);opacity:0}8%{opacity:1}85%{opacity:1}100%{transform:translateX(var(--d,1000px));opacity:0}}
+.plbl .t1{animation:plbl-tw 3.4s ease-in-out infinite}
+.plbl .t2{animation:plbl-tw 4.8s ease-in-out infinite 1.1s}
+.plbl .t3{animation:plbl-tw 6.2s ease-in-out infinite 2.3s}
+.plbl .ping{animation:plbl-ping 2.6s ease-out infinite}
+.plbl .blink{animation:plbl-blink 1.1s steps(1) infinite}
+.plbl .fl1{animation:plbl-float 6s ease-in-out infinite}
+.plbl .fl2{animation:plbl-float 7s ease-in-out infinite 1.4s}
+.plbl .fl3{animation:plbl-float 6.5s ease-in-out infinite .7s}
+.plbl .in{animation:plbl-in .7s cubic-bezier(.2,.8,.2,1) both}
+.plbl .grow{transform-box:fill-box;transform-origin:0 50%;animation:plbl-grow 1.4s cubic-bezier(.2,.8,.2,1) .5s both}
+.plbl:not(:target) *{animation:none!important}
+@media (prefers-reduced-motion:reduce){.plbl:not(:target) *{animation:none!important}}
+</style><defs><linearGradient id="plbl-brand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="plbl-shim" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="plbl-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:#ffffff"/><stop offset="1" style="stop-color:#f7f8fe"/></linearGradient><filter id="plbl-shadow" x="-20%" y="-40%" width="140%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dy="6" result="o"/><feFlood style="flood-color:#1e2a5a;flood-opacity:0.13"/><feComposite in2="o" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="plbl-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="40"/></filter><filter id="plbl-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><linearGradient id="plbl-edge" gradientUnits="userSpaceOnUse" x1="7" y1="0" x2="293" y2="0"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient></defs><rect x="7" y="7" width="286" height="82" rx="41" style="fill:url(#plbl-card);stroke:url(#plbl-edge);stroke-width:1.8"/><circle cx="48" cy="48" r="27" style="fill:url(#plbl-brand)"/><circle cx="38.5" cy="57.5" r="3.6" style="fill:#fff"/><path d="M35 44a13.5 13.5 0 0 1 13.5 13.5M35 34.5a23 23 0 0 1 23 23" style="fill:none;stroke:#fff;stroke-width:3.6;stroke-linecap:round"/><text x="90.0" y="42.0" class="m" style="font-size:11.5px;fill:#666f8e;font-weight:700;letter-spacing:1.6px">READ THE BLOG</text><text x="90.0" y="69.0" style="font-size:20.5px;fill:#0b1020;font-weight:750">clouddev.blog</text><path d="M258 53L269 42M261.5 42H269V49.5" style="fill:none;stroke:#666f8e;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round"/></svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 78" width="1200" height="78" id="motion" class="lbl" role="img" aria-label="Building: open source · verified GitHub snapshots"><title>Building: open source · verified GitHub snapshots</title><style>
+.lbl text{font-family:'Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
+.lbl .m{font-family:'Cascadia Code','JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace}
+@keyframes lbl-tw{0%,100%{opacity:.18}50%{opacity:1}}
+@keyframes lbl-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes lbl-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(3);opacity:0}}
+@keyframes lbl-spin{to{transform:rotate(360deg)}}
+@keyframes lbl-spinr{to{transform:rotate(-360deg)}}
+@keyframes lbl-blink{0%,55%{opacity:1}56%,100%{opacity:.1}}
+@keyframes lbl-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes lbl-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes lbl-travel{0%{transform:translateX(0);opacity:0}8%{opacity:1}85%{opacity:1}100%{transform:translateX(var(--d,1000px));opacity:0}}
+.lbl .t1{animation:lbl-tw 3.4s ease-in-out infinite}
+.lbl .t2{animation:lbl-tw 4.8s ease-in-out infinite 1.1s}
+.lbl .t3{animation:lbl-tw 6.2s ease-in-out infinite 2.3s}
+.lbl .ping{animation:lbl-ping 2.6s ease-out infinite}
+.lbl .blink{animation:lbl-blink 1.1s steps(1) infinite}
+.lbl .fl1{animation:lbl-float 6s ease-in-out infinite}
+.lbl .fl2{animation:lbl-float 7s ease-in-out infinite 1.4s}
+.lbl .fl3{animation:lbl-float 6.5s ease-in-out infinite .7s}
+.lbl .in{animation:lbl-in .7s cubic-bezier(.2,.8,.2,1) both}
+.lbl .grow{transform-box:fill-box;transform-origin:0 50%;animation:lbl-grow 1.4s cubic-bezier(.2,.8,.2,1) .5s both}
+.lbl:not(:target) *{animation:none!important}
+@media (prefers-reduced-motion:reduce){.lbl:not(:target) *{animation:none!important}}
+
+@keyframes lbl-run{0%{transform:translateX(0);opacity:0}6%{opacity:1}88%{opacity:1}100%{transform:translateX(1150px);opacity:0}}
+.lbl .run{animation:lbl-run 7s cubic-bezier(.45,0,.2,1) infinite}
+</style><defs><linearGradient id="lbl-brand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="lbl-shim" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="lbl-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:#ffffff"/><stop offset="1" style="stop-color:#f7f8fe"/></linearGradient><filter id="lbl-shadow" x="-20%" y="-40%" width="140%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dy="6" result="o"/><feFlood style="flood-color:#1e2a5a;flood-opacity:0.13"/><feComposite in2="o" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="lbl-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="40"/></filter><filter id="lbl-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><linearGradient id="lbl-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#059669;stop-opacity:.9"/><stop offset=".4" style="stop-color:#7c3aed;stop-opacity:.55"/><stop offset="1" style="stop-color:#c026d3;stop-opacity:0"/></linearGradient></defs><text x="14.0" y="48.0" class="m" style="font-size:15px;fill:url(#lbl-brand);font-weight:700">02</text><text x="52.0" y="49.0" style="font-size:27px;fill:#0b1020;font-weight:750;letter-spacing:-0.3px">Building</text><text x="1186.0" y="48.0" text-anchor="end" class="m" style="font-size:14px;fill:#666f8e;font-weight:400">open source · verified GitHub snapshots</text><rect x="14" y="63" width="1172" height="1.6" style="fill:url(#lbl-line)"/><g class="run"><circle cx="18" cy="63.8" r="7" style="fill:#059669;opacity:.22"/><circle cx="18" cy="63.8" r="3" style="fill:#059669"/></g></svg>

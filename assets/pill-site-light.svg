@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 96" width="300" height="96" id="motion" class="plsl" role="img" aria-label="ricky-g.com: Home base"><title>ricky-g.com: Home base</title><style>
+.plsl text{font-family:'Segoe UI Variable Display','Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
+.plsl .m{font-family:'Cascadia Code','JetBrains Mono','SF Mono',ui-monospace,Menlo,Consolas,'Liberation Mono',monospace}
+@keyframes plsl-tw{0%,100%{opacity:.18}50%{opacity:1}}
+@keyframes plsl-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes plsl-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(3);opacity:0}}
+@keyframes plsl-spin{to{transform:rotate(360deg)}}
+@keyframes plsl-spinr{to{transform:rotate(-360deg)}}
+@keyframes plsl-blink{0%,55%{opacity:1}56%,100%{opacity:.1}}
+@keyframes plsl-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes plsl-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes plsl-travel{0%{transform:translateX(0);opacity:0}8%{opacity:1}85%{opacity:1}100%{transform:translateX(var(--d,1000px));opacity:0}}
+.plsl .t1{animation:plsl-tw 3.4s ease-in-out infinite}
+.plsl .t2{animation:plsl-tw 4.8s ease-in-out infinite 1.1s}
+.plsl .t3{animation:plsl-tw 6.2s ease-in-out infinite 2.3s}
+.plsl .ping{animation:plsl-ping 2.6s ease-out infinite}
+.plsl .blink{animation:plsl-blink 1.1s steps(1) infinite}
+.plsl .fl1{animation:plsl-float 6s ease-in-out infinite}
+.plsl .fl2{animation:plsl-float 7s ease-in-out infinite 1.4s}
+.plsl .fl3{animation:plsl-float 6.5s ease-in-out infinite .7s}
+.plsl .in{animation:plsl-in .7s cubic-bezier(.2,.8,.2,1) both}
+.plsl .grow{transform-box:fill-box;transform-origin:0 50%;animation:plsl-grow 1.4s cubic-bezier(.2,.8,.2,1) .5s both}
+.plsl:not(:target) *{animation:none!important}
+@media (prefers-reduced-motion:reduce){.plsl:not(:target) *{animation:none!important}}
+</style><defs><linearGradient id="plsl-brand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="plsl-shim" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient><linearGradient id="plsl-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:#ffffff"/><stop offset="1" style="stop-color:#f7f8fe"/></linearGradient><filter id="plsl-shadow" x="-20%" y="-40%" width="140%" height="200%"><feGaussianBlur in="SourceAlpha" stdDeviation="7"/><feOffset dy="6" result="o"/><feFlood style="flood-color:#1e2a5a;flood-opacity:0.13"/><feComposite in2="o" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="plsl-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="40"/></filter><filter id="plsl-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter><linearGradient id="plsl-edge" gradientUnits="userSpaceOnUse" x1="7" y1="0" x2="293" y2="0"><stop offset="0" style="stop-color:#059669"/><stop offset=".33" style="stop-color:#0d9488"/><stop offset=".7" style="stop-color:#7c3aed"/><stop offset="1" style="stop-color:#c026d3"/></linearGradient></defs><rect x="7" y="7" width="286" height="82" rx="41" style="fill:url(#plsl-card);stroke:#e2e6f3;stroke-width:1.3"/><circle cx="48" cy="48" r="27" style="fill:#0b1020"/><text x="48" y="58.5" text-anchor="middle" style="font-size:29px;font-weight:800;letter-spacing:-1px;fill:#ffffff">g<tspan style="fill:url(#plsl-brand)">.</tspan></text><text x="90.0" y="42.0" class="m" style="font-size:11.5px;fill:#666f8e;font-weight:700;letter-spacing:1.6px">HOME BASE</text><text x="90.0" y="69.0" style="font-size:20.5px;fill:#0b1020;font-weight:750">ricky-g.com</text><path d="M258 53L269 42M261.5 42H269V49.5" style="fill:none;stroke:#666f8e;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round"/></svg>

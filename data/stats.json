@@ -1,0 +1,69 @@
+{
+  "agt_forks": "1.1k",
+  "agt_stars": "6.5k",
+  "availability": {
+    "agt": "available",
+    "calendar": "available",
+    "docker": "available",
+    "hub": "available",
+    "ledger": "available",
+    "mix": "available",
+    "posts": "available",
+    "repos": "available"
+  },
+  "calendar_total": 1224,
+  "contributed_to": 36,
+  "contributions": 1226,
+  "first_year": 2022,
+  "hub_stars": 9,
+  "mix": {
+    "commits": 262,
+    "issues": 100,
+    "prs": 146,
+    "reviews": 23
+  },
+  "posts": 27,
+  "projects": {
+    "agt": {
+      "description": "AI Agent Governance Toolkit — Policy enforcement, zero-trust identity, execution sandboxing, and reliability engineering for autonomous AI agents. Covers 10/10 OWASP Agentic Top 10.",
+      "forks": 1129,
+      "language": "Python",
+      "repository": "microsoft/agent-governance-toolkit",
+      "source": "https://api.github.com/repos/microsoft/agent-governance-toolkit",
+      "stars": 6535,
+      "url": "https://github.com/microsoft/agent-governance-toolkit",
+      "visibility": "public"
+    },
+    "docker": {
+      "description": "Prebuilt Dockerfiles for popular AI models – build and run with zero setup",
+      "forks": 0,
+      "language": "Python",
+      "repository": "Ricky-G/docker-ai-models",
+      "source": "https://api.github.com/repos/Ricky-G/docker-ai-models",
+      "stars": 2,
+      "url": "https://github.com/Ricky-G/docker-ai-models",
+      "visibility": "public"
+    },
+    "hub": {
+      "description": "Tested Azure cloud and Microsoft AI engineering scenarios: deployable architectures, runnable demos, benchmarks, and evidence-backed investigations.",
+      "forks": 3,
+      "language": "Bicep",
+      "repository": "Ricky-G/azure-scenario-hub",
+      "source": "https://api.github.com/repos/Ricky-G/azure-scenario-hub",
+      "stars": 9,
+      "url": "https://github.com/Ricky-G/azure-scenario-hub",
+      "visibility": "public"
+    },
+    "ledger": {
+      "description": "Local-first Markdown Kanban for VS Code with entity palettes, conflict-safe autosave, and append-only analytics.",
+      "forks": 0,
+      "language": "JavaScript",
+      "repository": "Ricky-G/ledgerboard",
+      "source": "https://api.github.com/repos/Ricky-G/ledgerboard",
+      "stars": 0,
+      "url": "https://github.com/Ricky-G/ledgerboard",
+      "visibility": "public"
+    }
+  },
+  "repos": 129
+}
