@@ -16,10 +16,8 @@ All colours live in THEMES, so a rebrand is a token change.
 from __future__ import annotations
 
 import argparse
-import base64
 import hashlib
 import html
-import io
 import json
 import math
 import os
@@ -39,7 +37,7 @@ except ZoneInfoNotFoundError as exc:
     raise RuntimeError("Install requirements.txt: Pacific/Auckland timezone data is required.") from exc
 
 try:
-    from PIL import Image, ImageFont
+    from PIL import ImageFont
 except ImportError as exc:
     raise RuntimeError("Install requirements.txt: Pillow is required to validate and render images.") from exc
 
@@ -183,7 +181,7 @@ def esc(s: str) -> str:
     return html.escape(str(s), quote=True)
 
 
-def tx(x, y, s, size, fill, weight=400, *, mono=False, anchor="start", ls=None, cls="", pre=False, extra=""):
+def tx(x, y, s, size, fill, weight=400, *, mono=False, anchor="start", ls=None, cls="", pre=False, extra="", role=""):
     st = f"font-size:{size}px;fill:{fill};font-weight:{weight}"
     if ls is not None:
         st += f";letter-spacing:{ls}px"
@@ -191,7 +189,8 @@ def tx(x, y, s, size, fill, weight=400, *, mono=False, anchor="start", ls=None, 
     a = f' text-anchor="{anchor}"' if anchor != "start" else ""
     sp = ' xml:space="preserve"' if pre else ""
     cc = f' class="{c}"' if c else ""
-    return f'<text x="{x:.1f}" y="{y:.1f}"{a}{cc}{sp} style="{st}"{extra}>{esc(s)}</text>'
+    rr = f' data-font-role="{esc(role)}"' if role else ""
+    return f'<text x="{x:.1f}" y="{y:.1f}"{a}{cc}{sp}{rr} style="{st}"{extra}>{esc(s)}</text>'
 
 
 # --------------------------------------------------------------------------- shared svg bits
@@ -268,12 +267,12 @@ def glow(T, P, cx, cy, r, key="aurB", op="glow_o"):
             f'style="fill:{T[key]};opacity:{T[op]}"/>')
 
 
-def kicker(T, x, y, text, dot_key="green", pulse=False, P=""):
+def kicker(T, x, y, text, dot_key="green", pulse=False, P="", size=21):
     s = f'<circle cx="{x + 5}" cy="{y - 4.5}" r="4.4" style="fill:{T[dot_key]}"/>'
     if pulse:
         s += (f'<circle class="ping" cx="{x + 5}" cy="{y - 4.5}" r="4.4" style="fill:none;stroke:{T[dot_key]};'
               f'stroke-width:1.5;transform-origin:{x + 5}px {y - 4.5}px;transform-box:view-box"/>')
-    return s + tx(x + 17, y, text, 12.5, T["ink3"], 700, mono=True, ls=1.8)
+    return s + tx(x + 20, y + 1, text, size, T["ink3"], 700, mono=True, ls=1.2, role="kicker")
 
 
 def arrow(x, y, color, size=11, sw=2.1):
@@ -289,7 +288,8 @@ def chip_box(T, x, y, label, *, dot=None, size=13.5, h=30, icon="", pad=13, mono
     if dot:
         s += f'<circle cx="{cx:.1f}" cy="{y + h / 2}" r="4.6" style="fill:{dot}"/>'
     s += icon.replace("%X", f"{cx:.1f}").replace("%Y", f"{y + h / 2:.1f}")
-    s += tx(x + pad + (16 if (dot or icon) else 0), y + h / 2 + size * 0.36, label, size, T["ink2"], 500, mono=mono)
+    s += tx(x + pad + (16 if (dot or icon) else 0), y + h / 2 + size * 0.36, label, size, T["ink2"],
+            500, mono=mono, role="chip-body")
     return s, w
 
 
@@ -381,7 +381,6 @@ def sky(T, P, W, H, blobs, rays, star_box, n_stars, seed):
 def hero_defs(T, P, W, H, cx, cy, r):
     return (
         f'<clipPath id="{P}-clip"><rect x="7" y="7" width="{W - 14}" height="{H - 14}" rx="26"/></clipPath>'
-        f'<clipPath id="{P}-pc"><circle cx="{cx}" cy="{cy}" r="{r}"/></clipPath>'
         f'<linearGradient id="{P}-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:{T["sky0"]}"/>'
         f'<stop offset=".62" style="stop-color:{T["sky1"]}"/><stop offset="1" style="stop-color:{T["sky2"]}"/></linearGradient>'
         f'<linearGradient id="{P}-rayg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:{T["aurA"]};stop-opacity:0"/>'
@@ -414,11 +413,14 @@ HERO_CSS = """
 .%P .shake{animation:%P-shake 6s ease-in-out infinite 1.5s}
 .%P .flash{animation:%P-flash 6s ease-in-out infinite 1.5s}
 .%P .sweep{transform-box:fill-box;transform-origin:0 50%;animation:%P-sweep 1.6s cubic-bezier(.2,.8,.2,1) .7s both}
+@keyframes %P-circuit{to{stroke-dashoffset:-36}}
+.%P .circuit{animation:%P-circuit 6s linear infinite}
 """
 
 
-def portrait(T, P, cx, cy, r, img):
-    r1, r2 = r + 14, r + 40
+def governance_core(T, P, cx, cy, r):
+    """Original policy shield and circuit nodes; no portrait or raster dependency."""
+    r1, r2 = r + 14, r + 46
     pk = []
     for ang, key in ((-38, "green"), (98, "violet"), (212, "magenta")):
         a = math.radians(ang)
@@ -426,22 +428,54 @@ def portrait(T, P, cx, cy, r, img):
         pk.append(f'<circle cx="{px:.1f}" cy="{py:.1f}" r="10" style="fill:{T[key]};opacity:.2"/>'
                   f'<circle cx="{px:.1f}" cy="{py:.1f}" r="4.4" style="fill:{T[key]}"/>')
     org = f"transform-origin:{cx}px {cy}px;transform-box:view-box"
-    return (
+    base = (
         f'<circle cx="{cx}" cy="{cy}" r="{r + 70}" style="fill:url(#{P}-aura)"/>'
         f'<g class="orbit" style="{org}"><circle cx="{cx}" cy="{cy}" r="{r2}" style="fill:none;stroke:{T["ink3"]};'
         f'stroke-opacity:.5;stroke-width:1.3;stroke-dasharray:1.5 8;stroke-linecap:round"/>{"".join(pk)}</g>'
         f'<circle class="ring" cx="{cx}" cy="{cy}" r="{r1}" style="fill:none;stroke:url(#{P}-ringg);'
         f'stroke-width:3.6;{org}"/>'
-        f'<image href="data:image/jpeg;base64,{img}" x="{cx - r}" y="{cy - r}" width="{2 * r}" height="{2 * r}" '
-        f'clip-path="url(#{P}-pc)" preserveAspectRatio="xMidYMid slice"/>'
-        f'<circle cx="{cx}" cy="{cy}" r="{r - 1}" style="fill:none;stroke:{T["ring_in"]};'
-        f'stroke-opacity:{T["ring_in_o"]};stroke-width:2"/>'
+        f'<g transform="translate({cx} {cy})" data-illustration="trusted-cloud-agent-governance">'
+        f'<path d="M-142-50H-108L-62-6M138-104H110L58-48M140 88H104L60 42" '
+        f'style="fill:none;stroke:url(#{P}-brand);stroke-width:3;opacity:.75"/>'
+        f'<path class="circuit" d="M-142-50H-108L-62-6M138-104H110L58-48M140 88H104L60 42" '
+        f'style="fill:none;stroke:{T["ink"]};stroke-width:2;stroke-dasharray:3 15;opacity:.5"/>'
+        f'<path d="M0-106L91-69V-5C91 62 44 111 0 130C-44 111-91 62-91-5V-69Z" '
+        f'transform="translate(0 9)" style="fill:{T["violet"]};opacity:.16"/>'
+        f'<path d="M0-106L91-69V-5C91 62 44 111 0 130C-44 111-91 62-91-5V-69Z" '
+        f'style="fill:url(#{P}-card);stroke:url(#{P}-brand);stroke-width:4"/>'
+        f'<path d="M0-86L73-56V-3C73 48 35 87 0 105C-35 87-73 48-73-3V-56Z" '
+        f'style="fill:none;stroke:{T["ink3"]};stroke-width:1;stroke-opacity:.4"/>'
+        f'<rect x="-36" y="-40" width="72" height="72" rx="15" '
+        f'style="fill:{T["chip"]};stroke:url(#{P}-brand);stroke-width:2"/>'
+        f'<path d="M-52-24H-36M-52-4H-36M-52 16H-36M36-24H52M36-4H52M36 16H52'
+        f'M-20-56V-40M0-56V-40M20-56V-40M-20 32V48M0 32V48M20 32V48" '
+        f'style="fill:none;stroke:{T["teal"]};stroke-width:3;stroke-linecap:round"/>'
+        f'<path d="M-18-7L-3 8L23-21" style="fill:none;stroke:{T["green"]};stroke-width:7;'
+        f'stroke-linecap:round;stroke-linejoin:round"/>'
+        f'<circle cx="0" cy="75" r="5" style="fill:{T["green"]}"/>'
+        '</g>'
     )
+    nodes = []
+    icons = {
+        "cloud": '<path d="M-18 8H16a10 10 0 0 0 1-20 14 14 0 0 0-27-2 11 11 0 0 0-8 22Z"/>',
+        "agent": '<path d="M0-19L18-9V10L0 20-18 10V-9Z"/><path d="M0-8L8-3V5L0 9-8 5V-3Z"/>',
+        "tool": '<path d="M-9-13L-22 0-9 13M9-13L22 0 9 13M4-17L-4 17"/>',
+    }
+    for dx, dy, key, colour in ((128, -112, "cloud", "teal"), (-132, -28, "agent", "violet"),
+                                (128, 94, "tool", "magenta")):
+        nodes.append(
+            f'<g transform="translate({cx + dx} {cy + dy})" data-node="{key}">'
+            f'<circle r="35" style="fill:{T["chip"]};stroke:{T[colour]};stroke-width:2"/>'
+            f'<circle r="28" style="fill:none;stroke:{T[colour]};stroke-opacity:.18;stroke-width:5"/>'
+            f'<g style="fill:none;stroke:{T[colour]};stroke-width:2.8;stroke-linecap:round;'
+            f'stroke-linejoin:round">{icons[key]}</g></g>'
+        )
+    return base + "".join(nodes)
 
 
-def decision_chip(T, P, x, y, kind, verb, obj, align="start"):
+def decision_chip(T, P, x, y, kind, verb, obj, align="start", fs=20):
     col = {"allow": T["green"], "deny": T["rose"], "audit": T["violet"]}[kind]
-    fs, h = 16, 40
+    h = 48
     w = 14 + 24 + 11 + tw(f"{verb} · {obj}", fs, "mono") + 18
     if align == "end":
         x -= w
@@ -458,7 +492,8 @@ def decision_chip(T, P, x, y, kind, verb, obj, align="start"):
             f'style="fill:{T["chip"]};fill-opacity:{T["chip_o"]};stroke:{T["chipline"]};stroke-width:1.2"/>'
             f'<circle cx="{cx:.1f}" cy="{cy}" r="12" style="fill:{col};fill-opacity:.16;stroke:{col};'
             f'stroke-opacity:.55;stroke-width:1.2"/>{icon}'
-            f'<text class="m" x="{x + 49:.1f}" y="{y + 25.5}" xml:space="preserve" style="font-size:{fs}px;fill:{T["ink"]}">'
+            f'<text class="m" x="{x + 49:.1f}" y="{y + 24 + fs * .36:.1f}" xml:space="preserve" '
+            f'data-font-role="decision" style="font-size:{fs}px;fill:{T["ink"]}">'
             f'<tspan style="fill:{col};font-weight:700">{verb}</tspan><tspan style="fill:{T["ink3"]}"> · </tspan>'
             f'{esc(obj)}</text>')
     if kind == "deny":
@@ -467,26 +502,27 @@ def decision_chip(T, P, x, y, kind, verb, obj, align="start"):
     return body, w
 
 
-def greeting(T, P, x, y, text, center=False):
-    fs, h = 16, 40
+def greeting(T, P, x, y, text, center=False, fs=20):
+    h = 48 if fs <= 20 else 58
     w = 22 + 16 + tw(text, fs, "bold") * 0.97 + 14
     if center:
         x -= w / 2
-    dx, dy = x + 21, y + 20
-    return (f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="{h}" rx="20" '
+    dx, dy = x + 21, y + h / 2
+    return (f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="{h}" rx="{h / 2}" '
             f'style="fill:{T["chip"]};fill-opacity:{T["chip_o"]};stroke:{T["chipline"]};stroke-width:1.2"/>'
             f'<circle class="ping" cx="{dx:.1f}" cy="{dy}" r="4.8" style="fill:none;stroke:{T["green"]};'
             f'stroke-width:1.6;transform-origin:{dx:.1f}px {dy}px;transform-box:view-box"/>'
             f'<circle cx="{dx:.1f}" cy="{dy}" r="4.6" style="fill:{T["green"]}"/>'
-            + tx(dx + 16, y + 25.6, text, fs, T["ink2"], 600))
+            + tx(dx + 16, dy + fs * .36, text, fs, T["ink2"], 600, role="greeting"))
 
 
 HERO_TITLE = ("ricky g. Cloud and AI Solution Architect, Auckland, New Zealand. Engineer at heart. "
-              "The hard part isn't creating AI. It's governing it.")
+              "The hard part isn't creating AI. It's governing it. A layered policy shield links cloud, "
+              "AI-agent and tool nodes through identity, policy and audit above the Auckland skyline.")
 
 
-def hero_desktop(T, P, img):
-    W, H, cx, cy, r = 1200, 560, 930, 226, 130
+def hero_desktop(T, P):
+    W, H, cx, cy, r = 1200, 620, 935, 276, 124
     o = [svg_open(P, W, H, HERO_TITLE, css(P, HERO_CSS)),
          "<defs>", defs_common(T, P), hero_defs(T, P, W, H, cx, cy, r), "</defs>",
          f'<g clip-path="url(#{P}-clip)">',
@@ -496,27 +532,27 @@ def hero_desktop(T, P, img):
              rays=[(120, -10, 230), (170, -10, 190), (232, -10, 250), (300, -10, 205), (372, -10, 238),
                    (450, -10, 180)],
              star_box=(20, 16, 1180, 380), n_stars=58, seed=7),
-         f'<g transform="translate(0 413)">{skyline(T, P)}</g>', "</g>",
+         f'<g transform="translate(0 473)">{skyline(T, P)}</g>', "</g>",
          greeting(T, P, 50, 50, "Kia ora · shipping from Auckland, NZ"),
-         f'<text x="44" y="214" style="font-size:150px;font-weight:800;letter-spacing:-6px;fill:{T["ink"]}">ricky '
+         f'<text x="44" y="232" style="font-size:164px;font-weight:800;letter-spacing:-6px;fill:{T["ink"]}">ricky '
          f'<tspan style="fill:url(#{P}-shim)">g.</tspan></text>',
-         tx(48, 290, "Cloud & AI Solution Architect", 27, T["ink"], 650),
-         tx(48, 328, "Engineer at heart · Auckland, New Zealand", 20.5, T["ink3"], 500),
-         tx(48, 396, "The hard part isn't creating AI.", 31, T["ink2"], 500),
-         tx(48, 444, "It's governing it.", 42, f"url(#{P}-brand)", 800, ls=-0.5),
-         f'<rect class="sweep" x="50" y="461" width="150" height="5" rx="2.5" style="fill:url(#{P}-brand)"/>',
-         portrait(T, P, cx, cy, r, img)]
-    a, _ = decision_chip(T, P, 814, 84, "allow", "allow", "repo.read", align="end")
-    b, _ = decision_chip(T, P, 832, 312, "deny", "deny", "shell.exec", align="end")
-    c, _ = decision_chip(T, P, 978, 350, "audit", "audit", "signed")
+         tx(48, 313, "Cloud & AI Solution Architect", 34, T["ink"], 650, role="hero-role"),
+         tx(48, 356, "Engineer at heart · Auckland, New Zealand", 25, T["ink3"], 500, role="hero-meta"),
+         tx(48, 430, "The hard part isn't creating AI.", 38, T["ink2"], 500, role="hero-slogan"),
+         tx(48, 491, "It's governing it.", 52, f"url(#{P}-brand)", 800, ls=-0.5, role="hero-slogan"),
+         f'<rect class="sweep" x="50" y="513" width="190" height="5" rx="2.5" style="fill:url(#{P}-brand)"/>',
+         governance_core(T, P, cx, cy, r)]
+    a, _ = decision_chip(T, P, 826, 93, "allow", "allow", "repo.read", align="end")
+    b, _ = decision_chip(T, P, 871, 404, "deny", "deny", "shell.exec", align="end")
+    c, _ = decision_chip(T, P, 1171, 455, "audit", "audit", "signed", align="end")
     o += [f'<g class="fl1">{a}</g>', f'<g class="fl2">{b}</g>', f'<g class="fl3">{c}</g>',
           f'<rect x="7.7" y="7.7" width="{W - 15.4}" height="{H - 15.4}" rx="25.3" '
           f'style="fill:none;stroke:{T["cardline"]};stroke-width:1.4"/></svg>']
     return "".join(o)
 
 
-def hero_phone(T, P, img):
-    W, H, cx, cy, r = 600, 880, 300, 262, 116
+def hero_phone(T, P):
+    W, H, cx, cy, r = 600, 1168, 300, 336, 122
     o = [svg_open(P, W, H, HERO_TITLE, css(P, HERO_CSS)),
          "<defs>", defs_common(T, P), hero_defs(T, P, W, H, cx, cy, r), "</defs>",
          f'<g clip-path="url(#{P}-clip)">',
@@ -525,22 +561,53 @@ def hero_phone(T, P, img):
                     (560, 90, 170, 80, -12, "aurC", "a1")],
              rays=[(70, -10, 220), (120, -10, 180), (180, -10, 240), (250, -10, 200)],
              star_box=(20, 16, 580, 560), n_stars=40, seed=9),
-         f'<g transform="translate(0 806) scale(.5)">{skyline(T, P)}</g>', "</g>",
-         greeting(T, P, 300, 36, "Kia ora · shipping from Auckland, NZ", center=True),
-         portrait(T, P, cx, cy, r, img)]
-    a, _ = decision_chip(T, P, 24, 118, "allow", "allow", "repo.read")
-    b, _ = decision_chip(T, P, 576, 372, "deny", "deny", "shell.exec", align="end")
+         f'<g transform="translate(0 1090) scale(.5)">{skyline(T, P)}</g>', "</g>",
+         greeting(T, P, 300, 36, "Kia ora · Auckland, NZ", center=True, fs=32),
+         governance_core(T, P, cx, cy, r)]
+    a, _ = decision_chip(T, P, 24, 135, "allow", "allow", "repo.read", fs=26)
+    b, _ = decision_chip(T, P, 576, 505, "deny", "deny", "shell.exec", align="end", fs=26)
     o += [f'<g class="fl1">{a}</g>', f'<g class="fl2">{b}</g>',
-          f'<text x="300" y="548" text-anchor="middle" style="font-size:118px;font-weight:800;letter-spacing:-5px;'
+          tx(300, 590, "identity · policy · audit", 30, T["ink2"], 600, anchor="middle", role="illustration-caption"),
+          f'<text x="300" y="712" text-anchor="middle" style="font-size:156px;font-weight:800;letter-spacing:-5px;'
           f'fill:{T["ink"]}">ricky <tspan style="fill:url(#{P}-shim)">g.</tspan></text>',
-          tx(300, 604, "Cloud & AI Solution Architect", 26, T["ink"], 650, anchor="middle"),
-          tx(300, 640, "Auckland, NZ · Engineer at heart", 18.5, T["ink3"], 500, anchor="middle"),
-          tx(300, 712, "The hard part isn't creating AI.", 27, T["ink2"], 500, anchor="middle"),
-          tx(300, 760, "It's governing it.", 38, f"url(#{P}-brand)", 800, anchor="middle", ls=-0.5),
-          f'<rect class="sweep" x="240" y="776" width="120" height="5" rx="2.5" style="fill:url(#{P}-brand)"/>',
+          tx(300, 788, "Cloud & AI Solution", 44, T["ink"], 650, anchor="middle", role="hero-role"),
+          tx(300, 842, "Architect", 44, T["ink"], 650, anchor="middle", role="hero-role"),
+          tx(300, 894, "Auckland, NZ · Engineer at heart", 34, T["ink3"], 500, anchor="middle", role="hero-meta")]
+    y = 956
+    for line in wrap("The hard part isn't creating AI.", 40, "regular", 532, 2):
+        o.append(tx(300, y, line, 40, T["ink2"], 500, anchor="middle", role="hero-slogan"))
+        y += 48
+    o += [tx(300, 1072, "It's governing it.", 56, f"url(#{P}-brand)", 800, anchor="middle",
+             ls=-0.5, role="hero-slogan"),
+          f'<rect class="sweep" x="220" y="1094" width="160" height="5" rx="2.5" style="fill:url(#{P}-brand)"/>',
           f'<rect x="7.7" y="7.7" width="{W - 15.4}" height="{H - 15.4}" rx="25.3" '
           f'style="fill:none;stroke:{T["cardline"]};stroke-width:1.4"/></svg>']
     return "".join(o)
+
+
+INTRO_BODY = ("I design cloud architectures, build AI systems you can trust, and create developer platforms "
+              "that accelerate delivery. I write about the journey on my blog.")
+ABOUT_BODY = ("I'm an engineer from Auckland, passionate about cloud, AI, and startups. I build scalable "
+              "systems, govern AI agents, and obsess over developer experience, turning gnarly architecture "
+              "into things that actually ship.")
+INTRO_TITLE = "Engineer at heart. " + INTRO_BODY + " About me. " + ABOUT_BODY
+
+
+def introduction(T, P, phone=False):
+    width, margin, body_size, heading_size = (400, 28, 35, 44) if phone else (1200, 44, 30, 42)
+    elements, y = [], 78 if not phone else 84
+    for heading, body in (("Engineer at heart.", INTRO_BODY), ("About me", ABOUT_BODY)):
+        for line in wrap(heading, heading_size, "bold", width - 2 * margin, 4):
+            elements.append(tx(margin, y, line, heading_size, T["ink"], 750, role="intro-heading"))
+            y += heading_size * 1.25
+        y += 8
+        for line in wrap(body, body_size, "regular", width - 2 * margin, 30):
+            elements.append(tx(margin, y, line, body_size, T["ink2"], role="intro-body"))
+            y += body_size * 1.45
+        y += 34
+    height = math.ceil(y)
+    return (svg_open(P, width, height, INTRO_TITLE, css(P)) + "<defs>" + defs_common(T, P) + "</defs>"
+            + card(T, P, 7, 7, width - 14, height - 14) + "".join(elements) + "</svg>")
 
 
 # --------------------------------------------------------------------------- link pills
@@ -552,12 +619,12 @@ PILLS = {
 
 
 def pill(T, P, kind):
-    W, H = 300, 96
+    W, H = 300, 104
     kick, label, _ = PILLS[kind]
     hot = kind == "blog"
     o = [svg_open(P, W, H, f"{label}: {kick.capitalize()}", css(P)), "<defs>", defs_common(T, P),
          brand_u(T, P, "edge", 7, 0, 293, 0), "</defs>",
-         f'<rect x="7" y="7" width="286" height="82" rx="41" style="fill:url(#{P}-card);'
+         f'<rect x="7" y="7" width="286" height="90" rx="45" style="fill:url(#{P}-card);'
          f'stroke:{f"url(#{P}-edge)" if hot else T["cardline"]};stroke-width:{1.8 if hot else 1.3}"/>']
     if kind == "blog":
         o.append(f'<circle cx="48" cy="48" r="27" style="fill:url(#{P}-brand)"/>'
@@ -571,9 +638,9 @@ def pill(T, P, kind):
     else:
         o.append('<circle cx="48" cy="48" r="27" style="fill:#0a66c2"/>'
                  '<text x="48" y="57.5" text-anchor="middle" style="font-size:25px;font-weight:800;fill:#fff">in</text>')
-    o += [tx(90, 42, kick, 11.5, T["ink3"], 700, mono=True, ls=1.6),
-          tx(90, 69, label, 20.5, T["ink"], 750),
-          arrow(258, 42, T["ink3"], 11, 2.1), "</svg>"]
+    o += [tx(82, 40, kick, 17, T["ink3"], 700, mono=True, ls=.7, role="pill-meta"),
+          tx(82, 74, label, 26, T["ink"], 750, role="pill-title"),
+          arrow(272, 46, T["ink3"], 8, 2.1), "</svg>"]
     return "".join(o)
 
 
@@ -589,7 +656,7 @@ LABELS = {
 
 def label(T, P, key):
     num, title, meta = LABELS[key]
-    W, H = 1200, 78
+    W, H = 1200, 96
     css_x = """
 @keyframes %P-run{0%{transform:translateX(0);opacity:0}6%{opacity:1}88%{opacity:1}100%{transform:translateX(1150px);opacity:0}}
 .%P .run{animation:%P-run 7s cubic-bezier(.45,0,.2,1) infinite}
@@ -599,12 +666,12 @@ def label(T, P, key):
          f'<stop offset="0" style="stop-color:{T["green"]};stop-opacity:.9"/>'
          f'<stop offset=".4" style="stop-color:{T["violet"]};stop-opacity:.55"/>'
          f'<stop offset="1" style="stop-color:{T["magenta"]};stop-opacity:0"/></linearGradient></defs>',
-         tx(14, 48, num, 15, f"url(#{P}-brand)", 700, mono=True),
-         tx(52, 49, title, 27, T["ink"], 750, ls=-0.3),
-         tx(1186, 48, meta, 14, T["ink3"], 400, mono=True, anchor="end"),
-         f'<rect x="14" y="63" width="1172" height="1.6" style="fill:url(#{P}-line)"/>',
-         f'<g class="run"><circle cx="18" cy="63.8" r="7" style="fill:{T["green"]};opacity:.22"/>'
-         f'<circle cx="18" cy="63.8" r="3" style="fill:{T["green"]}"/></g>',
+         tx(14, 62, num, 21, f"url(#{P}-brand)", 700, mono=True, role="section-number"),
+         tx(62, 64, title, 36, T["ink"], 750, ls=-0.3, role="section-title"),
+         tx(1186, 62, meta, 18.5, T["ink3"], 400, mono=True, anchor="end", role="section-meta"),
+         f'<rect x="14" y="83" width="1172" height="1.6" style="fill:url(#{P}-line)"/>',
+         f'<g class="run"><circle cx="18" cy="83.8" r="7" style="fill:{T["green"]};opacity:.22"/>'
+         f'<circle cx="18" cy="83.8" r="3" style="fill:{T["green"]}"/></g>',
          "</svg>"]
     return "".join(o)
 
@@ -661,85 +728,84 @@ def post_meta(post):
 
 
 def new_badge(T, P, x, y):
-    return (f'<rect x="{x}" y="{y}" width="58" height="26" rx="13" style="fill:url(#{P}-brand)"/>'
-            f'<circle class="ping" cx="{x + 13}" cy="{y + 13}" r="3.6" style="fill:none;stroke:#fff;stroke-width:1.4;'
-            f'transform-origin:{x + 13}px {y + 13}px;transform-box:view-box"/>'
-            f'<circle cx="{x + 13}" cy="{y + 13}" r="3.4" style="fill:#fff"/>'
-            + tx(x + 23, y + 17.8, "NEW", 12, "#ffffff", 800, ls=0.8))
+    return (f'<rect x="{x}" y="{y}" width="82" height="36" rx="18" style="fill:url(#{P}-brand)"/>'
+            f'<circle class="ping" cx="{x + 15}" cy="{y + 18}" r="4.6" style="fill:none;stroke:#fff;stroke-width:1.4;'
+            f'transform-origin:{x + 15}px {y + 18}px;transform-box:view-box"/>'
+            f'<circle cx="{x + 15}" cy="{y + 18}" r="4.4" style="fill:#fff"/>'
+            + tx(x + 29, y + 24.5, "NEW", 18, "#ffffff", 800, ls=.8, role="post-meta"))
 
 
 def post_featured(T, P, post, cover, now):
-    W, H = 1200, 330
     dt, date, cat = post_meta(post)
     is_new = (now - dt) < timedelta(days=NEW_DAYS)
+    x0, wmax = 616, 548
+    meta = wrap(f"{date} · {cat}", 18.5, "mono", wmax - (96 if is_new else 0), 2)
+    title = wrap(post["title"], 38, "bold", wmax, 4)
+    excerpt = wrap(post.get("content_text", ""), 25, "regular", wmax, 4)
+    title_y = 118 + (len(meta) - 1) * 27
+    excerpt_y = title_y + len(title) * 47 + 8
+    cta_y = excerpt_y + len(excerpt) * 35 + 24
+    W, H = 1200, max(388, math.ceil(cta_y + 30))
     o = [svg_open(P, W, H, f"Latest post: {post['title']}", css(P)), "<defs>", defs_common(T, P), "</defs>",
-         card(T, P, 7, 7, 1186, 316),
-         cover_art(P, "f", cover.get("topic", ""), cover.get("line", ""), 24, 24, 658, 282, 16, cover.get("b64"))]
-    x0, wmax = 716, 448
+         card(T, P, 7, 7, 1186, H - 14),
+         cover_art(P, "f", cover.get("topic", ""), cover.get("line", ""), 24, (H - 237) / 2,
+                   552, 237, 16, cover.get("b64"))]
     kx = x0
     if is_new:
-        o.append(new_badge(T, P, x0, 52))
-        kx = x0 + 70
-    o.append(tx(kx, 70, f"{date} · {cat}", 14, T["ink3"], 400, mono=True))
-    lines = wrap(post["title"], 30, "bold", wmax, 3)
-    y = 118
-    for ln in lines:
-        o.append(tx(x0, y, ln, 30, T["ink"], 750, ls=-0.3))
-        y += 36
-    ex_lines = wrap(post.get("content_text", ""), 17.5, "regular", wmax, 3 if len(lines) < 3 else 2)
-    y += 4
-    for ln in ex_lines:
-        o.append(tx(x0, y, ln, 17.5, T["ink2"], 400))
-        y += 25
-    o.append(f'<text x="{x0}" y="298" style="font-size:17.5px;font-weight:750;fill:url(#{P}-brand)">Read on '
-             f'clouddev.blog<tspan dx="6" style="fill:{T["violet"]}">→</tspan></text>')
+        o.append(new_badge(T, P, x0, 38))
+        kx = x0 + 96
+    for index, line in enumerate(meta):
+        o.append(tx(kx, 63 + index * 27, line, 18.5, T["ink3"], mono=True, role="post-meta"))
+    for index, line in enumerate(title):
+        o.append(tx(x0, title_y + index * 47, line, 38, T["ink"], 750, ls=-.3, role="post-title"))
+    for index, line in enumerate(excerpt):
+        o.append(tx(x0, excerpt_y + index * 35, line, 25, T["ink2"], role="post-body"))
+    o.append(tx(x0, cta_y, "Read on clouddev.blog →", 24, f"url(#{P}-brand)", 750, role="post-link"))
     o.append("</svg>")
     return "".join(o)
 
 
 def post_mini(T, P, post, cover, now):
-    W, H = 400, 330
+    W, H = 400, 550
     dt, date, cat = post_meta(post)
     is_new = (now - dt) < timedelta(days=NEW_DAYS)
     short_cat = cat.split(" / ")[-1]
     o = [svg_open(P, W, H, f"Post: {post['title']}", css(P)), "<defs>", defs_common(T, P), "</defs>",
-         card(T, P, 7, 7, 386, 316),
+         card(T, P, 7, 7, 386, H - 14),
          cover_art(P, "m", cover.get("topic", ""), cover.get("line", ""), 21, 21, 358, 153, 14, cover.get("b64"))]
     if is_new:
         o.append(new_badge(T, P, 33, 33))
-    o.append(tx(28, 205, f"{date} · {short_cat}", 13, T["ink3"], 400, mono=True))
-    y = 236
-    for ln in wrap(post["title"], 20.5, "bold", 344, 3):
-        o.append(tx(28, y, ln, 20.5, T["ink"], 750, ls=-0.2))
-        y += 26.5
+    for index, line in enumerate(wrap(f"{date} · {short_cat}", 21, "mono", 344, 2)):
+        o.append(tx(28, 216 + index * 29, line, 21, T["ink3"], mono=True, role="post-meta"))
+    for index, line in enumerate(wrap(post["title"], 27, "bold", 344, 6)):
+        o.append(tx(28, 291 + index * 35, line, 27, T["ink"], 750, ls=-.2, role="post-title"))
+    o.append(tx(28, 514, "Read the article →", 22, f"url(#{P}-brand)", 750, role="post-link"))
     o.append("</svg>")
     return "".join(o)
 
 
 def archive_card(T, P, stats):
-    W, H = 400, 330
+    W, H = 400, 550
     title = f"Browse {stats['posts']} published posts on clouddev.blog" if stats["posts"] is not None else "Browse the archive; article count unavailable."
     count = str(stats["posts"]) if stats["posts"] is not None else "Explore"
     suffix = f"posts since {stats['first_year']}" if stats["posts"] is not None else "the archive"
-    size = 88 if stats["posts"] is not None else 48
+    size = 110 if stats["posts"] is not None else 58
     o = [svg_open(P, W, H, title, css(P)), "<defs>",
-         defs_common(T, P), f'<clipPath id="{P}-c"><rect x="7" y="7" width="386" height="316" rx="24"/></clipPath>',
-         "</defs>", card(T, P, 7, 7, 386, 316),
+         defs_common(T, P), f'<clipPath id="{P}-c"><rect x="7" y="7" width="386" height="{H - 14}" rx="24"/></clipPath>',
+         "</defs>", card(T, P, 7, 7, 386, H - 14),
          f'<g clip-path="url(#{P}-c)">{glow(T, P, 360, 40, 90, "aurC")}</g>',
          kicker(T, 28, 56, "THE ARCHIVE", "violet"),
-         f'<text x="26" y="150" style="font-weight:800"><tspan style="font-size:{size}px;letter-spacing:-3px;'
-         f'fill:url(#{P}-brand)">{count}</tspan><tspan dx="12" style="font-size:19px;fill:{T["ink2"]};'
-         f'font-weight:600">{suffix}</tspan></text>']
-    x, y = 28, 180
+         tx(26, 174, count, size, f"url(#{P}-brand)", 800, ls=-3, role="archive-count"),
+         tx(28, 214, suffix, 26, T["ink2"], 600, role="archive-body")]
+    x, y = 28, 252
     for t in ("Azure", "AI agents", "GitHub Copilot", "AKS", "APIM", "MCP", "DevOps"):
-        w = 12 + tw(t, 13, "mono") + 12
+        w = 14 + tw(t, 21, "mono") + 14
         if x + w > 372:
-            x, y = 28, y + 38
-        s, w = chip_box(T, x, y, t, size=13, h=29, pad=12)
+            x, y = 28, y + 50
+        s, w = chip_box(T, x, y, t, size=21, h=40, pad=14)
         o.append(s)
         x += w + 8
-    o.append(f'<text x="28" y="298" style="font-size:17px;font-weight:750;fill:url(#{P}-brand)">Browse '
-             f'clouddev.blog<tspan dx="6" style="fill:{T["violet"]}">→</tspan></text>')
+    o.append(tx(28, 514, "Browse clouddev.blog →", 22, f"url(#{P}-brand)", 750, role="archive-link"))
     o.append("</svg>")
     return "".join(o)
 
@@ -763,9 +829,9 @@ def ring10(T, P, cx, cy, r, sw=6):
 
 
 def tile_agt(T, P, st):
-    W, H = 800, 340
-    rows = [("allow", "web.search", "demo"), ("allow", "repo.read", "demo"), ("deny", "shell.exec", "demo"),
-            ("allow", "pr.create", "demo"), ("audit", "4 calls, signed", "demo")]
+    W, H = 800, 550
+    rows = [("allow", "web.search"), ("allow", "repo.read"), ("deny", "shell.exec"),
+            ("allow", "pr.create"), ("audit", "4 calls, signed")]
     kf = []
     for i in range(len(rows)):
         a = 3 + i * 11
@@ -773,107 +839,116 @@ def tile_agt(T, P, st):
                   f"transform:none}}100%{{opacity:0}}}}.%P .r{i}{{animation:%P-row{i} 9s ease-out infinite}}")
     o = [svg_open(P, W, H, "Now building: Agent Governance Toolkit, policy enforcement and zero-trust identity "
                            "for AI agents. The project reports OWASP Agentic Top 10 coverage.", css(P, "".join(kf))),
-         "<defs>", defs_common(T, P), brand_u(T, P, "ringu", 456, 270, 500, 314),
-         f'<clipPath id="{P}-c"><rect x="7" y="7" width="786" height="326" rx="24"/></clipPath></defs>',
-         card(T, P, 7, 7, 786, 326),
+         "<defs>", defs_common(T, P), brand_u(T, P, "ringu", 446, 463, 488, 505),
+         f'<clipPath id="{P}-c"><rect x="7" y="7" width="786" height="{H - 14}" rx="24"/></clipPath></defs>',
+         card(T, P, 7, 7, 786, H - 14),
          f'<g clip-path="url(#{P}-c)">{glow(T, P, 770, 10, 150, "aurB")}{glow(T, P, 420, 360, 120, "aurA")}</g>',
-         kicker(T, 34, 56, "NOW BUILDING", "green", pulse=True, P=P),
-         tx(34, 84, "microsoft/agent-governance-toolkit", 14, T["ink4"], 400, mono=True),
-         tx(32, 132, "Agent Governance", 36, T["ink"], 800, ls=-0.6),
-         tx(32, 172, "Toolkit", 36, T["ink"], 800, ls=-0.6)]
-    y = 210
+         kicker(T, 34, 56, "NOW BUILDING", "green", pulse=True, P=P)]
+    for index, line in enumerate(("microsoft/", "agent-governance-toolkit")):
+        o.append(tx(34, 100 + index * 29, line, 21, T["ink3"], mono=True, role="project-meta"))
+    o += [tx(32, 188, "Agent Governance", 44, T["ink"], 800, ls=-.6, role="project-title"),
+          tx(32, 243, "Toolkit", 44, T["ink"], 800, ls=-.6, role="project-title")]
+    y = 290
     for ln in wrap("Policy enforcement, zero-trust identity, execution sandboxing and reliability engineering "
-                   "for autonomous AI agents.", 17, "regular", 380, 3):
-        o.append(tx(34, y, ln, 17, T["ink2"], 400))
-        y += 24
+                   "for autonomous AI agents.", 22, "regular", 372, 5):
+        o.append(tx(34, y, ln, 22, T["ink2"], role="project-body"))
+        y += 31
     x = 34
-    for lab, icon in ((metric(st["agt_stars"]), STAR_ICON.replace("%C", T["gold"])),
-                      (f"{metric(st['agt_forks'])} forks", ""), ("Python", "")):
-        s, w = chip_box(T, x, 280, lab, size=13.5, h=30, icon=icon,
+    for lab, icon in ((metric(st["agt_stars"]) if st["agt_stars"] is not None else "— stars",
+                       STAR_ICON.replace("%C", T["gold"])),
+                      (f"{st['agt_forks']} forks" if st["agt_forks"] is not None else "— forks", ""),
+                      ("Python", "")):
+        s, w = chip_box(T, x, 494, lab, size=21, h=40, icon=icon,
                         dot=("#3776ab" if lab == "Python" else (T["ink4"] if "forks" in lab else None)))
         o.append(s)
         x += w + 8
     # terminal
-    o.append(f'<rect x="452" y="30" width="318" height="214" rx="14" style="fill:{T["term"]};'
+    o.append(tx(438, 125, "Policy illustration", 21, T["ink3"], mono=True, role="project-meta"))
+    o.append(f'<rect x="438" y="152" width="332" height="290" rx="14" style="fill:{T["term"]};'
              f'stroke:{T["termline"]};stroke-width:1.2"/>')
     for i, c in enumerate((T["trose"], T["tgold"], T["tgreen"])):
-        o.append(f'<circle cx="{472 + i * 16}" cy="50" r="5" style="fill:{c};opacity:.85"/>')
-    o.append(tx(526, 54.5, "agt · policy illustration", 12.5, T["termdim"], 400, mono=True))
-    o.append(f'<rect x="452" y="67" width="318" height="1" style="fill:{T["termline"]}"/>')
-    for i, (verdict, action, lat) in enumerate(rows):
-        yy = 96 + i * 27
+        o.append(f'<circle cx="{456 + i * 18}" cy="175" r="5" style="fill:{c};opacity:.85"/>')
+    o.append(tx(526, 182, "agt", 21, T["termdim"], mono=True, role="terminal-meta"))
+    o.append(f'<rect x="438" y="196" width="332" height="1" style="fill:{T["termline"]}"/>')
+    for i, (verdict, action) in enumerate(rows):
+        yy = 233 + i * 38
         col = {"allow": T["tgreen"], "deny": T["trose"], "audit": T["tviolet"]}[verdict]
         g = []
         if verdict == "deny":
-            g.append(f'<rect x="460" y="{yy - 17}" width="302" height="24" rx="6" style="fill:{T["trose"]};opacity:.14"/>')
+            g.append(f'<rect x="447" y="{yy - 23}" width="314" height="32" rx="6" style="fill:{T["trose"]};opacity:.14"/>')
         mark = {"allow": "✓", "deny": "✗", "audit": "◆"}[verdict]
-        g.append(tx(470, yy, mark, 14, col, 700, mono=True))
-        g.append(tx(488, yy, verdict, 14, col, 700, mono=True))
-        g.append(tx(546, yy, action, 14, T["termink"], 400, mono=True))
-        g.append(tx(758, yy, lat, 12.5, T["termdim"], 400, mono=True, anchor="end"))
+        g.append(tx(454, yy, mark, 21, col, 700, mono=True))
+        g.append(tx(477, yy, verdict, 21, col, 700, mono=True, role="terminal-body"))
+        g.append(tx(551, yy, action, 21, T["termink"], mono=True, role="terminal-body"))
         o.append(f'<g class="r{i}">{"".join(g)}</g>')
-    o.append(f'<rect class="blink" x="470" y="{96 + 5 * 27 - 13}" width="8" height="15" style="fill:{T["termink"]}"/>')
-    o.append(ring10(T, P, 478, 292, 20, 6))
-    o.append(tx(512, 288, "OWASP Agentic Top 10", 15, T["ink"], 700))
-    o.append(tx(512, 308, "10/10 · project-reported coverage", 11.5, T["ink3"], 400, mono=True))
+    o.append(f'<rect class="blink" x="455" y="412" width="10" height="18" style="fill:{T["termink"]}"/>')
+    o.append(ring10(T, P, 463, 483, 20, 6))
+    o.append(tx(497, 490, "OWASP Agentic Top 10", 22, T["ink"], 700, role="project-body"))
+    o.append(tx(438, 529, "10/10 · project-reported", 21, T["ink3"], mono=True, role="project-meta"))
     o.append("</svg>")
     return "".join(o)
 
 
 def tile_head(T, P, kick, dot, title, right=None, pulse=False):
-    o = [kicker(T, 28, 56, kick, dot, pulse=pulse, P=P), tx(26, 101, title, 28, T["ink"], 800, ls=-0.5)]
+    o = [kicker(T, 28, 56, kick, dot, pulse=pulse, P=P)]
+    for index, line in enumerate(wrap(title, 34, "bold", 344, 2)):
+        o.append(tx(26, 136 + index * 42, line, 34, T["ink"], 800, ls=-.5, role="project-title"))
     if right:
         o.append(right)
     return "".join(o)
 
 
 def tile_hub(T, P, st):
-    W, H = 400, 340
+    W, H = 400, 550
     o = [svg_open(P, W, H, "Azure Scenario Hub: tested Azure and Microsoft AI scenarios, with a real APIM benchmark.",
                   css(P)), "<defs>", defs_common(T, P),
-         f'<clipPath id="{P}-c"><rect x="7" y="7" width="386" height="326" rx="24"/></clipPath></defs>',
-         card(T, P, 7, 7, 386, 326), f'<g clip-path="url(#{P}-c)">{glow(T, P, 380, 20, 90, "aurA")}</g>',
+         f'<clipPath id="{P}-c"><rect x="7" y="7" width="386" height="{H - 14}" rx="24"/></clipPath></defs>',
+         card(T, P, 7, 7, 386, H - 14), f'<g clip-path="url(#{P}-c)">{glow(T, P, 380, 20, 90, "aurA")}</g>',
          tile_head(T, P, "THE LAB", "violet", "Azure Scenario Hub")]
-    star = STAR_ICON.replace("%C", T["gold"]).replace("%X", "333").replace("%Y", "51.5")
-    o.append(star + tx(346, 56, str(st["hub_stars"]) if st["hub_stars"] is not None else "—",
-                      13.5, T["ink3"], 500, mono=True))
-    y = 134
+    star = STAR_ICON.replace("%C", T["gold"]).replace("%X", "322").replace("%Y", "82")
+    o.append(star + tx(340, 89, metric(st["hub_stars"]) if st["hub_stars"] is not None else "—",
+                      21, T["ink3"], 500, mono=True, role="project-meta"))
+    y = 215
     for ln in wrap("Tested Azure and Microsoft AI scenarios: deployable architectures, runnable demos "
-                   "and benchmarks.", 16.5, "regular", 340, 3):
-        o.append(tx(28, y, ln, 16.5, T["ink2"], 400))
-        y += 22.5
-    o.append(tx(28, 222, "APIM FAN-OUT · 1.67M REQUESTS", 11.5, T["ink3"], 700, mono=True, ls=1.2))
+                   "and benchmarks.", 22, "regular", 340, 4):
+        o.append(tx(28, y, ln, 22, T["ink2"], role="project-body"))
+        y += 31
+    o.append(tx(28, 346, "APIM FAN-OUT", 21, T["ink3"], 700, mono=True, role="project-meta"))
+    o.append(tx(28, 376, "1.67M REQUESTS", 21, T["ink3"], mono=True, role="project-meta"))
     for i, (lab, val) in enumerate((("Shared backend", 882), ("Backend per API", 874))):
-        yy = 248 + i * 36
-        o.append(tx(28, yy, lab, 14, T["ink2"], 500))
-        o.append(tx(372, yy, f"{val} req/s", 13.5, T["ink"], 600, mono=True, anchor="end"))
+        yy = 416 + i * 44
+        o.append(tx(28, yy, lab, 21, T["ink2"], 500, role="project-body"))
+        o.append(tx(372, yy, f"{val} req/s", 21, T["ink"], 600, mono=True, anchor="end", role="project-body"))
         o.append(f'<rect x="28" y="{yy + 7}" width="344" height="9" rx="4.5" style="fill:{T["track"]}"/>')
         o.append(f'<rect class="grow" x="28" y="{yy + 7}" width="{344 * val / 900:.1f}" height="9" rx="4.5" '
                  f'style="fill:url(#{P}-brand);animation-delay:{0.5 + i * 0.25}s"/>')
-    o.append(tx(28, 318, "p95 146 vs 153 ms · 0 errors · a tie", 12, T["ink3"], 400, mono=True))
+    o.append(tx(28, 508, "p95 146 vs 153 ms", 21, T["ink3"], mono=True, role="project-meta"))
+    o.append(tx(28, 536, "0 errors · a tie", 21, T["ink3"], mono=True, role="project-meta"))
     o.append("</svg>")
     return "".join(o)
 
 
 def tile_docker(T, P, st):
-    W, H = 400, 300
+    W, H = 400, 500
     o = [svg_open(P, W, H, "docker-ai-models: prebuilt Dockerfiles for popular AI models.", css(P)), "<defs>",
-         defs_common(T, P), "</defs>", card(T, P, 7, 7, 386, 286),
+         defs_common(T, P), "</defs>", card(T, P, 7, 7, 386, H - 14),
          tile_head(T, P, "CONTAINERS", "teal", "docker-ai-models",
-                   tx(372, 56, "Python", 13, T["ink3"], 500, mono=True, anchor="end")
-                   + f'<circle cx="{372 - tw("Python", 13, "mono") - 10:.1f}" cy="51.5" r="4.4" style="fill:#3776ab"/>')]
-    y = 134
-    for ln in wrap("Prebuilt Dockerfiles for popular AI models. Container recipes, ready to explore.", 16.5,
-                   "regular", 340, 2):
-        o.append(tx(28, y, ln, 16.5, T["ink2"], 400))
-        y += 22.5
-    o.append(f'<rect x="26" y="178" width="348" height="94" rx="12" style="fill:{T["term"]};stroke:{T["termline"]};'
+                   tx(372, 90, "Python", 21, T["ink3"], 500, mono=True, anchor="end", role="project-meta")
+                   + f'<circle cx="{372 - tw("Python", 21, "mono") - 10:.1f}" cy="83" r="4.4" style="fill:#3776ab"/>')]
+    y = 214
+    for ln in wrap("Prebuilt Dockerfiles for popular AI models. Container recipes, ready to explore.", 22,
+                   "regular", 340, 3):
+        o.append(tx(28, y, ln, 22, T["ink2"], role="project-body"))
+        y += 31
+    o.append(f'<rect x="26" y="326" width="348" height="142" rx="12" style="fill:{T["term"]};stroke:{T["termline"]};'
              f'stroke-width:1.1"/>')
-    code = [("FROM", " python:3.11-slim"), ("RUN", "  pip install mmgp gradio"), ("CMD", "  [\"python\", \"app.py\"]")]
+    code = [("FROM", " python:3.11-slim"), ("RUN", "  pip install \\"),
+            ("", "    mmgp gradio"), ("CMD", "  python app.py")]
     for i, (k, v) in enumerate(code):
-        yy = 204 + i * 24
-        o.append(tx(40, yy, str(i + 1), 12, T["termdim"], 400, mono=True))
-        o.append(f'<text class="m in" x="62" y="{yy}" xml:space="preserve" style="font-size:13.5px;fill:{T["termink"]};'
+        yy = 356 + i * 30
+        o.append(tx(40, yy, str(i + 1), 21, T["termdim"], mono=True))
+        o.append(f'<text class="m in" x="66" y="{yy}" xml:space="preserve" data-font-role="terminal-body" '
+                 f'style="font-size:21px;fill:{T["termink"]};'
                  f'animation-delay:{0.4 + i * 0.35:.2f}s"><tspan style="fill:{T["tviolet"]};font-weight:700">{k}'
                  f'</tspan>{esc(v)}</text>')
     o.append("</svg>")
@@ -881,55 +956,55 @@ def tile_docker(T, P, st):
 
 
 def tile_ledger(T, P, st):
-    W, H = 400, 300
+    W, H = 400, 500
     css_x = """
 @keyframes %P-move{0%,30%{transform:translate(0,0)}45%,80%{transform:translate(112px,-2px)}95%,100%{transform:translate(0,0)}}
 .%P .mv{animation:%P-move 7s cubic-bezier(.6,0,.2,1) infinite}
 """
     o = [svg_open(P, W, H, "ledgerboard: local-first Markdown Kanban for VS Code.", css(P, css_x)), "<defs>",
-         defs_common(T, P), "</defs>", card(T, P, 7, 7, 386, 286),
+         defs_common(T, P), "</defs>", card(T, P, 7, 7, 386, H - 14),
          tile_head(T, P, "VS CODE EXTENSION", "blue", "ledgerboard",
-                   tx(372, 56, "JavaScript", 13, T["ink3"], 500, mono=True, anchor="end")
-                   + f'<circle cx="{372 - tw("JavaScript", 13, "mono") - 10:.1f}" cy="51.5" r="4.4" style="fill:#f1e05a"/>')]
-    y = 134
-    for ln in wrap("Local-first Markdown Kanban for VS Code, with conflict-safe autosave.", 16.5, "regular", 340, 2):
-        o.append(tx(28, y, ln, 16.5, T["ink2"], 400))
-        y += 22.5
+                   tx(372, 90, "JavaScript", 21, T["ink3"], 500, mono=True, anchor="end", role="project-meta")
+                   + f'<circle cx="{372 - tw("JavaScript", 21, "mono") - 10:.1f}" cy="83" r="4.4" style="fill:#f1e05a"/>')]
+    y = 214
+    for ln in wrap("Local-first Markdown Kanban for VS Code, with conflict-safe autosave.", 22, "regular", 340, 3):
+        o.append(tx(28, y, ln, 22, T["ink2"], role="project-body"))
+        y += 31
     cols = ("Todo", "Doing", "Done")
     for i, c in enumerate(cols):
         x = 26 + i * 116
-        o.append(f'<rect x="{x}" y="178" width="108" height="94" rx="10" style="fill:{T["chip"]};stroke:{T["chipline"]};'
+        o.append(f'<rect x="{x}" y="326" width="108" height="142" rx="10" style="fill:{T["chip"]};stroke:{T["chipline"]};'
                  f'stroke-width:1"/>')
-        o.append(tx(x + 10, 196, c.upper(), 10.5, T["ink3"], 700, mono=True, ls=1))
+        o.append(tx(x + 10, 355, c.upper(), 21, T["ink3"], 700, mono=True, role="project-meta"))
         n = (2, 1, 2)[i]
         for k in range(n):
-            o.append(f'<rect x="{x + 9}" y="{206 + k * 30}" width="90" height="24" rx="6" style="fill:{T["card0"]};'
+            o.append(f'<rect x="{x + 9}" y="{372 + k * 39}" width="90" height="30" rx="6" style="fill:{T["card0"]};'
                      f'stroke:{T["chipline"]};stroke-width:1"/>'
-                     f'<rect x="{x + 17}" y="{215 + k * 30}" width="{(52, 38, 60)[(i + k) % 3]}" height="5" rx="2.5" '
+                     f'<rect x="{x + 17}" y="{384 + k * 39}" width="{(52, 38, 60)[(i + k) % 3]}" height="5" rx="2.5" '
                      f'style="fill:{T["ink4"]};opacity:.55"/>')
-    o.append(f'<g class="mv"><rect x="35" y="242" width="90" height="24" rx="6" filter="url(#{P}-shadow)" '
+    o.append(f'<g class="mv"><rect x="35" y="429" width="90" height="30" rx="6" filter="url(#{P}-shadow)" '
              f'style="fill:{T["card0"]};stroke:{T["violet"]};stroke-width:1.4"/>'
-             f'<rect x="43" y="251" width="46" height="5" rx="2.5" style="fill:url(#{P}-brand)"/></g>')
+             f'<rect x="43" y="441" width="46" height="5" rx="2.5" style="fill:url(#{P}-brand)"/></g>')
     o.append("</svg>")
     return "".join(o)
 
 
 def tile_arcade(T, P, st):
-    W, H = 400, 300
+    W, H = 400, 500
     cells_x, cells_y, s, gap = 19, 5, 13, 4.6
-    x0, y0 = 29, 184
+    x0, y0 = 29, 338
     css_x = """
 @keyframes %P-slither{0%{transform:translateX(0)}100%{transform:translateX(%Dpx)}}
 .%P .sn{animation:%P-slither 5s steps(%N) infinite}
 """.replace("%D", f"{(s + gap) * 9:.1f}").replace("%N", "9")
     o = [svg_open(P, W, H, "mini arcade: play snake and minesweeper on ricky-g.com.", css(P, css_x)), "<defs>",
-         defs_common(T, P), "</defs>", card(T, P, 7, 7, 386, 286),
+         defs_common(T, P), "</defs>", card(T, P, 7, 7, 386, H - 14),
          tile_head(T, P, "INSERT COIN", "gold", "mini arcade",
-                   tx(372, 56, "ricky-g.com", 13, T["ink3"], 500, mono=True, anchor="end"))]
-    y = 134
-    for ln in wrap("Snake and minesweeper, live on ricky-g.com. Beat my high score.", 16.5, "regular", 340, 2):
-        o.append(tx(28, y, ln, 16.5, T["ink2"], 400))
-        y += 22.5
+                   tx(372, 90, "ricky-g.com", 21, T["ink3"], 500, mono=True, anchor="end", role="project-meta"))]
+    y = 214
+    for ln in wrap("Snake and minesweeper, live on ricky-g.com. Beat my high score.", 22, "regular", 340, 3):
+        o.append(tx(28, y, ln, 22, T["ink2"], role="project-body"))
+        y += 31
     rng = random.Random(5)
     for j in range(cells_y):
         for i in range(cells_x):
@@ -943,7 +1018,8 @@ def tile_arcade(T, P, st):
         body.append(f'<rect x="{x0 + (4 - k) * (s + gap):.1f}" y="{sy:.1f}" width="{s}" height="{s}" rx="3.5" '
                     f'style="fill:url(#{P}-brand);opacity:{1 - k * 0.14:.2f}"/>')
     o.append(f'<g class="sn">{"".join(body)}</g>')
-    o.append(tx(372, 284, "▶ PRESS START", 11.5, T["ink3"], 700, mono=True, anchor="end", ls=1.2, cls="blink"))
+    o.append(tx(372, 474, "▶ PRESS START", 21, T["ink3"], 700, mono=True, anchor="end", cls="blink",
+                role="project-meta"))
     o.append("</svg>")
     return "".join(o)
 
@@ -968,8 +1044,8 @@ STACK = {
 
 def stack(T, P):
     W = 1200
-    band_x, band_w, lab_w = 22, 842, 186
-    cx0, cw = 886, 292
+    band_x, band_w, lab_w = 22, 770, 168
+    cx0, cw = 814, 364
     css_x = """
 @keyframes %P-dash{to{stroke-dashoffset:-24}}
 .%P .flow{animation:%P-dash 1.2s linear infinite}
@@ -978,16 +1054,16 @@ def stack(T, P):
     for name, chips in STACK["layers"]:
         rows, x, row = [], band_x + lab_w, []
         for lab, col in chips:
-            w = 13 + 16 + tw(lab, 14.5, "regular") + 14
+            w = 13 + 16 + tw(lab, 22, "regular") + 13
             if x + w > band_x + band_w - 16 and row:
                 rows.append(row)
                 row, x = [], band_x + lab_w
             row.append((lab, col, x))
             x += w + 9
         rows.append(row)
-        h = max(30 + len(rows) * 42, 92)
+        h = max(40 + len(rows) * 56, 120)
         bands.append((name, rows, y, h))
-        y += h + 14
+        y += h + 18
     H = y + 12
     o = [svg_open(P, W, H, "Stack: agents and AI, cloud platform and languages, with governance across every layer.",
                   css(P, css_x)), "<defs>", defs_common(T, P), brand_u(T, P, "edge", cx0, 26, cx0 + cw, H - 26),
@@ -995,12 +1071,12 @@ def stack(T, P):
     for i, (name, rows, by, bh) in enumerate(bands):
         o.append(f'<rect x="{band_x}" y="{by}" width="{band_w}" height="{bh}" rx="16" style="fill:{T["chip"]};'
                  f'fill-opacity:.55;stroke:{T["chipline"]};stroke-width:1"/>')
-        o.append(f'<text x="{band_x + 22}" y="{by + 44}" class="m" style="font-size:12.5px;font-weight:700;'
-                 f'letter-spacing:1.8px;fill:{T["ink3"]}">{esc(name)}</text>')
-        o.append(tx(band_x + 22, by + 64, ("layer 3", "layer 2", "layer 1")[i], 12, T["ink4"], 400, mono=True))
+        o.append(tx(band_x + 18, by + 47, name, 18, T["ink3"], 700, mono=True, ls=1, role="stack-meta"))
+        o.append(tx(band_x + 18, by + 77, ("layer 3", "layer 2", "layer 1")[i], 18, T["ink3"],
+                    mono=True, role="stack-meta"))
         for r, row in enumerate(rows):
             for lab, col, x in row:
-                s, _ = chip_box(T, x, by + 22 + r * 42, lab, dot=col, size=14.5, h=32, pad=13, mono=False,
+                s, _ = chip_box(T, x, by + 22 + r * 56, lab, dot=col, size=22, h=44, pad=13, mono=False,
                                 fill=T["card0"])
                 o.append(s)
         my = by + bh / 2
@@ -1014,22 +1090,25 @@ def stack(T, P):
     o.append(f'<path d="M{sx + 9} {sy - 13}l9 3.6v6.4c0 5.8-4 10-9 11.8-5-1.8-9-6-9-11.8v-6.4z" '
              f'style="fill:url(#{P}-brand)"/><path d="M{sx + 5} {sy + 1}l3 3 5.5-6" style="fill:none;stroke:#fff;'
              f'stroke-width:2;stroke-linecap:round;stroke-linejoin:round"/>')
-    o.append(f'<text x="{sx + 28}" y="{sy + 2}" class="m" style="font-size:12.5px;font-weight:700;letter-spacing:1.8px;'
-             f'fill:{T["ink"]}">{name}</text>')
-    o.append(tx(sx, sy + 30, sub, 13.5, T["ink3"], 400))
-    yy = sy + 52
+    o.append(tx(sx + 28, sy + 4, name, 20, T["ink"], 700, mono=True, ls=1.2, role="stack-heading"))
+    o.append(tx(sx, sy + 40, sub, 22, T["ink3"], role="stack-body"))
+    yy = sy + 64
     for lab, col in chips:
         if col is None:
-            s = (f'<rect x="{sx}" y="{yy}" width="{cw - 48}" height="34" rx="17" style="fill:url(#{P}-brand)"/>'
-                 + tx(sx + 15, yy + 22.3, lab, 13.5, "#ffffff", 700))
+            lines = wrap(lab, 22, "bold", cw - 78, 2)
+            height = 22 + len(lines) * 29
+            s = f'<rect x="{sx}" y="{yy}" width="{cw - 48}" height="{height}" rx="18" style="fill:url(#{P}-brand)"/>'
+            s += "".join(tx(sx + 15, yy + 29 + index * 29, line, 22, "#ffffff", 700, role="stack-body")
+                         for index, line in enumerate(lines))
         else:
-            s, _ = chip_box(T, sx, yy, lab, dot=col, size=14.5, h=34, pad=14, mono=False, fill=T["card0"])
+            height = 44
+            s, _ = chip_box(T, sx, yy, lab, dot=col, size=22, h=height, pad=14, mono=False, fill=T["card0"])
         o.append(s)
-        yy += 44
+        yy += height + 16
     fy = H - 26 - 44
     o.append(f'<rect x="{sx}" y="{fy - 24}" width="{cw - 48}" height="1" style="fill:{T["chipline"]}"/>')
-    o.append(tx(sx, fy, "every tool call", 12, T["ink4"], 400, mono=True))
-    o.append(f'<text class="m" x="{sx}" y="{fy + 21}" style="font-size:12.5px;fill:{T["ink2"]}">'
+    o.append(tx(sx, fy - 8, "every tool call", 18.5, T["ink3"], mono=True, role="stack-meta"))
+    o.append(f'<text class="m" x="{sx}" y="{fy + 24}" data-font-role="stack-meta" style="font-size:18.5px;fill:{T["ink2"]}">'
              f'identity <tspan style="fill:{T["violet"]}">›</tspan> policy <tspan style="fill:{T["violet"]}">›</tspan> audit</text>')
     o.append("</svg>")
     return "".join(o)
@@ -1039,19 +1118,19 @@ def stack(T, P):
 def pulse(T, P, st):
     if st["mix"] is None or st["contributions"] is None:
         return activity_notice(T, P, st)
-    W, H = 1200, 300
+    W, H = 1200, 360
     mix = st["mix"]
     total = sum(mix.values()) or 1
     o = [svg_open(P, W, H, f"Pulse: {st['contributions']:,} contributions in the last year.", css(P)), "<defs>",
-         defs_common(T, P), f'<clipPath id="{P}-c"><rect x="7" y="7" width="1186" height="286" rx="24"/></clipPath>',
-         "</defs>", card(T, P, 7, 7, 1186, 286),
+         defs_common(T, P), f'<clipPath id="{P}-c"><rect x="7" y="7" width="1186" height="{H - 14}" rx="24"/></clipPath>',
+         "</defs>", card(T, P, 7, 7, 1186, H - 14),
          f'<g clip-path="url(#{P}-c)">{glow(T, P, 120, 300, 130, "aurA")}</g>',
          kicker(T, 40, 62, "LAST 12 MONTHS", "green", pulse=True, P=P),
-         tx(36, 162, f"{st['contributions']:,}", 92, f"url(#{P}-brand)", 800, ls=-3),
-         tx(40, 202, "contributions on GitHub", 19, T["ink2"], 500),
-         tx(40, 254, "verified public profile snapshot", 12.5, T["ink4"], 400, mono=True),
-         f'<rect x="404" y="40" width="1" height="220" style="fill:{T["cardline"]}"/>',
-         f'<rect x="830" y="40" width="1" height="220" style="fill:{T["cardline"]}"/>',
+         tx(36, 188, f"{st['contributions']:,}", 110, f"url(#{P}-brand)", 800, ls=-3, role="pulse-count"),
+         tx(40, 241, "contributions on GitHub", 25, T["ink2"], 500, role="pulse-body"),
+         tx(40, 326, "verified public snapshot", 18.5, T["ink3"], mono=True, role="pulse-meta"),
+         f'<rect x="404" y="40" width="1" height="280" style="fill:{T["cardline"]}"/>',
+         f'<rect x="838" y="40" width="1" height="280" style="fill:{T["cardline"]}"/>',
          kicker(T, 438, 62, "WHERE IT GOES", "violet")]
     x = 438
     segs = (("Commits", "commits", T["green"]), ("Pull requests", "prs", T["teal"]),
@@ -1065,18 +1144,19 @@ def pulse(T, P, st):
         x += w
     o.append("</g>")
     for i, (lab, k, col) in enumerate(segs):
-        cx, cy = 438 + (i % 2) * 190, 150 + (i // 2) * 44
+        cx, cy = 438, 152 + i * 40
         pct = round(100 * mix[k] / total)
         o.append(f'<circle cx="{cx + 5}" cy="{cy - 5}" r="5" style="fill:{col}"/>')
-        o.append(tx(cx + 18, cy, lab, 15.5, T["ink2"], 500))
-        o.append(tx(cx + 176, cy, f"{pct}%", 15.5, T["ink"], 700, mono=True, anchor="end"))
-    o.append(tx(438, 254, "share of public contribution types", 12, T["ink4"], 400, mono=True))
+        o.append(tx(cx + 18, cy, lab, 22, T["ink2"], 500, role="pulse-body"))
+        o.append(tx(814, cy, f"{pct}%", 22, T["ink"], 700, mono=True, anchor="end", role="pulse-body"))
+    o.append(tx(438, 326, "share of public types", 18.5, T["ink3"], mono=True, role="pulse-meta"))
     stats_r = ((metric(st["repos"]), "public repositories"), (metric(st["contributed_to"]), "public repos contributed to"),
                (metric(st["posts"]), "posts on clouddev.blog"))
     for i, (num, lab) in enumerate(stats_r):
-        yy = 92 + i * 68
-        o.append(tx(864, yy, num, 36, T["ink"], 800, ls=-1))
-        o.append(tx(866, yy + 24, lab, 14.5, T["ink3"], 400))
+        yy = 96 + i * 94
+        o.append(tx(864, yy, num, 46, T["ink"], 800, ls=-1, role="pulse-count"))
+        for index, line in enumerate(wrap(lab, 22, "regular", 304, 2)):
+            o.append(tx(866, yy + 32 + index * 28, line, 22, T["ink3"], role="pulse-body"))
     o.append("</svg>")
     return "".join(o)
 
@@ -1089,22 +1169,22 @@ OFF_CLOCK_TEXT = "Off the clock? " + OFF_CLOCK_BODY
 
 
 def signoff(T, P, st):
-    W, H = 1200, 250
+    W, H = 1200, 410
     o = [svg_open(P, W, H, OFF_CLOCK_TEXT, css(P)),
-         "<defs>", defs_common(T, P), f'<clipPath id="{P}-c"><rect x="7" y="7" width="1186" height="236" rx="24"/>'
-         f'</clipPath></defs>', card(T, P, 7, 7, 1186, 236),
+         "<defs>", defs_common(T, P), f'<clipPath id="{P}-c"><rect x="7" y="7" width="1186" height="{H - 14}" rx="24"/>'
+         f'</clipPath></defs>', card(T, P, 7, 7, 1186, H - 14),
          f'<g clip-path="url(#{P}-c)">{glow(T, P, 1150, 230, 170, "aurB")}{glow(T, P, 900, 0, 120, "aurA")}</g>',
          kicker(T, 44, 60, "OFF THE CLOCK", "magenta"),
-         tx(42, 110, "Still building. Let's make something.", 34, T["ink"], 800, ls=-0.6)]
-    y = 150
-    for ln in wrap(OFF_CLOCK_BODY, 18.5, "regular", 700, 3):
-        o.append(tx(44, y, ln, 18.5, T["ink2"], 400))
-        y += 27
-    o += [f'<text x="1156" y="112" text-anchor="end" style="font-size:56px;font-weight:800;letter-spacing:-2.4px;'
+         tx(42, 121, "Still building. Let's make something.", 43, T["ink"], 800, ls=-.6, role="signoff-title")]
+    y = 179
+    for ln in wrap(OFF_CLOCK_BODY, 26, "regular", 1110, 6):
+        o.append(tx(44, y, ln, 26, T["ink2"], role="signoff-body"))
+        y += 38
+    o += [f'<text x="1156" y="353" text-anchor="end" style="font-size:70px;font-weight:800;letter-spacing:-2.4px;'
           f'fill:{T["ink"]}">ricky <tspan style="fill:url(#{P}-shim)">g.</tspan></text>',
-          tx(1156, 146, f"Auckland, New Zealand · {st['utc']}", 13.5, T["ink3"], 400, mono=True, anchor="end"),
-          tx(1156, 172, f"snapshot {st['synced_long']}", 12.5, T["ink4"], 400, mono=True, anchor="end"),
-          tx(1156, 194, "built from public sources", 12.5, T["ink4"], 400, mono=True, anchor="end"),
+          tx(44, 330, f"Auckland, New Zealand · {st['utc']}", 20, T["ink3"], mono=True, role="signoff-meta"),
+          tx(44, 363, f"snapshot {st['synced_long']}", 18.5, T["ink3"], mono=True, role="signoff-meta"),
+          tx(44, 390, "built from public sources", 18.5, T["ink3"], mono=True, role="signoff-meta"),
           "</svg>"]
     return "".join(o)
 
@@ -1117,146 +1197,195 @@ def phone_card(T, P, height, title, extra_css=""):
 
 def post_phone(T, P, post, cover, now):
     _, date, category = post_meta(post)
-    o = phone_card(T, P, 720, f"Latest post: {post['title']}")
+    meta = wrap(f"{date} · {category}", 32, "mono", 532, 3)
+    title = wrap(post["title"], 44, "bold", 532, 6)
+    excerpt = wrap(post.get("content_text", ""), 40, "regular", 532, 6)
+    title_y = 342 + len(meta) * 44
+    excerpt_y = title_y + len(title) * 58 + 16
+    cta_y = excerpt_y + len(excerpt) * 53 + 26
+    o = phone_card(T, P, math.ceil(cta_y + 42), f"Latest post: {post['title']}")
     o.append(cover_art(P, "phone", cover.get("topic", ""), cover.get("line", ""),
                        24, 24, 552, 237, 16, cover.get("b64")))
-    o.append(tx(32, 302, f"{date} · {category}", 18, T["ink3"], mono=True))
-    y = 350
-    lines = wrap(post["title"], 34, "bold", 532, 4)
-    for line in lines:
-        o.append(tx(32, y, line, 34, T["ink"], 750, ls=-0.3))
-        y += 43
-    y += 10
-    for line in wrap(post.get("content_text", ""), 23, "regular", 532, 3):
-        o.append(tx(32, y, line, 23, T["ink2"]))
-        y += 31
-    o += [tx(32, 678, "Read on clouddev.blog →", 24, f"url(#{P}-brand)", 750), "</svg>"]
+    for index, line in enumerate(meta):
+        o.append(tx(32, 313 + index * 44, line, 32, T["ink3"], mono=True, role="post-meta"))
+    for index, line in enumerate(title):
+        o.append(tx(32, title_y + index * 58, line, 44, T["ink"], 750, ls=-.3, role="post-title"))
+    for index, line in enumerate(excerpt):
+        o.append(tx(32, excerpt_y + index * 53, line, 40, T["ink2"], role="post-body"))
+    o += [tx(32, cta_y, "Read on clouddev.blog →", 32, f"url(#{P}-brand)", 750, role="post-link"), "</svg>"]
     return "".join(o)
 
 
 def label_phone(T, P, key):
     number, title, meta = LABELS[key]
-    o = [svg_open(P, 600, 112, f"{title}: {meta}", css(P)),
+    o = [svg_open(P, 600, 196, f"{title}: {meta}", css(P)),
          "<defs>", defs_common(T, P), "</defs>",
-         tx(14, 44, number, 21, f"url(#{P}-brand)", 700, mono=True),
-         tx(58, 46, title, 36, T["ink"], 750)]
-    for line in wrap(meta, 19, "mono", 570, 1):
-        o.append(tx(14, 80, line, 19, T["ink3"], mono=True))
-    o += [f'<rect x="14" y="100" width="572" height="2" style="fill:url(#{P}-brand)"/>', "</svg>"]
+         tx(14, 60, number, 34, f"url(#{P}-brand)", 700, mono=True, role="section-number"),
+         tx(86, 63, title, 48, T["ink"], 750, role="section-title")]
+    for index, line in enumerate(wrap(meta, 32, "mono", 570, 2)):
+        o.append(tx(14, 116 + index * 43, line, 32, T["ink3"], mono=True, role="section-meta"))
+    o += [f'<rect x="14" y="184" width="572" height="2" style="fill:url(#{P}-brand)"/>', "</svg>"]
     return "".join(o)
 
 
 def tile_agt_phone(T, P, st):
-    o = phone_card(T, P, 740, "Agent Governance Toolkit: policy enforcement, zero-trust identity and audit.")
-    o += [kicker(T, 34, 56, "NOW BUILDING", pulse=True, P=P),
-          tx(34, 94, "microsoft/agent-governance-toolkit", 20, T["ink3"], mono=True),
-          tx(32, 156, "Agent Governance", 49, T["ink"], 800, ls=-0.6),
-          tx(32, 214, "Toolkit", 49, T["ink"], 800, ls=-0.6)]
-    y = 260
+    elements = [kicker(T, 34, 64, "NOW BUILDING", pulse=True, P=P, size=32)]
+    for index, line in enumerate(("microsoft/", "agent-governance-toolkit")):
+        elements.append(tx(34, 125 + index * 44, line, 32, T["ink3"], mono=True, role="project-meta"))
+    title = wrap("Agent Governance Toolkit", 56, "bold", 532, 3)
+    for index, line in enumerate(title):
+        elements.append(tx(32, 237 + index * 70, line, 56, T["ink"], 800, ls=-.6, role="project-title"))
+    y = 237 + len(title) * 70 + 18
     for line in wrap("Policy enforcement, zero-trust identity, execution sandboxing and reliability "
-                     "engineering for autonomous AI agents.", 25, "regular", 530, 4):
-        o.append(tx(34, y, line, 25, T["ink2"]))
-        y += 33
+                     "engineering for autonomous AI agents.", 40, "regular", 530, 12):
+        elements.append(tx(34, y, line, 40, T["ink2"], role="project-body"))
+        y += 53
+    y += 8
     x = 34
-    for label_text in (f"★ {metric(st['agt_stars'])}", f"{metric(st['agt_forks'])} forks", "Python"):
-        item, width = chip_box(T, x, 380, label_text, size=20, h=38)
-        o.append(item)
+    for label_text in (f"★ {st['agt_stars']}" if st["agt_stars"] is not None else "— stars",
+                       f"{st['agt_forks']} forks" if st["agt_forks"] is not None else "— forks", "Python"):
+        item, width = chip_box(T, x, y, label_text, size=32, h=54)
+        if x + width > 568 and x != 34:
+            x, y = 34, y + 72
+            item, width = chip_box(T, x, y, label_text, size=32, h=54)
+        elements.append(item)
         x += width + 9
-    o.append(f'<rect x="32" y="442" width="536" height="240" rx="16" style="fill:{T["term"]};'
+    terminal_y = y + 88
+    elements.append(f'<rect x="32" y="{terminal_y}" width="536" height="352" rx="16" style="fill:{T["term"]};'
              f'stroke:{T["termline"]};stroke-width:1.2"/>')
-    o.append(tx(52, 474, "agt · policy illustration", 18, T["termdim"], mono=True))
+    elements.append(tx(52, terminal_y + 52, "agt · policy illustration", 32, T["termdim"],
+                       mono=True, role="terminal-meta"))
     rows = [("allow", "web.search"), ("allow", "repo.read"), ("deny", "shell.exec"),
             ("allow", "pr.create"), ("audit", "4 calls, signed")]
     for index, (decision, action) in enumerate(rows):
-        y = 513 + index * 31
+        y = terminal_y + 113 + index * 48
         colour = {"allow": T["tgreen"], "deny": T["trose"], "audit": T["tviolet"]}[decision]
-        o.append(tx(52, y, decision, 20, colour, 700, mono=True))
-        o.append(tx(140, y, action, 20, T["termink"], mono=True))
-    o += [tx(34, 712, "OWASP Agentic Top 10 · project reports 10/10", 19, T["ink3"]), "</svg>"]
-    return "".join(o)
+        elements.append(tx(52, y, decision, 32, colour, 700, mono=True, role="terminal-body"))
+        elements.append(tx(182, y, action, 32, T["termink"], mono=True, role="terminal-body"))
+    y = terminal_y + 414
+    for line in wrap("OWASP Agentic Top 10 · project reports 10/10", 32, "regular", 532, 3):
+        elements.append(tx(34, y, line, 32, T["ink3"], role="project-meta"))
+        y += 44
+    o = phone_card(T, P, math.ceil(y + 20), "Agent Governance Toolkit: policy enforcement, zero-trust identity and audit.")
+    return "".join(o + elements + ["</svg>"])
 
 
 def stack_phone(T, P):
     sections = list(STACK["layers"]) + [(STACK["cross"][0], STACK["cross"][2])]
-    elements, y = [], 44
+    elements, y = [], 62
     for name, chips in sections:
-        elements.append(tx(32, y, name, 30, T["ink"], 750))
-        y += 22
+        elements.append(tx(32, y, name, 46, T["ink"], 750, role="stack-heading"))
+        y += 36
         x = 32
         for name, colour in chips:
-            width = 28 + tw(name, 26, "regular") + (20 if colour else 0)
+            width = 28 + tw(name, 40, "regular") + (16 if colour else 0)
             if x + width > 568 and x > 32:
-                x, y = 32, y + 56
-            item, width = chip_box(T, x, y, name, dot=colour, size=26, h=44, mono=False)
-            elements.append(item)
-            x += width + 10
-        y += 102
-    height = int(y + 50)
+                x, y = 32, y + 80
+            if width > 536:
+                lines = wrap(name, 40, "regular", 480, 3)
+                height = 24 + len(lines) * 52
+                elements.append(f'<rect x="32" y="{y}" width="536" height="{height}" rx="20" '
+                                f'style="fill:{T["chip"]};stroke:{T["chipline"]};stroke-width:1.1"/>')
+                if colour:
+                    elements.append(f'<circle cx="52" cy="{y + 30}" r="6" style="fill:{colour}"/>')
+                for index, line in enumerate(lines):
+                    elements.append(tx(70, y + 48 + index * 52, line, 40, T["ink2"], role="stack-body"))
+                y += height + 16
+                x = 32
+            else:
+                item, width = chip_box(T, x, y, name, dot=colour, size=40, h=62, pad=14, mono=False)
+                elements.append(item)
+                x += width + 10
+        y += 116
+    for line in wrap("every tool call: identity › policy › audit", 32, "regular", 536, 3):
+        elements.append(tx(32, y, line, 32, T["ink2"], role="stack-meta"))
+        y += 46
+    height = math.ceil(y + 22)
     o = phone_card(T, P, height, "Stack: agents, cloud, languages and governance across every layer.")
     o += elements
-    o += [tx(32, height - 38, "every tool call: identity › policy › audit", 24, T["ink2"]), "</svg>"]
+    o.append("</svg>")
     return "".join(o)
 
 
 def pulse_phone(T, P, st):
     if st["mix"] is None or st["contributions"] is None:
         return activity_notice(T, P, st, phone=True)
-    o = phone_card(T, P, 760, f"Public profile snapshot: {st['contributions']:,} contributions.")
-    o += [kicker(T, 34, 54, "LAST 12 MONTHS", pulse=True, P=P),
-          tx(32, 158, f"{st['contributions']:,}", 94, f"url(#{P}-brand)", 800, ls=-3),
-          tx(34, 203, "contributions on the public profile", 25, T["ink2"])]
+    elements = [kicker(T, 34, 62, "LAST 12 MONTHS", pulse=True, P=P, size=32),
+                tx(32, 198, f"{st['contributions']:,}", 116, f"url(#{P}-brand)", 800, ls=-3, role="pulse-count")]
+    y = 261
+    for line in wrap("contributions on the public profile", 40, "regular", 532, 3):
+        elements.append(tx(34, y, line, 40, T["ink2"], role="pulse-body"))
+        y += 53
+    y += 32
     total = sum(st["mix"].values())
     segments = (("Commits", "commits", "green"), ("Pull requests", "prs", "teal"),
                 ("Issues", "issues", "violet"), ("Code reviews", "reviews", "magenta"))
     for index, (name, key, colour) in enumerate(segments):
-        y = 264 + index * 47
-        o.append(f'<circle cx="43" cy="{y - 8}" r="7" style="fill:{T[colour]}"/>')
-        o.append(tx(62, y, name, 26, T["ink2"]))
+        elements.append(f'<circle cx="43" cy="{y - 8}" r="7" style="fill:{T[colour]}"/>')
+        elements.append(tx(62, y, name, 40, T["ink2"], role="pulse-body"))
         percentage = round(100 * st["mix"][key] / total) if total else 0
-        o.append(tx(562, y, f"{st['mix'][key]:,} · {percentage}%", 25, T["ink"], 700, anchor="end"))
-    o.append(tx(34, 452, "Mix counts public repositories only.", 20, T["ink3"]))
+        elements.append(tx(562, y, f"{st['mix'][key]:,} · {percentage}%", 36, T["ink"], 700,
+                           anchor="end", role="pulse-body"))
+        y += 62
+    y += 16
+    for line in wrap("Mix counts public repositories only.", 32, "regular", 532, 3):
+        elements.append(tx(34, y, line, 32, T["ink3"], role="pulse-meta"))
+        y += 45
     values = ((st["repos"], "public repositories"), (st["contributed_to"], "public repos contributed to"),
               (st["posts"], "published blog posts"))
-    for index, (number, caption) in enumerate(values):
-        y = 521 + index * 70
-        o.append(tx(32, y, metric(number), 43, T["ink"], 800))
-        o.append(tx(156, y - 3, caption, 25, T["ink2"]))
-    o += [tx(34, 728, "A captured snapshot, not a live visitor-time query.", 20, T["ink3"]), "</svg>"]
-    return "".join(o)
+    for number, caption in values:
+        y += 76
+        for line in wrap(metric(number), 62, "bold", 532, 2):
+            elements.append(tx(32, y, line, 62, T["ink"], 800, role="pulse-count"))
+            y += 69
+        for line in wrap(caption, 40, "regular", 532, 3):
+            elements.append(tx(34, y, line, 40, T["ink2"], role="pulse-body"))
+            y += 53
+    y += 28
+    for line in wrap("A captured snapshot, not a live visitor-time query.", 32, "regular", 532, 3):
+        elements.append(tx(34, y, line, 32, T["ink3"], role="pulse-meta"))
+        y += 45
+    o = phone_card(T, P, math.ceil(y + 20), f"Public profile snapshot: {st['contributions']:,} contributions.")
+    return "".join(o + elements + ["</svg>"])
 
 
 def activity_notice(T, P, st, phone=False):
-    width, height = (600, 450) if phone else (1200, 260)
-    o = [svg_open(P, width, height, "Public activity snapshot. Some metrics are unavailable; no sample values substituted.",
-                  css(P)), "<defs>", defs_common(T, P), "</defs>", card(T, P, 7, 7, width - 14, height - 14)]
-    o.append(tx(32, 66, "Public activity", 38, T["ink"], 750))
+    width, size = (600, 40) if phone else (1200, 26)
+    elements = [tx(32, 88, "Public activity", 48, T["ink"], 750, role="pulse-title")]
     lines = [f"Public profile contributions: {metric(st['contributions'], True)}",
              f"Public repositories: {metric(st['repos'])} · blog posts: {metric(st['posts'])}",
              "Public contribution-type breakdown unavailable.",
              "No sample statistics or private metrics are substituted."]
-    y = 126
+    y = 159
     for text in lines:
-        for line in wrap(text, 23 if phone else 22, "regular", width - 64, 2):
-            o.append(tx(32, y, line, 23 if phone else 22, T["ink2"]))
-            y += 38
-    o.append("</svg>")
-    return "".join(o)
+        for line in wrap(text, size, "regular", width - 64, 4):
+            elements.append(tx(32, y, line, size, T["ink2"], role="pulse-body"))
+            y += size * 1.4
+        y += 10
+    height = math.ceil(y + 24)
+    o = [svg_open(P, width, height, "Public activity snapshot. Some metrics are unavailable; no sample values substituted.",
+                  css(P)), "<defs>", defs_common(T, P), "</defs>", card(T, P, 7, 7, width - 14, height - 14)]
+    return "".join(o + elements + ["</svg>"])
 
 
 def signoff_phone(T, P, st):
-    o = phone_card(T, P, 540, OFF_CLOCK_TEXT)
-    o.append(kicker(T, 34, 58, "OFF THE CLOCK", "magenta"))
-    y = 115
-    for line in wrap("Still building. Let's make something.", 39, "bold", 532, 2):
-        o.append(tx(32, y, line, 39, T["ink"], 800, ls=-0.4))
-        y += 49
+    elements = [kicker(T, 34, 66, "OFF THE CLOCK", "magenta", size=32)]
+    y = 143
+    for line in wrap("Still building. Let's make something.", 52, "bold", 532, 3):
+        elements.append(tx(32, y, line, 52, T["ink"], 800, ls=-.4, role="signoff-title"))
+        y += 65
     y += 16
-    for line in wrap(OFF_CLOCK_BODY, 24, "regular", 532, 5):
-        o.append(tx(34, y, line, 24, T["ink2"]))
-        y += 33
-    o += [tx(34, 452, "ricky g.", 47, f"url(#{P}-brand)", 800, ls=-1.5),
-          tx(34, 493, f"Auckland, NZ · snapshot {st['synced_long']}", 19, T["ink3"]), "</svg>"]
-    return "".join(o)
+    for line in wrap(OFF_CLOCK_BODY, 40, "regular", 532, 20):
+        elements.append(tx(34, y, line, 40, T["ink2"], role="signoff-body"))
+        y += 53
+    y += 40
+    elements.append(tx(34, y, "ricky g.", 60, f"url(#{P}-brand)", 800, ls=-1.5))
+    y += 61
+    for line in wrap(f"Auckland, NZ · snapshot {st['synced_long']}", 32, "regular", 532, 3):
+        elements.append(tx(34, y, line, 32, T["ink3"], role="signoff-meta"))
+        y += 45
+    o = phone_card(T, P, math.ceil(y + 20), OFF_CLOCK_TEXT)
+    return "".join(o + elements + ["</svg>"])
 
 
 def snake(T, P, days):
@@ -1279,7 +1408,7 @@ def snake(T, P, days):
 """
     o = [svg_open(P, width, height, "A playful snake over the actual public GitHub contribution calendar.",
                   css(P, extra)), "<defs>", defs_common(T, P), "</defs>", card(T, P, 7, 7, 1186, 246),
-         tx(32, 42, "REAL CONTRIBUTIONS · PLAYFUL PIXELS", 16, T["ink3"], 700, mono=True)]
+         tx(32, 42, "REAL CONTRIBUTIONS · PLAYFUL PIXELS", 20, T["ink3"], 700, mono=True)]
     for day in days:
         delta = (datetime.fromisoformat(day["date"]).date() - origin).days
         x, y = 32 + delta // 7 * gap, 64 + delta % 7 * 23
@@ -1336,12 +1465,12 @@ def writing_block(feed, stats):
     archive_alt = (f"Browse {stats['posts']} published posts since {stats['first_year']} on clouddev.blog."
                    if stats["posts"] is not None else "Browse all published articles on clouddev.blog. Count unavailable.")
     row += picture("assets/generated/archive", archive_alt, "275", "https://clouddev.blog/archives/")
-    lines += [row, "</p>", "", "<ol>"]
+    lines += [row, "</p>", ""]
     for item in items:
-        lines.append(f'<li><strong><a href="{esc(item["url"])}">{esc(item["title"])}</a></strong>'
-                     f' — {post_meta(item)[1]}<br>{esc(item["content_text"])}</li>')
+        lines.append(f'<h3><a href="{esc(item["url"])}">{esc(item["title"])}</a></h3>')
+        lines.append(f'<p><strong>{post_meta(item)[1]}</strong><br>{esc(item["content_text"])}</p>')
     count = f' {stats["posts"]}' if stats["posts"] is not None else ""
-    lines += ["</ol>", f'<p><a href="https://clouddev.blog/archives/">Explore all{count} published articles →</a></p>']
+    lines.append(f'<p><a href="https://clouddev.blog/archives/">Explore all{count} published articles →</a></p>')
     return "\n".join(lines)
 
 
@@ -1365,10 +1494,12 @@ def projects_block(stats):
                       "275", "https://github.com/Ricky-G/ledgerboard")
             + picture("assets/tile-arcade", "Play snake and minesweeper on ricky-g.com.", "275", "https://ricky-g.com")
             + "</p>\n\n"
-            f'<p><strong><a href="{agt}">Agent Governance Toolkit</a></strong> — policy enforcement, zero-trust '
+            f'<h3><a href="{agt}">Agent Governance Toolkit</a></h3>\n'
+            '<p>Policy enforcement, zero-trust '
             'identity, execution sandboxing and reliability engineering for autonomous AI agents. '
             'The project reports OWASP Agentic Top 10 coverage.</p>\n'
-            f'<p><strong><a href="{hub}">Azure Scenario Hub</a></strong> — deployable Azure and Microsoft AI '
+            f'<h3><a href="{hub}">Azure Scenario Hub</a></h3>\n'
+            '<p>Deployable Azure and Microsoft AI '
             'scenarios, runnable demos and benchmarks. '
             '<a href="https://clouddev.blog/Azure/APIM/'
             'apim-backend-fan-out-shared-backend-rewrite-uri-vs-one-backend-per-api-a-real-benchmark/">'
@@ -1430,12 +1561,14 @@ def replace_block(source, name, body, initialize=False):
 
 
 # --------------------------------------------------------------------------- build
-def build_all(T, theme, data, img, covers_fn):
+def build_all(T, theme, data, covers_fn):
     stats, feed, now = data["stats"], data["feed"], data["now"]
     items = feed["items"][:3]
     out = {
-        "hero": hero_desktop(T, f"hd{theme[0]}", img),
-        "hero-phone": hero_phone(T, f"hp{theme[0]}", img),
+        "hero": hero_desktop(T, f"hd{theme[0]}"),
+        "hero-phone": hero_phone(T, f"hp{theme[0]}"),
+        "intro": introduction(T, f"in{theme[0]}"),
+        "intro-phone": introduction(T, f"inp{theme[0]}", phone=True),
         "label-writing": label(T, f"lw{theme[0]}", "writing"),
         "label-writing-phone": label_phone(T, f"lwp{theme[0]}", "writing"),
         "label-building": label(T, f"lb{theme[0]}", "building"),
@@ -1528,13 +1661,6 @@ def main(argv=None):
             stats = dict(inputs.stats)
             stamp = datetime.fromisoformat(state.get("rendered_at", now.isoformat())).astimezone(NZ)
             set_stamp(stats, stamp)
-            portrait_path = ASSETS / "src" / "portrait.jpg"
-            with Image.open(portrait_path) as portrait_image:
-                if portrait_image.format != "JPEG":
-                    raise ValueError("The supplied portrait must be a JPEG.")
-                portrait_image.verify()
-            img = base64.b64encode(portrait_path.read_bytes()).decode()
-
             def covers_fn(post):
                 cover = stand_in(post)
                 if post["url"] in inputs.covers:
@@ -1546,7 +1672,7 @@ def main(argv=None):
             data = {"stats": stats, "feed": inputs.feed, "now": now}
             pending = dict(inputs.pending)
             for theme, tokens in THEMES.items():
-                for name, svg in build_all(tokens, theme, data, img, covers_fn).items():
+                for name, svg in build_all(tokens, theme, data, covers_fn).items():
                     pending[f"assets/{name}-{theme}.svg"] = svg.encode()
                 snake_name = f"assets/generated/snake-{theme}.svg"
                 if args.preserve_snake or state.get("snake_source") == "snk":

@@ -1,6 +1,6 @@
 # Aurora Australis profile
 
-The owner's Aurora artwork is the design surface: Auckland skyline, illustrated portrait, green-to-magenta accents, article covers, project illustrations, an architecture stack and a contribution snake. GitHub still controls its page background, sidebar and navigation. The README contains supported Markdown/HTML and repository-local SVG images, not a website embedded in GitHub.
+The owner's Aurora artwork is the design surface: Auckland skyline, green-to-magenta accents, article covers, project illustrations, an architecture stack and a contribution snake. The hero now contains an original vector policy shield and connected cloud, AI-agent and tool nodes instead of repeating the account avatar. The original portrait file remains unused for history; the generator neither opens it nor embeds a portrait in any hero. GitHub still controls its page background, sidebar and navigation. The README contains supported Markdown/HTML and repository-local SVG images, not a website embedded in GitHub.
 
 The hero and introduction use the owner's employer-free role and narrative from [ricky-g.com](https://ricky-g.com). The off-clock copy is also readable text below its image. Microsoft project and technology names are intentionally retained; this revision does not change account company, bio or sidebar settings.
 
@@ -60,6 +60,14 @@ GitHub documents [theme-aware picture sources](https://github.blog/changelog/202
 Images follow the browser's `prefers-color-scheme`, including system-synchronized GitHub themes. Do not assume a manually forced GitHub account theme that differs from the browser/OS preference also changes standard `<picture>` media queries. No account appearance or sidebar settings are changed by this repository.
 
 Fixed pixel tile widths with GitHub's normal image maximum-width behavior allow tiles to wrap into readable phone rows instead of shrinking a three-column grid to tiny text. Each article/project has its own real link; full article titles, dates, excerpts and stack labels are also real text. The terminal, Kanban and snake are illustrations, not interactive controls or measured performance results.
+
+### Typography we control
+
+The role and article/project titles use meaningful native `h3` headings. GitHub controls their exact appearance and its ordinary paragraph font; this repository does **not** override all page fonts with CSS, `<big>` or `<font>`.
+
+The primary introduction and About-me narrative are fully visible in a larger themed SVG panel, with complete alt text, a visible blog link and an optional native disclosure containing the same full plain text. The disclosure is an alternate reading format, not hidden essential copy. Article/project cards, the stack, pulse and sign-off likewise use larger SVG type with additional height and wrapping, rather than shrinking text to fit.
+
+Font contracts use actual profile-image widths, not the wider repository blob viewer: approximately 837.5 px for a full image on desktop and 235.6 px on a narrow profile. At those widths the desktop hero role is about 23.7 px, full intro body 20.9 px, mini titles 18.6 px at their 275 px tile width, and essential tile metadata 12.5 px even when narrowed to 238 px. The 400-unit phone intro keeps its full prose about 20.6 px at 235.6 px wide. These are design projections checked against SVG source dimensions; native browser verification is still required before adopting a typography revision. Account avatar/sidebar fonts and text already baked into article cover artwork remain outside this design's control.
 
 SVGs contain no scripts, external fonts/resources, foreign objects or SMIL animations. Their **default is static**. Only a parent `<picture>` source matching `prefers-reduced-motion: no-preference` selects the explicit `#motion` opt-in. This avoids inconsistent reduced-motion evaluation inside embedded SVG images observed in local Chromium/Firefox probes. Reduced-motion visitors and unsupported-source fallbacks receive the static image URL; the choice uses no JavaScript. The fragment itself is an explicit opt-in intended for the parent README, not a claim that directly opening an opted-in raw URL performs another preference check.
 

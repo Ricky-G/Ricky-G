@@ -1,4 +1,3 @@
-import base64
 import io
 import json
 import os
@@ -27,12 +26,6 @@ STATS = {
     "repos": 12, "contributed_to": 4, "posts": 8, "first_year": 2022,
     "agt_stars": "6.5k", "agt_forks": "1.1k", "hub_stars": 9,
 }
-
-
-def portrait_fixture():
-    buffer = io.BytesIO()
-    build.Image.new("RGB", (16, 16), "#888888").save(buffer, "JPEG")
-    return base64.b64encode(buffer.getvalue()).decode()
 
 
 class BoundaryTests(unittest.TestCase):
@@ -105,7 +98,7 @@ class RenderingTests(unittest.TestCase):
         self.assertIn("(prefers-reduced-motion: no-preference)", image)
         self.assertIn("assets/example-phone-dark.svg#motion", image)
         self.assertIn('<img src="assets/example-light.svg"', image)
-        svg = build.hero_desktop(build.THEMES["light"], "fixture", portrait_fixture())
+        svg = build.hero_desktop(build.THEMES["light"], "fixture")
         self.assertIn('id="motion"', svg)
         self.assertIn(".fixture:not(:target) *{animation:none!important}", svg)
 
@@ -114,7 +107,7 @@ class RenderingTests(unittest.TestCase):
         build.set_stamp(stats, datetime(2026, 11, 7, tzinfo=timezone.utc).astimezone(build.NZ))
         rendered = build.build_all(build.THEMES["light"], "light",
                                    {"stats": stats, "feed": {"items": [POST]}, "now": datetime.now(build.NZ)},
-                                   portrait_fixture(), build.stand_in)
+                                   build.stand_in)
         self.assertIn("generated/post-1", rendered)
         self.assertIn("generated/post-1-phone", rendered)
         self.assertNotIn("generated/post-2", rendered)
@@ -125,7 +118,7 @@ class RenderingTests(unittest.TestCase):
         build.set_stamp(stats, datetime(2026, 11, 7, tzinfo=timezone.utc).astimezone(build.NZ))
         data = {"stats": stats, "feed": {"items": [POST]}, "now": datetime.now(build.NZ)}
         for theme, tokens in build.THEMES.items():
-            rendered = build.build_all(tokens, theme, data, portrait_fixture(), build.stand_in)
+            rendered = build.build_all(tokens, theme, data, build.stand_in)
             for name, svg in rendered.items():
                 with self.subTest(theme=theme, asset=name):
                     build.validate_svg(f"assets/{name}-{theme}.svg", svg.encode())
@@ -175,12 +168,17 @@ class RenderingTests(unittest.TestCase):
         for theme, tokens in build.THEMES.items():
             for renderer in (build.hero_desktop, build.hero_phone):
                 with self.subTest(theme=theme, renderer=renderer.__name__):
-                    svg = renderer(tokens, "fixture", portrait_fixture())
+                    svg = renderer(tokens, "fixture")
                     self.assertNotIn("Microsoft", svg)
-                    self.assertIn("Cloud &amp; AI Solution Architect", svg)
+                    self.assertIn("Cloud and AI Solution Architect", svg)
+                    self.assertIn("Cloud &amp; AI Solution", svg)
                     self.assertIn("Engineer at heart", svg)
                     self.assertIn("Auckland", svg)
-                    self.assertIn("data:image/jpeg;base64,", svg)
+                    self.assertNotIn("<image", svg)
+                    self.assertNotIn("data:image", svg)
+                    self.assertIn('data-illustration="trusted-cloud-agent-governance"', svg)
+                    for node in ("cloud", "agent", "tool"):
+                        self.assertIn(f'data-node="{node}"', svg)
                     self.assertIn("The hard part isn&#x27;t creating AI.", svg)
                     self.assertIn("It&#x27;s governing it.", svg)
                     self.assertIn(".fixture:not(:target) *{animation:none!important}", svg)
@@ -218,6 +216,145 @@ class RenderingTests(unittest.TestCase):
                 svg = build.stack(tokens, "fixture")
                 self.assertIn("Microsoft Agent Framework", svg)
                 self.assertIn("Microsoft Foundry", svg)
+
+
+class TypographyTests(unittest.TestCase):
+    def setUp(self):
+        self.stats = dict(STATS)
+        self.now = datetime(2026, 11, 9, tzinfo=timezone.utc).astimezone(build.NZ)
+        build.set_stamp(self.stats, self.now)
+        self.tokens = build.THEMES["light"]
+
+    def projected(self, svg, role, displayed_width):
+        root = build.ET.fromstring(svg)
+        source_width = float(root.get("viewBox").split()[2])
+        nodes = [node for node in root.iter() if node.get("data-font-role") == role]
+        self.assertTrue(nodes, role)
+        fonts = [float(re.search(r"font-size:([\d.]+)px", node.get("style"))[1]) for node in nodes]
+        return min(fonts) * displayed_width / source_width
+
+    def test_desktop_type_is_measurably_larger_at_the_actual_profile_width(self):
+        cases = [
+            (build.hero_desktop(self.tokens, "fixture"), "hero-role", 837.5, 23),
+            (build.hero_desktop(self.tokens, "fixture"), "hero-meta", 837.5, 17),
+            (build.introduction(self.tokens, "fixture"), "intro-body", 837.5, 20),
+            (build.post_featured(self.tokens, "fixture", POST, build.stand_in(POST), self.now),
+             "post-title", 837.5, 25),
+            (build.post_featured(self.tokens, "fixture", POST, build.stand_in(POST), self.now),
+             "post-body", 837.5, 15),
+            (build.post_featured(self.tokens, "fixture", POST, build.stand_in(POST), self.now),
+             "post-meta", 837.5, 12),
+            (build.post_mini(self.tokens, "fixture", POST, build.stand_in(POST), self.now),
+             "post-title", 275, 18),
+            (build.tile_agt(self.tokens, "fixture", self.stats), "project-body", 550, 15),
+            (build.tile_agt(self.tokens, "fixture", self.stats), "project-meta", 550, 12),
+            (build.stack(self.tokens, "fixture"), "chip-body", 837.5, 14),
+            (build.pulse(self.tokens, "fixture", self.stats), "pulse-meta", 837.5, 12),
+            (build.signoff(self.tokens, "fixture", self.stats), "signoff-body", 837.5, 16),
+        ]
+        for svg, role, width, minimum in cases:
+            with self.subTest(role=role, width=width):
+                self.assertGreaterEqual(self.projected(svg, role, width), minimum)
+
+    def test_narrow_profile_uses_reflowed_larger_tokens_not_desktop_shrink(self):
+        cases = [
+            (build.introduction(self.tokens, "fixture", phone=True), "intro-body", 235.6, 20),
+            (build.hero_phone(self.tokens, "fixture"), "hero-role", 235.6, 17),
+            (build.hero_phone(self.tokens, "fixture"), "hero-meta", 235.6, 12),
+            (build.post_phone(self.tokens, "fixture", POST, build.stand_in(POST), self.now),
+             "post-body", 235.6, 15),
+            (build.post_phone(self.tokens, "fixture", POST, build.stand_in(POST), self.now),
+             "post-meta", 235.6, 12),
+            (build.post_mini(self.tokens, "fixture", POST, build.stand_in(POST), self.now),
+             "post-title", 238, 15),
+            (build.post_mini(self.tokens, "fixture", POST, build.stand_in(POST), self.now),
+             "post-meta", 238, 12),
+            (build.tile_docker(self.tokens, "fixture", self.stats), "terminal-body", 238, 12),
+            (build.tile_agt_phone(self.tokens, "fixture", self.stats), "project-body", 235.6, 15),
+            (build.tile_agt_phone(self.tokens, "fixture", self.stats), "terminal-body", 235.6, 12),
+            (build.stack_phone(self.tokens, "fixture"), "chip-body", 235.6, 15),
+            (build.pulse_phone(self.tokens, "fixture", self.stats), "pulse-meta", 235.6, 12),
+            (build.signoff_phone(self.tokens, "fixture", self.stats), "signoff-body", 235.6, 15),
+        ]
+        for svg, role, width, minimum in cases:
+            with self.subTest(role=role, width=width):
+                self.assertGreaterEqual(self.projected(svg, role, width), minimum)
+
+    def test_full_primary_narrative_never_ellipsizes_on_either_canvas(self):
+        for phone in (False, True):
+            svg = build.introduction(self.tokens, "fixture", phone=phone)
+            root = build.ET.fromstring(svg)
+            body = " ".join(node.text for node in root.iter()
+                            if node.get("data-font-role") == "intro-body")
+            self.assertEqual(body, build.INTRO_BODY + " " + build.ABOUT_BODY)
+            self.assertNotIn("…", body)
+            self.assertNotIn("<image", svg)
+            build.validate_svg("assets/intro-light.svg", svg.encode())
+
+    def test_native_intro_and_title_hierarchy_uses_supported_heading_semantics(self):
+        readme = (Path(__file__).resolve().parents[1] / "README.md").read_text(encoding="utf-8")
+        self.assertIn('<h3 align="center">Cloud &amp; AI Solution Architect · Auckland, NZ</h3>', readme)
+        self.assertIn('src="assets/intro-light.svg"', readme)
+        self.assertIn("Read the introduction as text", readme)
+        self.assertIn('<a href="https://clouddev.blog">my blog</a>', readme)
+        self.assertNotRegex(readme, r"<(?:big|font|style|script)\b")
+        self.assertNotRegex(readme, r"\bstyle=")
+        writing = build.writing_block({"items": [POST]}, self.stats)
+        self.assertIn(f'<h3><a href="{POST["url"]}">{POST["title"]}</a></h3>', writing)
+        projects = build.projects_block(self.stats)
+        self.assertIn('<h3><a href="https://github.com/microsoft/agent-governance-toolkit">', projects)
+
+    def test_governance_hero_has_no_raster_resource_or_portrait_dependency(self):
+        for renderer in (build.hero_desktop, build.hero_phone):
+            svg = renderer(self.tokens, "fixture")
+            root = build.ET.fromstring(svg)
+            self.assertFalse(list(root.iter("{http://www.w3.org/2000/svg}image")))
+            self.assertNotIn("base64", svg)
+            self.assertNotIn("portrait", svg.lower())
+            self.assertIn("layered policy shield", root.get("aria-label").lower())
+            self.assertEqual(root.find("{http://www.w3.org/2000/svg}title").text, build.HERO_TITLE)
+            self.assertEqual({node.get("data-node") for node in root.iter() if node.get("data-node")},
+                             {"cloud", "agent", "tool"})
+
+    def test_desktop_audit_chip_does_not_cover_a_redundant_core_caption(self):
+        desktop = build.ET.fromstring(build.hero_desktop(self.tokens, "fixture"))
+        phone = build.ET.fromstring(build.hero_phone(self.tokens, "fixture"))
+        self.assertFalse([node for node in desktop.iter()
+                          if node.get("data-font-role") == "illustration-caption"])
+        self.assertEqual(len([node for node in phone.iter()
+                              if node.get("data-font-role") == "illustration-caption"]), 1)
+        self.assertIn("identity, policy and audit", desktop.get("aria-label"))
+
+    def test_project_identity_wraps_at_the_owner_repository_boundary(self):
+        for renderer in (build.tile_agt, build.tile_agt_phone):
+            root = build.ET.fromstring(renderer(self.tokens, "fixture", self.stats))
+            labels = [node.text for node in root.iter() if node.get("data-font-role") == "project-meta"]
+            self.assertEqual(labels[:2], ["microsoft/", "agent-governance-toolkit"])
+
+    def test_larger_text_has_reserved_vertical_space_for_long_titles_and_metadata(self):
+        long_post = dict(POST, title="Long unbroken article " + "X" * 280)
+        data = {"stats": self.stats, "feed": {"items": [long_post]}, "now": self.now}
+        for theme, tokens in build.THEMES.items():
+            rendered = build.build_all(tokens, theme, data, build.stand_in)
+            for name, svg in rendered.items():
+                root = build.ET.fromstring(svg)
+                height = float(root.get("viewBox").split()[3])
+                for node in root.iter("{http://www.w3.org/2000/svg}text"):
+                    if not node.get("data-font-role"):
+                        continue
+                    size = float(re.search(r"font-size:([\d.]+)px", node.get("style"))[1])
+                    self.assertLessEqual(float(node.get("y")) + size * .25, height,
+                                         (name, node.text, height))
+                build.validate_svg(f"assets/{name}-{theme}.svg", svg.encode())
+
+    def test_docker_illustration_wraps_commands_without_shrinking_metadata(self):
+        root = build.ET.fromstring(build.tile_docker(self.tokens, "fixture", self.stats))
+        lines = [node for node in root.iter("{http://www.w3.org/2000/svg}text")
+                 if node.get("data-font-role") == "terminal-body"]
+        self.assertEqual(len(lines), 4)
+        for node in lines:
+            self.assertLessEqual(build.tw("".join(node.itertext()), 21, "mono"), 308)
+            self.assertIn("font-size:21px", node.get("style"))
 
 
 class ValidationTests(unittest.TestCase):
@@ -420,6 +557,12 @@ class SnakeRefreshTests(unittest.TestCase):
         self.now += timedelta(hours=1)
         self.assertEqual(self.render_cached_provider(), 0)
         self.assertEqual(self.snapshot(), expired)
+
+    def test_profile_build_no_longer_opens_or_needs_the_original_portrait(self):
+        (self.root / "assets" / "src" / "portrait.jpg").unlink()
+        self.assertEqual(self.render_cached_provider(), 0)
+        for name in ("hero-light.svg", "hero-dark.svg", "hero-phone-light.svg", "hero-phone-dark.svg"):
+            self.assertNotIn(b"<image", (self.root / "assets" / name).read_bytes())
 
 
 class WorkflowTests(unittest.TestCase):
