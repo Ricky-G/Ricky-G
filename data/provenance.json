@@ -4,7 +4,7 @@
     "calendar": "00e962db2b71145bd1beeddbfaacd4d05181e2ab18ba7e03436a1a0637909d30",
     "covers": "b8313954c452a9fd6a8b0377518e8630236602ebe1afba0ec9ed4bfef531ab16",
     "feed": "cc71b50356029e5c113e73141b6531251af9c7a9f4d2f33b018caa6402b50f06",
-    "stats": "921d17e8e363d12f99e41a699ad79cb3a3cf937d1ddedac45dcfb55fedf84dbc"
+    "stats": "1a312b978910b65570695223ab7236e30a39ab08c300da4d19c8420c88cb0409"
   },
   "readiness": [
     {
@@ -30,15 +30,15 @@
     "agt": {
       "payload": {
         "description": "AI Agent Governance Toolkit — Policy enforcement, zero-trust identity, execution sandboxing, and reliability engineering for autonomous AI agents. Covers 10/10 OWASP Agentic Top 10.",
-        "forks": 1129,
+        "forks": 1130,
         "language": "Python",
         "repository": "microsoft/agent-governance-toolkit",
         "source": "https://api.github.com/repos/microsoft/agent-governance-toolkit",
-        "stars": 6536,
+        "stars": 6542,
         "url": "https://github.com/microsoft/agent-governance-toolkit",
         "visibility": "public"
       },
-      "retrieved_at": "2026-11-08T04:32:04.294636Z"
+      "retrieved_at": "2026-11-08T20:57:40.599934Z"
     },
     "calendar": {
       "payload": {

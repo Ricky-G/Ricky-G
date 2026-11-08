@@ -26,11 +26,11 @@
   "projects": {
     "agt": {
       "description": "AI Agent Governance Toolkit — Policy enforcement, zero-trust identity, execution sandboxing, and reliability engineering for autonomous AI agents. Covers 10/10 OWASP Agentic Top 10.",
-      "forks": 1129,
+      "forks": 1130,
       "language": "Python",
       "repository": "microsoft/agent-governance-toolkit",
       "source": "https://api.github.com/repos/microsoft/agent-governance-toolkit",
-      "stars": 6536,
+      "stars": 6542,
       "url": "https://github.com/microsoft/agent-governance-toolkit",
       "visibility": "public"
     },

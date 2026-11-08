@@ -14,10 +14,10 @@
     "assets/generated/pulse-light.svg": "7c5488c2c70d66eb9b639af7a59e8f534b2e02dc3b180c8c53c3ea12e22af861",
     "assets/generated/pulse-phone-dark.svg": "e8ec0303952bbf3e0d0814a253502ec08fce51a150b3024ddc3904fc5b392fd2",
     "assets/generated/pulse-phone-light.svg": "9e112b806843d4fcb582f3487e7bbef0a6e882ee242fc55fbf58312788764304",
-    "assets/generated/signoff-dark.svg": "0c644d10f7e0df50dd1a9b36ddf5c6302b24395b717e15ead38cdfafb00d4a1e",
-    "assets/generated/signoff-light.svg": "18669ec371f25a93a0539dddeb18a68e82232439dbc2ed20c988cab2513328cc",
-    "assets/generated/signoff-phone-dark.svg": "81706d75edc422949e18c775af70eebbc22cd5b5d72c9116d674b5a58714e157",
-    "assets/generated/signoff-phone-light.svg": "53830ab0bdde54e9abee0627ea5bac552573d186b76cbcf8a10ecc8561f64b6d",
+    "assets/generated/signoff-dark.svg": "75b6b6012087cd5ecd5eede69fab45292097003f0215016f634a8f1ea6518552",
+    "assets/generated/signoff-light.svg": "5493b72a3ae6ef40ed1b5b480a2ac239a7289f8e416840f6fe70e4c87aaa887d",
+    "assets/generated/signoff-phone-dark.svg": "f981006ca2bd5c3be2bb01df93bbfef9e15f9811fe0c3b0224a09cda3aebadc3",
+    "assets/generated/signoff-phone-light.svg": "9fa456c96f9a70213393f2b8269e6bfc35c3ec65d4cedbf89756fcaa7b3ead98",
     "assets/generated/snake-dark.svg": "27d8c720b6e7cbc77b3da8db7c2d703dfc32451e550af67eec4b102d48a91c7c",
     "assets/generated/snake-light.svg": "6eb63edf955e7483cd7661430bffe0d46a9af45685b4b6a63317d25a56ad6de4",
     "assets/generated/tile-agt-dark.svg": "1786d282b66a9e54c3f472141ad0f0f57ec90bd6f0e60dc0b3c50a9a8a088800",
@@ -67,6 +67,6 @@
     "assets/tile-ledgerboard-dark.svg": "45123116f6340c46eeba37888421c53f205da50e397a62b5e580f4aa90017f40",
     "assets/tile-ledgerboard-light.svg": "0979836107bda2ea237c4192fcf6fbead3e4ccb15cab54e5c9653c6e520482ee"
   },
-  "rendered_at": "2026-11-08T17:32:04.294636+13:00",
+  "rendered_at": "2026-11-09T09:57:40.599934+13:00",
   "snake_source": "snk"
 }
