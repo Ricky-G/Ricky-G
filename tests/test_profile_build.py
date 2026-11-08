@@ -1,6 +1,7 @@
 import io
 import json
 import os
+from html import unescape
 from pathlib import Path
 import re
 import shutil
@@ -193,7 +194,7 @@ class RenderingTests(unittest.TestCase):
         self.assertIn("I design cloud architectures, build AI systems you can trust", intro)
         self.assertIn("create developer platforms that accelerate delivery", intro)
         self.assertIn('I write about the journey on <a href="https://clouddev.blog">my blog</a>.', intro)
-        self.assertIn("<strong>About me</strong>", intro)
+        self.assertIn("About me. I'm an engineer from Auckland", intro)
         self.assertIn("I'm an engineer from Auckland, passionate about cloud, AI, and startups.", intro)
         self.assertIn("turning gnarly architecture into things that actually ship.", intro)
 
@@ -295,7 +296,9 @@ class TypographyTests(unittest.TestCase):
         readme = (Path(__file__).resolve().parents[1] / "README.md").read_text(encoding="utf-8")
         self.assertIn('<h3 align="center">Cloud &amp; AI Solution Architect · Auckland, NZ</h3>', readme)
         self.assertIn('src="assets/intro-light.svg"', readme)
-        self.assertIn("Read the introduction as text", readme)
+        self.assertNotIn("Read the introduction as text", readme)
+        intro_alt = re.search(r'<img src="assets/intro-light.svg"[^>]*alt="([^"]+)"', readme)[1]
+        self.assertEqual(unescape(intro_alt), build.INTRO_TITLE)
         self.assertIn('<a href="https://clouddev.blog">my blog</a>', readme)
         self.assertNotRegex(readme, r"<(?:big|font|style|script)\b")
         self.assertNotRegex(readme, r"\bstyle=")
@@ -487,6 +490,63 @@ class ChipMotionTests(unittest.TestCase):
         self.assertIn('<img src="assets/hero-light.svg"', hero)
         self.assertIn('srcset="assets/hero-phone-dark.svg"', hero)
         self.assertNotIn('src="assets/hero-light.svg#motion"', hero)
+
+
+class HeroPlayTests(unittest.TestCase):
+    def setUp(self):
+        self.root = Path(__file__).resolve().parents[1]
+        self.readme = (self.root / "README.md").read_text(encoding="utf-8")
+        self.control = re.search(
+            r"<details>\s*<summary>Play hero animation</summary>.*?</details>",
+            self.readme, re.DOTALL,
+        ).group()
+
+    def test_play_control_is_exactly_once_closed_and_immediately_below_hero(self):
+        self.assertEqual(self.readme.count("<summary>Play hero animation</summary>"), 1)
+        self.assertTrue(self.control.startswith("<details>\n"))
+        self.assertNotRegex(self.control, r"<details[^>]+\bopen\b")
+        first_hero_end = self.readme.index("</p>") + len("</p>")
+        self.assertEqual(self.readme[first_hero_end:self.readme.index(self.control)].strip(), "")
+        self.assertLess(self.readme.index(self.control), self.readme.index("assets/pill-blog"))
+
+    def test_play_sources_are_explicit_motion_for_each_theme_and_phone(self):
+        sources = re.findall(r'<source media="([^"]+)" srcset="([^"]+)"', self.control)
+        self.assertEqual(sources, [
+            ("(prefers-color-scheme: dark) and (max-width: 600px)", "assets/hero-phone-dark.svg#motion"),
+            ("(max-width: 600px)", "assets/hero-phone-light.svg#motion"),
+            ("(prefers-color-scheme: dark)", "assets/hero-dark.svg#motion"),
+        ])
+        self.assertIn('<img src="assets/hero-light.svg#motion" width="99%"', self.control)
+        self.assertNotIn("prefers-reduced-motion", self.control)
+        self.assertNotIn("<a ", self.control)
+        build.verify_references(self.control.encode(), {})
+
+    def test_play_image_keeps_the_full_existing_accessible_description(self):
+        primary = self.readme.split("</p>", 1)[0]
+        primary_alt = re.search(r'<img [^>]*alt="([^"]+)"', primary)[1]
+        play_alt = re.search(r'<img [^>]*alt="([^"]+)"', self.control)[1]
+        self.assertEqual(primary_alt, play_alt)
+        self.assertIn("layered policy shield", play_alt)
+        self.assertNotIn("snapshot", play_alt.lower())
+
+    def test_owner_blog_link_and_removed_intro_disclosure_are_preserved(self):
+        primary = self.readme.split("</p>", 1)[0]
+        self.assertIn('<a href="https://clouddev.blog"><picture>', primary)
+        self.assertNotIn('<a href="https://ricky-g.com">', primary)
+        self.assertNotIn("Read the introduction as text", self.readme)
+        self.assertNotIn("<strong>About me</strong>", self.readme)
+        intro_alt = re.search(r'<img src="assets/intro-light.svg"[^>]*alt="([^"]+)"', self.readme)[1]
+        self.assertEqual(unescape(intro_alt), build.INTRO_TITLE)
+        self.assertIn('<a href="https://clouddev.blog">my blog</a>', self.readme)
+
+    def test_automatic_hero_keeps_static_fallback_and_normal_motion_gate(self):
+        primary = self.readme.split("</p>", 1)[0]
+        sources = re.findall(r'<source media="([^"]+)" srcset="([^"]+)"', primary)
+        explicit = [(media, src) for media, src in sources if src.endswith("#motion")]
+        self.assertEqual(len(explicit), 4)
+        self.assertTrue(all("(prefers-reduced-motion: no-preference)" in media for media, _ in explicit))
+        self.assertIn('<img src="assets/hero-light.svg"', primary)
+        self.assertNotIn('<img src="assets/hero-light.svg#motion"', primary)
 
 
 class ValidationTests(unittest.TestCase):
@@ -711,6 +771,20 @@ class SnakeRefreshTests(unittest.TestCase):
         self.assertIn("files", state)
         self.assertTrue((self.root / "data" / "provenance.json").is_file())
         self.assertNotIn(b"Public-data snapshot:", (self.root / "README.md").read_bytes())
+
+    def test_offline_builds_preserve_owner_edits_and_closed_play_control_byte_for_byte(self):
+        from profile_data import read_inputs
+        before = self.snapshot()
+        with patch("profile_data.read_inputs", wraps=read_inputs) as inputs:
+            with patch("sys.stdout", new_callable=io.StringIO):
+                self.assertEqual(build.main(["--offline"]), 0)
+                self.assertEqual(build.main(["--offline"]), 0)
+        self.assertTrue(all(call.kwargs["offline"] for call in inputs.call_args_list))
+        self.assertEqual(self.snapshot(), before)
+        readme = (self.root / "README.md").read_bytes()
+        self.assertIn(b'<a href="https://clouddev.blog"><picture>', readme)
+        self.assertEqual(readme.count(b"<summary>Play hero animation</summary>"), 1)
+        self.assertNotIn(b"Read the introduction as text", readme)
 
 
 class WorkflowTests(unittest.TestCase):
