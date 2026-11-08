@@ -328,7 +328,7 @@ class ReadinessAndCacheContracts(unittest.TestCase):
         self.assertNotEqual(initial.provenance["retrieved_at"], result.provenance["retrieved_at"])
         self.assertEqual(initial.provenance["last_good"], result.provenance["last_good"])
 
-    def test_unchanged_hourly_gate_only_fetches_feed_and_writes_nothing(self):
+    def test_unchanged_feed_check_only_fetches_feed_and_writes_nothing(self):
         cache_fixture(self.root, pd.read_inputs(self.root, now=NOW))
         self.fixture.calls.clear()
         before = snapshots(self.root)
@@ -336,7 +336,7 @@ class ReadinessAndCacheContracts(unittest.TestCase):
         self.assertEqual([url for url, _ in self.fixture.calls], [pd.FEED_URL])
         self.assertEqual(snapshots(self.root), before)
 
-    def test_changed_hourly_gate_requires_article_readiness_and_stable_reread(self):
+    def test_changed_feed_check_requires_article_readiness_and_stable_reread(self):
         cache_fixture(self.root, pd.read_inputs(self.root, now=NOW))
         self.fixture.feed["items"][0]["title"] = "Newly published public title"
         self.fixture.calls.clear()
@@ -347,7 +347,7 @@ class ReadinessAndCacheContracts(unittest.TestCase):
         self.assertEqual(set(urls), {pd.FEED_URL} | {item["url"] for item in self.fixture.feed["items"]})
         self.assertEqual(snapshots(self.root), before)
 
-    def test_hourly_gate_rejects_invalid_unavailable_unstable_or_unready_inputs(self):
+    def test_feed_check_rejects_invalid_unavailable_unstable_or_unready_inputs(self):
         cache_fixture(self.root, pd.read_inputs(self.root, now=NOW))
         before = snapshots(self.root)
         self.fixture.overrides[pd.FEED_URL] = pd.ProfileError("Public provider unavailable")
@@ -369,7 +369,7 @@ class ReadinessAndCacheContracts(unittest.TestCase):
             pd.check_feed(self.root)
         self.assertEqual(snapshots(self.root), before)
 
-    def test_hourly_gate_requires_verified_cache_not_starter_samples(self):
+    def test_feed_check_requires_verified_cache_not_starter_samples(self):
         with self.assertRaisesRegex(pd.ProfileError, "previously verified"):
             pd.check_feed(self.root)
 
@@ -620,7 +620,7 @@ class BoundedFetchContracts(unittest.TestCase):
             with self.subTest(relative=relative), self.assertRaises(pd.ProfileError):
                 pd._safe_path(root, relative)
 
-    def test_hourly_cli_reports_noop_through_bounded_step_metadata(self):
+    def test_feed_check_cli_reports_noop_through_bounded_step_metadata(self):
         with tempfile.TemporaryDirectory(prefix="aurora-feed-step-") as temporary:
             output = Path(temporary) / "output"
             summary = Path(temporary) / "summary"
@@ -631,7 +631,7 @@ class BoundedFetchContracts(unittest.TestCase):
             self.assertEqual(output.read_bytes(), b"changed=false\n")
             self.assertIn("unchanged", summary.read_text())
 
-    def test_failed_hourly_cli_cannot_produce_a_success_shaped_gate(self):
+    def test_failed_feed_check_cli_cannot_produce_a_success_shaped_gate(self):
         with tempfile.TemporaryDirectory(prefix="aurora-feed-step-") as temporary:
             output = Path(temporary) / "output"
             with patch.object(pd, "check_feed", side_effect=pd.ProfileError("Not published")), patch.dict(pd.os.environ, {

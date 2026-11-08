@@ -3,6 +3,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import sys
 import tempfile
@@ -169,6 +170,54 @@ class RenderingTests(unittest.TestCase):
         svg = build.snake(build.THEMES["light"], "fixture", [])
         self.assertIn("No simulated", svg)
         self.assertNotIn('class="snake"', svg)
+
+    def test_all_hero_variants_are_employer_free_and_keep_the_aurora_design(self):
+        for theme, tokens in build.THEMES.items():
+            for renderer in (build.hero_desktop, build.hero_phone):
+                with self.subTest(theme=theme, renderer=renderer.__name__):
+                    svg = renderer(tokens, "fixture", portrait_fixture())
+                    self.assertNotIn("Microsoft", svg)
+                    self.assertIn("Cloud &amp; AI Solution Architect", svg)
+                    self.assertIn("Engineer at heart", svg)
+                    self.assertIn("Auckland", svg)
+                    self.assertIn("data:image/jpeg;base64,", svg)
+                    self.assertIn("The hard part isn&#x27;t creating AI.", svg)
+                    self.assertIn("It&#x27;s governing it.", svg)
+                    self.assertIn(".fixture:not(:target) *{animation:none!important}", svg)
+                    build.validate_svg("assets/hero-light.svg", svg.encode())
+
+    def test_intro_keeps_owner_website_narrative_and_the_complete_blog_link(self):
+        readme = (Path(__file__).resolve().parents[1] / "README.md").read_text(encoding="utf-8")
+        intro = readme.split("<h2><picture>", 1)[0]
+        self.assertNotIn("Microsoft", intro)
+        self.assertIn("Cloud &amp; AI Solution Architect · Auckland, NZ", intro)
+        self.assertIn("Engineer at heart.", intro)
+        self.assertIn("I design cloud architectures, build AI systems you can trust", intro)
+        self.assertIn("create developer platforms that accelerate delivery", intro)
+        self.assertIn('I write about the journey on <a href="https://clouddev.blog">my blog</a>.', intro)
+        self.assertIn("<strong>About me</strong>", intro)
+        self.assertIn("I'm an engineer from Auckland, passionate about cloud, AI, and startups.", intro)
+        self.assertIn("turning gnarly architecture into things that actually ship.", intro)
+
+    def test_full_off_clock_copy_is_accessible_text_when_images_shorten_it(self):
+        stats = dict(STATS)
+        build.set_stamp(stats, datetime(2026, 11, 8, tzinfo=timezone.utc).astimezone(build.NZ))
+        block = build.signoff_block(stats)
+        self.assertIn(f'<p align="center">{build.esc(build.OFF_CLOCK_TEXT)}</p>', block)
+        self.assertIn(build.esc(build.OFF_CLOCK_TEXT) + " Auckland, New Zealand.", block)
+        self.assertIn("I love meeting founders and building crazy, impossible ideas together", block)
+        for renderer in (build.signoff, build.signoff_phone):
+            svg = renderer(build.THEMES["light"], "fixture", stats)
+            root = build.ET.fromstring(svg)
+            self.assertEqual(root.find("{http://www.w3.org/2000/svg}title").text, build.OFF_CLOCK_TEXT)
+            build.validate_svg("assets/generated/signoff-light.svg", svg.encode())
+
+    def test_employer_removal_does_not_remove_microsoft_technology_names(self):
+        for theme, tokens in build.THEMES.items():
+            with self.subTest(theme=theme):
+                svg = build.stack(tokens, "fixture")
+                self.assertIn("Microsoft Agent Framework", svg)
+                self.assertIn("Microsoft Foundry", svg)
 
 
 class ValidationTests(unittest.TestCase):
@@ -356,6 +405,22 @@ class SnakeRefreshTests(unittest.TestCase):
         self.assertEqual(self.render_cached_provider(), 0)
         self.assertEqual(self.snapshot(), changed)
 
+    def test_real_fourteen_day_new_boundary_changes_once_then_is_an_exact_noop(self):
+        feed = json.loads((self.root / "data" / "feed.json").read_bytes())
+        published = datetime.fromisoformat(feed["items"][0]["date_published"].replace("Z", "+00:00"))
+        self.now = published + timedelta(days=14, seconds=-1)
+        self.assertEqual(self.render_cached_provider(), 0)
+        self.assertIn(b">NEW</text>", (self.root / "assets" / "generated" / "post-1-light.svg").read_bytes())
+        self.now += timedelta(seconds=1)
+        self.assertEqual(self.render_cached_provider(), 0)
+        expired = self.snapshot()
+        self.assertNotIn(b">NEW</text>", expired["assets/generated/post-1-light.svg"])
+        self.assertEqual(json.loads(expired["data/build-state.json"])["rendered_at"],
+                         self.now.astimezone(build.NZ).isoformat())
+        self.now += timedelta(hours=1)
+        self.assertEqual(self.render_cached_provider(), 0)
+        self.assertEqual(self.snapshot(), expired)
+
 
 class WorkflowTests(unittest.TestCase):
     def test_workflow_has_timezone_and_only_repository_write_job(self):
@@ -373,16 +438,40 @@ class WorkflowTests(unittest.TestCase):
         self.assertIn('git push origin "HEAD:$TARGET_BRANCH"', text)
         self.assertNotIn("--force", text)
 
-    def test_refresh_is_default_branch_only_and_hourly_work_is_gated(self):
+    def test_refresh_is_default_branch_only_and_exactly_weekly_or_manual(self):
         text = (Path(__file__).resolve().parents[1] / ".github" / "workflows" / "profile.yml").read_text()
         self.assertIn("if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)", text)
         self.assertIn('ref: ${{ github.event.repository.default_branch }}', text)
-        self.assertIn('cron: "0 6 * * *"', text)
-        self.assertIn('cron: "17 * * * *"', text)
-        self.assertIn("scripts/profile_data.py --check-feed", text)
-        self.assertGreaterEqual(text.count("if: steps.feed.outputs.changed != 'false'"), 6)
-        self.assertNotIn("repository_dispatch:", text)
-        self.assertNotIn("workflow_run:", text)
+        triggers = text.split("\non:\n", 1)[1].split("\npermissions:", 1)[0]
+        self.assertEqual(re.findall(r"^  ([a-z_]+):", triggers, re.MULTILINE),
+                         ["schedule", "workflow_dispatch"])
+        self.assertEqual(re.findall(r'cron:\s*"([^"]+)"', triggers), ["0 6 * * 1"])
+        self.assertEqual(triggers.count('timezone: "Pacific/Auckland"'), 1)
+        self.assertNotIn("steps.feed", text)
+        self.assertNotIn("--check-feed", text)
+        self.assertNotIn("hourly", text.lower())
+
+    def test_weekly_auckland_schedule_keeps_monday_six_across_daylight_saving(self):
+        for local, utc_hour in (
+            (datetime(2026, 11, 9, 6, tzinfo=build.NZ), 17),
+            (datetime(2026, 6, 8, 6, tzinfo=build.NZ), 18),
+        ):
+            with self.subTest(local=local):
+                self.assertEqual(local.weekday(), 0)
+                utc = local.astimezone(timezone.utc)
+                self.assertEqual(utc.weekday(), 6)
+                self.assertEqual(utc.hour, utc_hour)
+                self.assertEqual(utc.minute, 0)
+
+    def test_readonly_checks_keep_source_pushes_and_pull_requests(self):
+        text = (Path(__file__).resolve().parents[1] / ".github" / "workflows" / "checks.yml").read_text()
+        triggers = text.split("\non:\n", 1)[1].split("\npermissions:", 1)[0]
+        self.assertEqual(re.findall(r"^  ([a-z_]+):", triggers, re.MULTILINE),
+                         ["push", "pull_request", "workflow_dispatch"])
+        self.assertNotIn("pull_request_target", text)
+        self.assertNotIn("workflow_run", text)
+        self.assertNotIn("contents: write", text)
+        self.assertNotIn("git push", text)
 
     def test_hosted_checks_are_read_only_on_windows_and_linux(self):
         text = (Path(__file__).resolve().parents[1] / ".github" / "workflows" / "checks.yml").read_text()
@@ -397,7 +486,6 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(text.count("git diff --exit-code -- README.md assets data"), 2)
 
     def test_actions_are_immutable_pins_in_both_workflows(self):
-        import re
         directory = Path(__file__).resolve().parents[1] / ".github" / "workflows"
         for path in (directory / "checks.yml", directory / "profile.yml"):
             refs = re.findall(r"uses:\s+([^\s]+)", path.read_text())

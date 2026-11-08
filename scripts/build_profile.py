@@ -481,7 +481,7 @@ def greeting(T, P, x, y, text, center=False):
             + tx(dx + 16, y + 25.6, text, fs, T["ink2"], 600))
 
 
-HERO_TITLE = ("ricky g. Cloud and AI Solution Architect at Microsoft, Auckland, New Zealand. "
+HERO_TITLE = ("ricky g. Cloud and AI Solution Architect, Auckland, New Zealand. Engineer at heart. "
               "The hard part isn't creating AI. It's governing it.")
 
 
@@ -500,7 +500,7 @@ def hero_desktop(T, P, img):
          greeting(T, P, 50, 50, "Kia ora · shipping from Auckland, NZ"),
          f'<text x="44" y="214" style="font-size:150px;font-weight:800;letter-spacing:-6px;fill:{T["ink"]}">ricky '
          f'<tspan style="fill:url(#{P}-shim)">g.</tspan></text>',
-         tx(48, 290, "Cloud & AI Solution Architect at Microsoft", 27, T["ink"], 650),
+         tx(48, 290, "Cloud & AI Solution Architect", 27, T["ink"], 650),
          tx(48, 328, "Engineer at heart · Auckland, New Zealand", 20.5, T["ink3"], 500),
          tx(48, 396, "The hard part isn't creating AI.", 31, T["ink2"], 500),
          tx(48, 444, "It's governing it.", 42, f"url(#{P}-brand)", 800, ls=-0.5),
@@ -534,7 +534,7 @@ def hero_phone(T, P, img):
           f'<text x="300" y="548" text-anchor="middle" style="font-size:118px;font-weight:800;letter-spacing:-5px;'
           f'fill:{T["ink"]}">ricky <tspan style="fill:url(#{P}-shim)">g.</tspan></text>',
           tx(300, 604, "Cloud & AI Solution Architect", 26, T["ink"], 650, anchor="middle"),
-          tx(300, 640, "Microsoft · Auckland, NZ · Engineer at heart", 18.5, T["ink3"], 500, anchor="middle"),
+          tx(300, 640, "Auckland, NZ · Engineer at heart", 18.5, T["ink3"], 500, anchor="middle"),
           tx(300, 712, "The hard part isn't creating AI.", 27, T["ink2"], 500, anchor="middle"),
           tx(300, 760, "It's governing it.", 38, f"url(#{P}-brand)", 800, anchor="middle", ls=-0.5),
           f'<rect class="sweep" x="240" y="776" width="120" height="5" rx="2.5" style="fill:url(#{P}-brand)"/>',
@@ -1082,18 +1082,22 @@ def pulse(T, P, st):
 
 
 # --------------------------------------------------------------------------- sign-off
+OFF_CLOCK_BODY = ("I'm still building AI and AI agents, exploring emerging tech, and chasing far too many "
+                  "side projects. I love meeting founders and building crazy, impossible ideas together, "
+                  "so if that's you, let's talk.")
+OFF_CLOCK_TEXT = "Off the clock? " + OFF_CLOCK_BODY
+
+
 def signoff(T, P, st):
     W, H = 1200, 250
-    o = [svg_open(P, W, H, "Off the clock? Still building. Founders with crazy, impossible ideas: let's talk.", css(P)),
+    o = [svg_open(P, W, H, OFF_CLOCK_TEXT, css(P)),
          "<defs>", defs_common(T, P), f'<clipPath id="{P}-c"><rect x="7" y="7" width="1186" height="236" rx="24"/>'
          f'</clipPath></defs>', card(T, P, 7, 7, 1186, 236),
          f'<g clip-path="url(#{P}-c)">{glow(T, P, 1150, 230, 170, "aurB")}{glow(T, P, 900, 0, 120, "aurA")}</g>',
          kicker(T, 44, 60, "OFF THE CLOCK", "magenta"),
          tx(42, 110, "Still building. Let's make something.", 34, T["ink"], 800, ls=-0.6)]
     y = 150
-    for ln in wrap("I'm building AI agents, exploring emerging tech and chasing far too many side projects. "
-                   "I love meeting founders with crazy, impossible ideas, so if that's you, let's talk.",
-                   18.5, "regular", 700, 3):
+    for ln in wrap(OFF_CLOCK_BODY, 18.5, "regular", 700, 3):
         o.append(tx(44, y, ln, 18.5, T["ink2"], 400))
         y += 27
     o += [f'<text x="1156" y="112" text-anchor="end" style="font-size:56px;font-weight:800;letter-spacing:-2.4px;'
@@ -1240,16 +1244,14 @@ def activity_notice(T, P, st, phone=False):
 
 
 def signoff_phone(T, P, st):
-    o = phone_card(T, P, 540, "Still building. Founders with impossible ideas: let's talk.")
+    o = phone_card(T, P, 540, OFF_CLOCK_TEXT)
     o.append(kicker(T, 34, 58, "OFF THE CLOCK", "magenta"))
     y = 115
     for line in wrap("Still building. Let's make something.", 39, "bold", 532, 2):
         o.append(tx(32, y, line, 39, T["ink"], 800, ls=-0.4))
         y += 49
     y += 16
-    for line in wrap("I'm still building AI and AI agents, exploring emerging tech, and chasing far too "
-                     "many side projects. Founders with crazy, impossible ideas: let's talk.",
-                     24, "regular", 532, 5):
+    for line in wrap(OFF_CLOCK_BODY, 24, "regular", 532, 5):
         o.append(tx(34, y, line, 24, T["ink2"]))
         y += 33
     o += [tx(34, 452, "ricky g.", 47, f"url(#{P}-brand)", 800, ls=-1.5),
@@ -1396,9 +1398,9 @@ def pulse_block(stats):
 
 def signoff_block(stats):
     return ('<p align="center">' + picture("assets/generated/signoff",
-            "Off the clock? Still building AI and AI agents, exploring emerging tech and side projects. "
-            f"Founders with impossible ideas: let's talk. Auckland, New Zealand. Snapshot {stats['synced_long']}.",
+            f"{OFF_CLOCK_TEXT} Auckland, New Zealand. Snapshot {stats['synced_long']}.",
             "99%", "https://www.linkedin.com/in/rickygummadi", phone=True) + '</p>\n\n'
+            f'<p align="center">{esc(OFF_CLOCK_TEXT)}</p>\n\n'
             f'<p align="center">Public-data snapshot: {stats["synced_long"]}. '
             '<a href="https://www.linkedin.com/in/rickygummadi">Let’s make something →</a></p>')
 

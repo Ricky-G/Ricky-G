@@ -2,6 +2,8 @@
 
 The owner's Aurora artwork is the design surface: Auckland skyline, illustrated portrait, green-to-magenta accents, article covers, project illustrations, an architecture stack and a contribution snake. GitHub still controls its page background, sidebar and navigation. The README contains supported Markdown/HTML and repository-local SVG images, not a website embedded in GitHub.
 
+The hero and introduction use the owner's employer-free role and narrative from [ricky-g.com](https://ricky-g.com). The off-clock copy is also readable text below its image. Microsoft project and technology names are intentionally retained; this revision does not change account company, bio or sidebar settings.
+
 ## Build locally
 
 Python 3.14, Pillow and timezone data are pinned in `requirements.txt`. Use a virtual environment; no global installation is required.
@@ -39,15 +41,15 @@ Archive count/year come from public publication metadata, not the three-item fee
 
 ## Refresh pipeline
 
-The [Profile refresh workflow](https://github.com/Ricky-G/Ricky-G/actions/workflows/profile.yml) is installed and active on main. It refreshes the default branch daily at **06:00 Pacific/Auckland** and checks for new writing at **17 minutes past each hour**. Native timezone scheduling handles NZST/NZDT. The hourly gate makes a bounded canonical public-feed request and validates the last-good cache. If the normalized feed is unchanged, it skips rendering, GitHub metrics and snake generation without creating a commit. A changed feed must pass article readiness and a stable re-read before the full refresh can proceed; the renderer repeats those checks before publication.
+The [Profile refresh workflow](https://github.com/Ricky-G/Ricky-G/actions/workflows/profile.yml) is installed on main. It runs **once a week, Monday at 06:00 Pacific/Auckland**, or manually. Its only triggers are the single weekly cron (`0 6 * * 1`) and `workflow_dispatch`: there is no hourly polling, daily refresh or production push trigger. Every run refreshes the public writing, metrics and snake, with article readiness and a stable feed re-read before publication. Native timezone scheduling handles NZST/NZDT: Monday 06:00 is Sunday 17:00 UTC in NZDT and Sunday 18:00 UTC in NZST.
 
-Use **Actions → Profile refresh → Run workflow → main** for an immediate full refresh or recovery. Actions can delay/drop schedules, especially at the start of an hour, and disable public schedules after **60 days without repository activity**. Re-enable in the Actions UI and run manually to recover. There is no few-minute freshness SLA. A same-URL cover-only change is picked up by the daily/manual full refresh, not the unchanged-feed hourly gate.
+New posts, cover changes and activity snapshots appear after the next successful weekly run unless a manual run is requested sooner. Use **Actions → Profile refresh → Run workflow → main** for an immediate full refresh or recovery. Actions can delay/drop schedules, especially at the start of an hour, and disable public schedules after **60 days without repository activity**. Re-enable in the Actions UI and run manually to recover. There is no few-minute freshness SLA; unchanged inputs produce no publication commit or new sync stamp.
 
-The workflow uses only its repository-scoped, short-lived `GITHUB_TOKEN`, with `contents: write` limited to the refresh job. No PAT, deploy key, cloud service or cross-repository credential is installed. The owner's separate blog deploy key does not grant profile access. The optional dispatch hook from the starter kit is **not installed** in the blog/output repository; hourly public polling avoids a cross-repository credential.
+The workflow uses only its repository-scoped, short-lived `GITHUB_TOKEN`, with `contents: write` limited to the refresh job. No PAT, deploy key, cloud service or cross-repository credential is installed. The owner's separate blog deploy key does not grant profile access. The optional dispatch hook from the starter kit is **not installed** in the blog/output repository; the profile reads canonical public sources directly.
 
 Snake generation and all README changes share one default-branch-only job and one ordinary, non-force push. Manual runs on feature branches are skipped rather than writing to main. If snake generation fails, the previous valid images are retained with a workflow warning. A branch-head change fails publication instead of rebasing over owner edits. Branch protection may require a separately designed PR-based refresh; do not bypass it or change settings to make this workflow write.
 
-The [Profile checks workflow](https://github.com/Ricky-G/Ricky-G/actions/workflows/checks.yml) is read-only: Ubuntu and Windows runners execute the public-data, renderer and workflow contracts, then verify two network-free builds leave the committed README/images/cache unchanged. Checkout credentials are not persisted, and this workflow cannot publish. Validate a feature-branch candidate there and on the native GitHub README before adopting it on main.
+The [Profile checks workflow](https://github.com/Ricky-G/Ricky-G/actions/workflows/checks.yml) is read-only: source pushes and pull requests run Ubuntu and Windows contracts, then verify two network-free builds leave the committed README/images/cache unchanged. These checks do not trigger the production refresh. Checkout credentials are not persisted, and this workflow cannot publish. Validate a feature-branch candidate there and on the native GitHub README before adopting it on main.
 
 A local build never commits, pushes, runs remote workflows or changes profile settings. Publication and pipeline activation require owner approval; ordinary future design changes should follow the same checks/native-preview gate.
 
