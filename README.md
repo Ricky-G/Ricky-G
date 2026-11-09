@@ -5,14 +5,11 @@ Writing, project metadata, pulse and sign-off are rebuilt from validated public 
 See PROFILE.md for local reproduction, refresh behavior and activation prerequisites.
 -->
 
-<p align="center">
-<a href="https://clouddev.blog"><picture>
-<source media="(prefers-color-scheme: dark) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-phone-dark.svg#motion">
-<source media="(prefers-color-scheme: light) and (max-width: 600px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-phone-light.svg#motion">
-<source media="(prefers-color-scheme: dark) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-dark.svg#motion">
-<source media="(prefers-color-scheme: light) and (min-width: 601px) and (prefers-reduced-motion: no-preference)" srcset="assets/hero-light.svg#motion">
-<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/hero-phone-dark.svg"><source media="(max-width: 600px)" srcset="assets/hero-phone-light.svg"><source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg"><img src="assets/hero-light.svg" width="99%" alt="Kia ora, shipping from Auckland, New Zealand. Ricky Gummadi, Cloud and AI Solution Architect. Engineer at heart. The hard part isn't creating AI. It's governing it. A layered policy shield connects cloud, AI-agent and tool nodes through identity, policy and audit above the Auckland skyline. The allow, deny and audit chips are illustrations."></picture></a>
-</p>
+<p align="center"><picture>
+<source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/hero-phone-dark.svg?animation=play#motion">
+<source media="(max-width: 600px)" srcset="assets/hero-phone-light.svg?animation=play#motion">
+<source media="(prefers-color-scheme: dark)" srcset="assets/hero-dark.svg?animation=play#motion">
+<img src="assets/hero-light.svg?animation=play#motion" width="99%" alt="Kia ora, shipping from Auckland, New Zealand. Ricky Gummadi, Cloud and AI Solution Architect. Engineer at heart. The hard part isn't creating AI. It's governing it. A layered policy shield connects cloud, AI-agent and tool nodes through identity, policy and audit above the Auckland skyline. The allow, deny and audit chips are illustrations."></picture></p>
 
 <p align="center">
 <a href="https://clouddev.blog"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/pill-blog-dark.svg"><img src="assets/pill-blog-light.svg" width="220" alt="Read the blog: clouddev.blog"></picture></a><a href="https://ricky-g.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/pill-site-dark.svg"><img src="assets/pill-site-light.svg" width="220" alt="Home base: ricky-g.com"></picture></a><a href="https://www.linkedin.com/in/rickygummadi"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/pill-linkedin-dark.svg"><img src="assets/pill-linkedin-light.svg" width="220" alt="Let's connect on LinkedIn"></picture></a>
